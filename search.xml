@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>你好，世界</title>
+    <url>/posts/acf5da54/</url>
+    <content><![CDATA[欢迎来到 zczzzzz 的博客！这是第一篇文章，用来验证博客的基础能力是否正常。
+
+代码高亮
+def hello(name: str) -&gt; str:    return f&quot;你好，&#123;name&#125;！&quot;print(hello(&quot;世界&quot;))
+数学公式
+行内公式：E=mc2E = mc^2E=mc2，以及求和 ∑i=1ni=n(n+1)2\sum_{i=1}^{n} i = \frac{n(n+1)}{2}∑i=1n​i=2n(n+1)​。
+块级公式：
+∫−∞∞e−x2 dx=π\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
+∫−∞∞​e−x2dx=π​
+柯西不等式：
+(∑i=1naibi)2≤(∑i=1nai2)(∑i=1nbi2)\left(\sum_{i=1}^{n} a_i b_i\right)^2 \leq \left(\sum_{i=1}^{n} a_i^2\right)\left(\sum_{i=1}^{n} b_i^2\right)
+(i=1∑n​ai​bi​)2≤(i=1∑n​ai2​)(i=1∑n​bi2​)
+表格
+
+
+
+能力
+状态
+
+
+
+
+代码高亮
+✅
+
+
+数学公式
+✅
+
+
+本地搜索
+✅
+
+
+RSS 订阅
+✅
+
+
+
+待办
+
+[x] 搭好博客框架
+[ ] 换掉默认的头像和壁纸
+[ ] 配置评论系统
+
+
+这篇文章可以直接删除。新文章用 npx hexo new &quot;文章标题&quot; 创建，写好的 Markdown 放在 source/_posts/ 下即可。
+
+]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>Hello</tag>
+        <tag>其他</tag>
+      </tags>
+  </entry>
+</search>
