@@ -383,7 +383,88 @@ body :not(.navbar-container) > a:hover,
   color: #B8B0A2 !important;
 }
 
-/* ---- 11. 图片：圆角轻微，不抢戏 ---- */
+/* ---- 11. 代码块：底色必须铺满整个容器，不留白缝 ----
+   Redefine 默认把 figure.highlight 设成 inline-block，导致代码块
+   只跟着内容宽度走，右侧露出白底；同时 td.code 也没有撑满。
+   这里把 figure 改成 block + 100% 宽度，表格也强制撑满，
+   所有层级背景统一为 #F1ECE0，彻底消灭白缝。 */
+.markdown-body .highlight,
+.markdown-body figure.highlight {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 1.2rem 0 !important;
+  background-color: #F1ECE0 !important;
+  --highlight-background: #F1ECE0 !important;
+  --highlight-gutter-background: #EFE9DC !important;
+}
+.markdown-body .code-container,
+.markdown-body .code-container figure,
+.markdown-body .code-container figure.highlight,
+.markdown-body .code-container .highlight,
+.markdown-body .code-container .highlight table,
+.markdown-body .code-container .highlight td,
+.markdown-body .code-container .highlight td.gutter,
+.markdown-body .code-container .highlight td.code,
+.markdown-body .code-container .highlight pre,
+.markdown-body .code-container .gutter pre,
+.markdown-body .code-container .code pre,
+.markdown-body .highlight table,
+.markdown-body .highlight td,
+.markdown-body .highlight td.gutter,
+.markdown-body .highlight td.code,
+.markdown-body .highlight pre,
+.markdown-body .highlight .gutter pre,
+.markdown-body .highlight .code pre {
+  background-color: #F1ECE0 !important;
+  color: #2E2B26 !important;
+}
+.markdown-body .highlight table,
+.markdown-body .code-container .highlight table {
+  display: table !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  table-layout: fixed !important;
+}
+.markdown-body .highlight td.gutter,
+.markdown-body .code-container .highlight td.gutter {
+  width: 42px !important;
+  min-width: 42px !important;
+  background-color: #EFE9DC !important;
+  border-right: 1px solid #E4DECF !important;
+  vertical-align: top !important;
+}
+.markdown-body .highlight td.gutter pre,
+.markdown-body .code-container .highlight td.gutter pre {
+  color: #8C857A !important;
+  background-color: #EFE9DC !important;
+  text-align: center !important;
+  padding-right: 0 !important;
+}
+.markdown-body .highlight td.code,
+.markdown-body .code-container .highlight td.code {
+  width: 100% !important;
+  min-width: 100% !important;
+  vertical-align: top !important;
+  background-color: #F1ECE0 !important;
+}
+.markdown-body .highlight .code pre,
+.markdown-body .code-container .highlight .code pre {
+  width: 100% !important;
+  background-color: #F1ECE0 !important;
+  white-space: pre !important;
+  overflow-x: auto !important;
+}
+/* mac 标题（左上角三个圆点旁边的 "Python"） */
+.markdown-body .code-container::before,
+.markdown-body .highlight::before {
+  color: #2E2B26 !important;
+}
+
+/* ---- 12. 图片：圆角轻微，不抢戏 ---- */
 .markdown-body img {
   border-radius: 4px;
   margin: 1.2rem auto;
