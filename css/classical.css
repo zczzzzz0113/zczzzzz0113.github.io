@@ -370,6 +370,14 @@ body :not(.navbar-container) > a:hover,
   display: none !important;
 }
 
+/* 文章页作者区：只留名字，不要头像、不要等级徽章 */
+.article-header .avatar {
+  display: none !important;
+}
+.author-label {
+  display: none !important;
+}
+
 /* 滚动进度百分比（已极少使用，保险起见也压到极弱） */
 .scroll-progress-percentage {
   color: #B8B0A2 !important;

@@ -1,1 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?><svg width="343px" height="343px" viewBox="0 0 343 343" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>redefine-favicon-2</title><defs><path d="M173.008798,0 C243.696387,0 301,58.2029825 301,130 C301,201.797017 243.696387,260 173.008798,260 L173.008,177.513 L173.348389,177.510815 C199.069478,177.087242 219.791789,155.777442 219.791789,129.551724 C219.791789,103.210683 198.886831,81.8288874 173.008786,81.5882581 L0,81.5862069 L0,0 Z" id="path-1"></path></defs><g id="logo-MIT-favicon-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Logo" transform="translate(19.000000, 19.000000)"><polygon id="左下角" fill="#A31F34" points="-1.50695428e-14 186 119 304 0 304"></polygon><polygon id="梯形" fill="#C9C8C7" points="-1.39749323e-14 4.08700851e-15 304 304 194.542274 304 -1.39749323e-14 110.334744"></polygon><mask id="mask-2" fill="white"><use xlink:href="#path-1"></use></mask><use id="Combined-Shape" fill="#C9C8C7" xlink:href="#path-1"></use><polygon id="阴影" fill="#8A8B8C" mask="url(#mask-2)" points="0 0 111.230321 4.08700851e-15 304 189.020851 304 304"></polygon></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="755.84003"
+   height="755.84003"
+   viewBox="0 0 755.84003 755.84003"
+   sodipodi:docname="a.pdf"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath18">
+      <path
+         d="M 0,0 H 566.88 V 566.88 H 0 Z"
+         id="path16" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath30">
+      <path
+         d="M 0,0 H 566.88 V 566.88 H 0 Z"
+         id="path28" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <g
+     id="g8"
+     inkscape:groupmode="layer"
+     inkscape:label="a"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,755.84)">
+    <path
+       d="M 0,0.005 H 566.875 V 566.881 H 0 Z"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="path10" />
+    <g
+       id="g12">
+      <g
+         id="g14"
+         clip-path="url(#clipPath18)">
+        <g
+           id="g20"
+           transform="translate(85.0123,283.4425)">
+          <path
+             d="M 0,0 C 0,109.587 88.838,198.425 198.425,198.425 308.012,198.425 396.85,109.587 396.85,0 396.85,-109.587 308.012,-198.425 198.425,-198.425 88.838,-198.425 0,-109.587 0,0"
+             style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
+             id="path22" />
+        </g>
+      </g>
+    </g>
+    <g
+       id="g24">
+      <g
+         id="g26"
+         clip-path="url(#clipPath30)">
+        <g
+           id="g32"
+           transform="translate(356.9437,380.9837)">
+          <path
+             d="m 0,0 v -5.741 l -98.168,-190.881 h 29.852 c 6.507,0 13.061,1.052 19.663,3.157 6.602,2.105 12.725,5.55 18.37,10.333 5.645,4.784 10.477,11.147 14.496,19.089 4.018,7.941 6.697,17.844 8.037,29.708 h 6.602 c -0.574,-6.506 -0.861,-14.926 -0.861,-25.259 0,-4.401 0.095,-10.621 0.287,-18.658 0.191,-8.037 0.765,-16.361 1.722,-24.972 -7.08,0.382 -14.83,0.622 -23.25,0.717 -8.42,0.096 -16.792,0.144 -25.116,0.144 h -23.107 c -12.438,0 -25.451,-0.048 -39.037,-0.144 -13.587,-0.095 -26.312,-0.335 -38.177,-0.717 v 5.74 l 98.455,190.882 h -31 c -7.272,0 -14.017,-0.957 -20.237,-2.87 -6.219,-1.914 -11.912,-5.119 -17.079,-9.616 -5.166,-4.497 -9.472,-10.525 -12.916,-18.084 -3.445,-7.558 -5.837,-16.983 -7.176,-28.273 h -6.602 c 0.382,2.679 0.622,5.932 0.717,9.759 0.096,3.827 0.144,7.846 0.144,12.056 0,4.401 -0.144,10.62 -0.431,18.658 -0.287,8.037 -0.813,16.361 -1.578,24.972 6.314,-0.191 13.299,-0.383 20.954,-0.574 7.654,-0.191 15.26,-0.287 22.819,-0.287 h 20.811 c 12.821,0 26.503,0.048 41.046,0.143 C -26.216,-0.622 -12.63,-0.383 0,0"
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path34" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
