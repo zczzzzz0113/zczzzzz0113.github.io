@@ -76,13 +76,40 @@ body {
   font-size: 17px;
 }
 
-/* 链接：克制的古铜色，悬停加下划线 */
-a {
+/* 链接：克制的古铜色，悬停加下划线。
+   选择器明示排除 .navbar-container 下的所有链接（用 :not() 反选），
+   防止全局 a:hover 的 underline 与主题在 .navbar-item a::after 上
+   添加的装饰线叠加，导致导航按钮悬停出现"两条横线"。*/
+body :not(.navbar-container) > a,
+.site-main a,
+.markdown-body a,
+.post-content a,
+.page-content a,
+.home-article-list a,
+.home-article-title a,
+.category-link,
+.tag-link,
+.paginator a,
+.breadcrumb a,
+.cl-footer-line a,
+.cl-hero a {
   color: #7A6A53;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-a:hover {
+body :not(.navbar-container) > a:hover,
+.site-main a:hover,
+.markdown-body a:hover,
+.post-content a:hover,
+.page-content a:hover,
+.home-article-list a:hover,
+.home-article-title a:hover,
+.category-link:hover,
+.tag-link:hover,
+.paginator a:hover,
+.breadcrumb a:hover,
+.cl-footer-line a:hover,
+.cl-hero a:hover {
   color: #2E2B26;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -102,18 +129,49 @@ a:hover {
   color: #56514A !important;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
+  text-decoration: none !important;
 }
 .navbar-container a:hover,
 .navbar-item:hover {
   color: #2E2B26 !important;
+  text-decoration: none !important;
+}
+/* 取消主题 navbar-item 的悬停"上下两条线"装饰。
+   主题会给 .navbar-item a 添加 ::after（在底部 -5px 一条线）；
+   全局 a:hover 的 underline 我已限定范围不再命中，
+   但主题自带的 ::after 也一并隐藏，保持最干净。*/
+.navbar-container a::after,
+.navbar-container a::before,
+.navbar-item a::after,
+.navbar-item a::before,
+.navbar-item.active a::after,
+.navbar-item:hover a::after,
+.navbar-container a:hover::after {
+  display: none !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  transform: none !important;
+  background: transparent !important;
 }
 .navbar-item.active {
   color: #2E2B26 !important;
-  border-bottom: 1px solid #7A6A53;
+  font-weight: 600;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
-/* 右上角搜索图标保持低调 */
-.icon-item.search {
-  color: #56514A !important;
+/* 关闭搜索图标与搜索弹窗（即使主题配置未关，也兜底隐藏） */
+.navbar-item.search,
+.navbar-list .navbar-item.search,
+.icon-item.search,
+.search-icon,
+.search-container,
+.search-modal,
+#search,
+#local-search,
+[data-search-modal] {
+  display: none !important;
 }
 
 /* ---- 5. 首页 Hero：占满全屏，纯排版，大量留白 ---- */
@@ -133,7 +191,12 @@ a:hover {
 .cl-hero__title {
   margin: 0;
   font-size: 3rem;
-  font-weight: 400;
+  /* 古典风格的"粗宋体"：英文走 Georgia Bold，
+     中文优先 Source Han Serif SC / Noto Serif SC 的 Bold/Heavy，
+     再回退到系统自带的 SimSun/STSong（用 font-weight: 700 走合成加粗）。*/
+  font-family: Georgia, "Source Han Serif SC Heavy", "Source Han Serif SC Bold",
+    "Noto Serif SC", "Songti SC", STZhongsong, STSong, SimSun, serif !important;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: #2E2B26;
   line-height: 1.2;
@@ -144,6 +207,16 @@ a:hover {
   font-style: italic;
   color: #8C857A;
   letter-spacing: 0.04em;
+}
+
+/* 左上角 navbar 站名（同步与 hero 标题同款的粗宋体） */
+.logo-title,
+.logo-title h1,
+.logo-title h1 a {
+  font-family: Georgia, "Source Han Serif SC Heavy", "Source Han Serif SC Bold",
+    "Noto Serif SC", "Songti SC", STZhongsong, STSong, SimSun, serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
 }
 
 /* 发丝线分隔（Hero 与页脚共用） */
