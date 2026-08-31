@@ -1,52 +1,76 @@
 /* =============================================================
    classical.css — 极简古典纸感主题（米白纸张 · Georgia 衬线体）
-   设计原则：留白、统一衬线字体、克制的细分隔线、无廉价描边、无玻璃拟物。
-   通过覆盖 Redefine 的 CSS 变量 + 少量针对性样式实现，不改动 node_modules。
+   设计原则：留白、统一衬线字体、克制的细分隔线、无廉价描边。
+
+   关键实现说明（勿踩坑）：
+   1. 主题真实变量名是 --background-color（不是 --bg-color）、
+      --shadow-color-1/2（不是 --shadow-color）；暗色模式通过给
+      <html> 加 .dark 类（不是 data-theme 属性）切换。
+   2. 本文件经 inject.head 注入，加载顺序在主题 style.css/tailwind.css
+      之前，因此所有变量覆盖必须加 !important 才能生效。
+   3. 导航栏的真实类名是 .navbar-container（不是 .navbar）。
    ============================================================= */
 
-/* ---- 1. 主题变量：米白纸张配色（明/暗模式都强制为纸感，避免突兀切换） ---- */
+/* ---- 1. 主题变量：米白纸张配色（明/暗都强制为纸感） ---- */
 :root,
-html[data-theme="light"],
-html[data-theme="dark"] {
-  --bg-color: #F7F3EA;            /* 米白纸张 */
-  --first-text-color: #2E2B26;    /* 近黑暖墨 */
-  --second-text-color: #56514A;   /* 次级文字 */
-  --third-text-color: #8C857A;    /* 弱化元信息 */
-  --fourth-text-color: #B8B0A2;   /* 更弱的辅助 */
-  --primary-color: #7A6A53;       /* 克制的古铜色，仅作点缀 */
-  --border-color: #E4DECF;        /* 极淡发丝线 */
-  --shadow-color: rgba(46, 43, 38, 0.05);
-  --home-banner-text-color: #2E2B26;
-  --home-banner-img: none;
-  --navbar-height: 64px;
+html,
+html.light,
+html.dark,
+body.light-mode,
+body.dark-mode {
+  --background-color: #F7F3EA !important;
+  --background-color-transparent: rgba(247, 243, 234, 0.7) !important;
+  --background-color-transparent-15: rgba(247, 243, 234, 0.85) !important;
+  --background-color-transparent-40: rgba(247, 243, 234, 0.6) !important;
+  --background-color-transparent-80: rgba(247, 243, 234, 0.8) !important;
+  --second-background-color: #F1ECE0 !important;
+  --third-background-color: #EFE9DC !important;
+  --third-background-color-transparent: rgba(239, 233, 220, 0.5) !important;
+  --primary-color: #7A6A53 !important;
+  --first-text-color: #2E2B26 !important;
+  --second-text-color: #56514A !important;
+  --third-text-color: #8C857A !important;
+  --fourth-text-color: #B8B0A2 !important;
+  --default-text-color: #2E2B26 !important;
+  --invert-text-color: #F7F3EA !important;
+  --border-color: #E4DECF !important;
+  --link-color: #7A6A53 !important;
+  --selection-color: rgba(122, 106, 83, 0.18) !important;
+  --shadow-color-1: rgba(46, 43, 38, 0.04) !important;
+  --shadow-color-2: rgba(46, 43, 38, 0.05) !important;
+  --shadow-hover-color: rgba(46, 43, 38, 0.06) !important;
+  --home-banner-text-color: #2E2B26 !important;
+  --avatar-background-color: #E4DECF !important;
+  --scrollbar-color: #D8D2C4 !important;
+  --scrollbar-color-hover: #C5BEAF !important;
+  --scroll-bar-bg-color: #EFE9DC !important;
 }
 
 /* ---- 2. 统一字体：英文 Georgia，中文回退到系统衬线（宋体系） ---- */
 body,
 .site-main,
 .page-container,
-.navbar, .navbar-item, .navbar-logo,
+.navbar-container, .navbar-content, .navbar-item,
 .home-article-title, .home-article-content, .home-article-meta-info,
 .home-article-category, .home-article-tag, .home-article-date,
 .post-title, .markdown-body,
-.archive-title, .category-listing, .tag-listing,
 .cl-hero__title, .cl-hero__sub,
 .cl-footer-line, .cl-footer-motto,
 h1, h2, h3, h4, h5, h6,
-p, a, li, span, blockquote, code, figcaption {
+p, a, li, span, blockquote, figcaption {
   font-family: Georgia, "Noto Serif SC", "Source Han Serif SC",
     "Songti SC", "STSong", "SimSun", serif !important;
 }
 
-html {
-  background: var(--bg-color);
+/* ---- 3. 全局底色与正文 ---- */
+html, body {
+  background-color: #F7F3EA !important;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--bg-color);
-  color: var(--first-text-color);
+  color: #2E2B26 !important;
   line-height: 1.85;
   letter-spacing: 0.01em;
   font-size: 17px;
@@ -54,54 +78,56 @@ body {
 
 /* 链接：克制的古铜色，悬停加下划线 */
 a {
-  color: var(--primary-color);
+  color: #7A6A53;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 a:hover {
-  color: var(--first-text-color);
+  color: #2E2B26;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-/* ---- 3. 导航栏：纸感、底部一条发丝线、无彩色块 ---- */
-.navbar {
-  background: rgba(247, 243, 234, 0.9) !important;
+/* ---- 4. 导航栏：纸感、底部一条发丝线（真实类名 .navbar-container） ---- */
+.navbar-container {
+  background: rgba(247, 243, 234, 0.92) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--border-color) !important;
+  border-bottom: 1px solid #E4DECF !important;
   box-shadow: none !important;
-  color: var(--first-text-color) !important;
+  color: #2E2B26 !important;
 }
-.navbar a, .navbar-item {
-  color: var(--second-text-color) !important;
+.navbar-container a,
+.navbar-item {
+  color: #56514A !important;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
 }
-.navbar a:hover, .navbar-item:hover {
-  color: var(--first-text-color) !important;
+.navbar-container a:hover,
+.navbar-item:hover {
+  color: #2E2B26 !important;
 }
 .navbar-item.active {
-  color: var(--first-text-color) !important;
-  border-bottom: 1px solid var(--primary-color);
+  color: #2E2B26 !important;
+  border-bottom: 1px solid #7A6A53;
 }
-
 /* 右上角搜索图标保持低调 */
 .icon-item.search {
-  color: var(--second-text-color) !important;
+  color: #56514A !important;
 }
 
-/* ---- 4. 首页 Hero：纯排版，大量留白 ---- */
+/* ---- 5. 首页 Hero：占满全屏，纯排版，大量留白 ---- */
 .home-banner-background { display: none !important; }
 
 .cl-hero {
-  min-height: 78vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: var(--bg-color);
+  background: #F7F3EA;
   padding: 0 24px;
 }
 .cl-hero__title {
@@ -109,14 +135,14 @@ a:hover {
   font-size: 3rem;
   font-weight: 400;
   letter-spacing: 0.08em;
-  color: var(--first-text-color);
+  color: #2E2B26;
   line-height: 1.2;
 }
 .cl-hero__sub {
   margin: 0;
   font-size: 1.15rem;
   font-style: italic;
-  color: var(--third-text-color);
+  color: #8C857A;
   letter-spacing: 0.04em;
 }
 
@@ -131,18 +157,18 @@ a:hover {
   display: block;
   width: 100%;
   height: 1px;
-  background: var(--primary-color);
+  background: #7A6A53;
   opacity: 0.55;
 }
 
-/* ---- 5. 首页文章列表：无卡片、无阴影，仅底部发丝线分隔 ---- */
+/* ---- 6. 首页文章列表：无卡片、无阴影，仅底部发丝线分隔 ---- */
 .home-article-list {
   padding: 0;
 }
 .home-article-item {
   background: transparent !important;
   border: none !important;
-  border-bottom: 1px solid var(--border-color) !important;
+  border-bottom: 1px solid #E4DECF !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   padding: 2.6rem 0 !important;
@@ -154,57 +180,58 @@ a:hover {
 .home-article-title {
   font-size: 1.65rem;
   font-weight: 400;
-  color: var(--first-text-color);
+  color: #2E2B26;
   letter-spacing: 0.02em;
   line-height: 1.4;
 }
+.home-article-title a,
 .home-article-title a:hover {
-  color: var(--primary-color);
+  color: #2E2B26;
 }
 .home-article-content {
-  color: var(--second-text-color);
+  color: #56514A;
   font-size: 1rem;
   line-height: 1.8;
 }
 .home-article-meta-info,
 .home-article-meta-info-container {
-  color: var(--third-text-color);
+  color: #8C857A;
   font-size: 0.88rem;
   letter-spacing: 0.03em;
 }
 .home-article-category,
 .home-article-tag {
-  color: var(--third-text-color);
-  border-color: var(--border-color) !important;
+  color: #8C857A;
+  border-color: #E4DECF !important;
 }
 
 /* 分页：低调文字 */
 .home-paginator {
-  color: var(--third-text-color);
+  color: #8C857A;
   border: none !important;
   background: transparent !important;
 }
 
-/* ---- 6. 文章页：正文纸感、标题留白 ---- */
+/* ---- 7. 文章页：正文纸感、标题留白 ---- */
 .markdown-body {
-  color: var(--first-text-color);
+  color: #2E2B26;
   line-height: 1.9;
 }
 .markdown-body h1, .markdown-body h2, .markdown-body h3,
 .markdown-body h4, .markdown-body h5, .markdown-body h6 {
-  color: var(--first-text-color);
+  color: #2E2B26;
   font-weight: 400;
   letter-spacing: 0.02em;
   border: none;
 }
 .markdown-body blockquote {
-  border-left: 2px solid var(--primary-color);
+  border-left: 2px solid #7A6A53;
   background: transparent;
-  color: var(--second-text-color);
+  color: #56514A;
   padding: 0.4rem 1.2rem;
 }
 .markdown-body a {
-  color: var(--primary-color);
+  color: #7A6A53;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -214,38 +241,38 @@ a:hover {
   border: none;
   border-radius: 3px;
   padding: 0.1em 0.4em;
-  color: var(--first-text-color);
+  color: #2E2B26;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace !important;
 }
 .markdown-body pre {
   background: #F1ECE0 !important;
-  border: 1px solid var(--border-color);
+  border: 1px solid #E4DECF;
   border-radius: 6px;
 }
 
-/* ---- 7. 归档 / 分类 / 标签页：朴素排版 ---- */
+/* ---- 8. 归档 / 分类 / 标签页：朴素排版 ---- */
 .archive-title, .category-listing, .tag-listing {
-  color: var(--first-text-color);
+  color: #2E2B26;
   border: none !important;
   background: transparent !important;
 }
 
-/* ---- 8. 页脚：安静居中 ---- */
+/* ---- 9. 页脚：安静居中 ---- */
 .footer {
   background: transparent !important;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #E4DECF;
   padding: 3rem 0 !important;
 }
 .cl-footer-inner {
   text-align: center;
-  color: var(--third-text-color);
+  color: #8C857A;
 }
 .cl-footer-rule {
   width: 48px;
   margin: 0 auto 1.6rem;
 }
 .cl-footer-rule i {
-  background: var(--primary-color);
+  background: #7A6A53;
   opacity: 0.5;
 }
 .cl-footer-line {
@@ -254,28 +281,28 @@ a:hover {
   letter-spacing: 0.04em;
 }
 .cl-footer-line a {
-  color: var(--primary-color);
+  color: #7A6A53;
 }
 .cl-footer-motto {
   margin: 0.7rem 0;
   font-style: italic;
-  color: var(--third-text-color);
+  color: #8C857A;
   letter-spacing: 0.04em;
   font-size: 0.95rem;
 }
 
-/* ---- 9. 删除一切干扰性功能按钮（右下角悬浮工具、回到顶部等） ---- */
+/* ---- 10. 删除一切干扰性功能按钮（右下角悬浮工具、回到顶部等） ---- */
 .right-side-tools-container,
 .side-tools-container {
   display: none !important;
 }
 
-/* 滚动进度百分比：保留但压到极弱，避免抢眼 */
+/* 滚动进度百分比（已极少使用，保险起见也压到极弱） */
 .scroll-progress-percentage {
-  color: var(--fourth-text-color) !important;
+  color: #B8B0A2 !important;
 }
 
-/* ---- 10. 图片：圆角轻微，不抢戏 ---- */
+/* ---- 11. 图片：圆角轻微，不抢戏 ---- */
 .markdown-body img {
   border-radius: 4px;
   margin: 1.2rem auto;
@@ -284,5 +311,5 @@ a:hover {
 /* 选中文字：古铜底 */
 ::selection {
   background: rgba(122, 106, 83, 0.18);
-  color: var(--first-text-color);
+  color: #2E2B26;
 }
