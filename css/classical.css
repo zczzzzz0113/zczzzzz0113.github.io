@@ -229,13 +229,14 @@ body :not(.navbar-container) > a:hover,
   animation: clHeroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
 
-/* 打字机副标题：多语言循环（含 RTL），闪动圆点光标 */
+/* 打字机副标题：多语言循环（含 RTL），加粗、与标题同色 */
 .cl-hero__type {
   margin: 0;
   min-height: 2.2em;
   font-style: italic;
+  font-weight: 600;
   font-size: clamp(0.95rem, 1.6vw, 1.1rem);
-  color: #8C857A;
+  color: #2E2B26;
   letter-spacing: 0.08em;
   line-height: 1.9;
 }
