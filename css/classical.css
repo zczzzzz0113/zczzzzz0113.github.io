@@ -572,15 +572,23 @@ body :not(.navbar-container) > a:hover,
 .archive-list-container .article-item:last-child {
   border-image: linear-gradient(to bottom, #7a6a53 20%, rgba(122, 106, 83, 0) 100%) 1 !important;
 }
-/* 条目节点：古铜空心环（背景填页面底色，形成空心环，与实线区分） */
+/* 条目节点：古铜空心环（背景填页面底色，形成空心环，与实线区分）
+   定位：线中心 = 2px 边框的中心，即相对 li 内边距盒左沿 -1px；
+   用 translateX(-50%) 以自身宽度居中，不依赖 rem，各设备一致压在线上 */
 .archive-list-container .article-item::after {
   border: 2px solid #7a6a53 !important;
   background: #F7F3EA !important;
+  left: -1px !important;
+  transform: translateX(-50%) !important;
 }
-/* 文章节点：实心暖墨小点，与古铜线形成对比，清晰可见 */
+/* 文章节点：实心暖墨小点，与古铜线形成对比，清晰可见
+   定位：.article-title 是相对定位块，其左沿 = li 内边距(1.5rem)起点；
+   线中心在其左 -(1.5rem + 1px)，calc 跟随真实内边距，translateX(-50%) 居中 */
 .archive-list-container .article-item .article-title::after {
   background: #2E2B26 !important;
   border-color: #2E2B26 !important;
+  left: calc(-1.5rem - 1px) !important;
+  transform: translateX(-50%) !important;
 }
 
 /* ---- 15. 移动端公式：横向滑动，避免超出屏幕被裁切 ----
