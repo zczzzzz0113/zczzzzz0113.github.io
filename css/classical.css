@@ -558,10 +558,29 @@ body :not(.navbar-container) > a:hover,
   transition: none !important;
 }
 
-/* 归档竖线：覆盖主题 border-image 渐变（浅灰→透明导致"半根"），
-   显式指定古铜色并加宽，避免在浅色主题下 var(--border-color)=8%黑不可见 */
+/* ---- 14. 归档页时间轴竖线 + 圆点居中 ----
+   主题默认 border-image 渐变（浅灰→透明）会让末项"下半截没颜色"，
+   且浅色下 var(--border-color)=8% 黑几乎不可见。
+   这里：清除 border-image；用纯古铜实色 #7a6a53（与 hero 分割线统一）；
+   边框还原 2px 以匹配主题圆点定位；并用 transform 显式把两个圆点
+   居中到线上（空心环 ::after 与文章实心点 .article-title::after）。
+   另：主题原实心点 background 为 #eaeced 近白，几乎不可见，改古铜实色。 */
 .archive-list-container .article-item {
   border-image: none !important;
-  border-left-color: rgba(120, 100, 80, 0.7) !important;
-  border-left-width: 3px !important;
+  border-left-color: #7a6a53 !important;
+  border-left-width: 2px !important;
+}
+/* 空心环标记（年份/文章）：居中到线上 */
+.archive-list-container .article-item::after {
+  left: -1px !important;
+  transform: translateX(-50%) !important;
+  border-color: #7a6a53 !important;
+  background: transparent !important;
+}
+/* 实心点标记（文章标题）：居中到线上，并修正近白不可见 */
+.archive-list-container .article-item .article-title::after {
+  left: -25px !important;
+  transform: translateX(-50%) !important;
+  background: #7a6a53 !important;
+  border-color: #7a6a53 !important;
 }
