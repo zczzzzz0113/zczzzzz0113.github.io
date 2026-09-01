@@ -54,7 +54,7 @@ body,
 .home-article-title, .home-article-content, .home-article-meta-info,
 .home-article-category, .home-article-tag, .home-article-date,
 .post-title, .markdown-body,
-.cl-hero__title, .cl-hero__sub,
+.cl-hero__title, .cl-hero__eyebrow,
 .cl-footer-line, .cl-footer-motto,
 h1, h2, h3, h4, h5, h6,
 p, a, li, span, blockquote, figcaption {
@@ -191,7 +191,7 @@ body :not(.navbar-container) > a:hover,
   display: none !important;
 }
 
-/* ---- 5. 首页 Hero：占满全屏，纯排版，大量留白 ---- */
+/* ---- 5. 首页 Hero：占满全屏，横向铭牌式（细线夹副标题 + 大而轻主标题） ---- */
 .home-banner-background { display: none !important; }
 
 .cl-hero {
@@ -203,27 +203,63 @@ body :not(.navbar-container) > a:hover,
   justify-content: center;
   text-align: center;
   background: #F7F3EA;
-  padding: 0 24px;
+  padding: 0 clamp(1.2rem, 4vw, 2rem);
 }
+
+.cl-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.3rem, 3.2vh, 2rem);
+}
+
+/* 展签一行：细线 — SIC PARVIS MAGNA — 细线，像书籍扉页/美术馆展签 */
+.cl-hero__eyebrow-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.8rem, 2vw, 1.4rem);
+  opacity: 0;
+  animation: clHeroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+.cl-hero__line {
+  width: clamp(20px, 4vw, 48px);
+  height: 1px;
+  background: #7A6A53;
+  opacity: 0.45;
+}
+.cl-hero__eyebrow {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.72rem, 1.3vw, 0.9rem);
+  letter-spacing: clamp(0.18em, 2.5vw, 0.3em);
+  text-transform: uppercase;
+  color: #8C857A;
+  white-space: nowrap;
+  /* 视觉补偿宽字距造成的右偏 */
+  padding-left: clamp(0.18em, 2.5vw, 0.3em);
+}
+
+/* 主标题：大而轻——用尺寸与留白撑气场，不用粗重压人 */
 .cl-hero__title {
   margin: 0;
-  font-size: 3rem;
-  /* 古典风格的"粗宋体"：英文走 Georgia Bold，
-     中文优先 Source Han Serif SC / Noto Serif SC 的 Bold/Heavy，
-     再回退到系统自带的 SimSun/STSong（用 font-weight: 700 走合成加粗）。*/
-  font-family: Georgia, "Source Han Serif SC Heavy", "Source Han Serif SC Bold",
-    "Noto Serif SC", "Songti SC", STZhongsong, STSong, SimSun, serif !important;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  font-family: Georgia, "Source Han Serif SC", "Noto Serif SC",
+    "Songti SC", STZhongsong, STSong, SimSun, serif !important;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   color: #2E2B26;
-  line-height: 1.2;
+  line-height: 1.25;
+  opacity: 0;
+  animation: clHeroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
-.cl-hero__sub {
-  margin: 0;
-  font-size: 1.15rem;
-  font-style: italic;
-  color: #8C857A;
-  letter-spacing: 0.04em;
+
+@keyframes clHeroFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-hero__eyebrow-row,
+  .cl-hero__title { animation: none; opacity: 1; }
 }
 
 /* 左上角 navbar 站名（同步与 hero 标题同款的粗宋体） */
