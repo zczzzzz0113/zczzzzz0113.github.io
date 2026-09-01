@@ -558,29 +558,27 @@ body :not(.navbar-container) > a:hover,
   transition: none !important;
 }
 
-/* ---- 14. 归档页时间轴竖线 + 圆点居中 ----
-   主题默认 border-image 渐变（浅灰→透明）会让末项"下半截没颜色"，
-   且浅色下 var(--border-color)=8% 黑几乎不可见。
-   这里：清除 border-image；用纯古铜实色 #7a6a53（与 hero 分割线统一）；
-   边框还原 2px 以匹配主题圆点定位；并用 transform 显式把两个圆点
-   居中到线上（空心环 ::after 与文章实心点 .article-title::after）。
-   另：主题原实心点 background 为 #eaeced 近白，几乎不可见，改古铜实色。 */
+/* ---- 14. 归档页时间轴：恢复主题原始几何 + 古铜色 + 末端渐隐 ----
+   主题原始的 left:-7px / left:-1.79rem 本就精确居中在 2px 竖线上，
+   之前我加 transform、改 left 反而打乱了定位。这里只改「颜色」与「末端渐隐」：
+   - 竖线：古铜 #7a6a53（与 hero 分割线统一），2px，保持主题定位
+   - 末端末项：border-image 古铜→透明渐变，象征时间流逝、渐渐淡出
+   - 时间圆点 .article-item::after：恢复为实心古铜点（原主题近白底+灰边几乎看不见，且被我误设成透明空心环）
+   - 文章圆点 .article-title::after：沿用主题原始定位 left:-1.79rem，仅把近白底改成古铜实色 */
 .archive-list-container .article-item {
-  border-image: none !important;
-  border-left-color: #7a6a53 !important;
-  border-left-width: 2px !important;
+  border-left: 2px solid #7a6a53 !important;
 }
-/* 空心环标记（年份/文章）：居中到线上 */
+/* 末项：竖线由古铜渐隐至透明，象征时间流逝 */
+.archive-list-container .article-item:last-child {
+  border-image: linear-gradient(to bottom, #7a6a53 20%, rgba(122, 106, 83, 0) 100%) 1 !important;
+}
+/* 时间节点：实心古铜圆点，居中于线上（沿用主题 left:-7px / top:20px / 12px） */
 .archive-list-container .article-item::after {
-  left: -1px !important;
-  transform: translateX(-50%) !important;
-  border-color: #7a6a53 !important;
-  background: transparent !important;
+  border: 2px solid #7a6a53 !important;
+  background: #7a6a53 !important;
 }
-/* 实心点标记（文章标题）：居中到线上，并修正近白不可见 */
+/* 文章节点：实心古铜小点，沿用主题原始定位（left:-1.79rem / top:0.5em / 7px），仅改可见颜色 */
 .archive-list-container .article-item .article-title::after {
-  left: -25px !important;
-  transform: translateX(-50%) !important;
   background: #7a6a53 !important;
   border-color: #7a6a53 !important;
 }
