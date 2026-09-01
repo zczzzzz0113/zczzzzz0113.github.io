@@ -563,9 +563,10 @@ body :not(.navbar-container) > a:hover,
    border-l-2 border-border-color 的实色边框整个覆盖掉，
    视觉上呈现"下半截没颜色"。这里清除 border-image，
    让最后一项沿用上方各条同色实线，竖线贯通全段。 */
-/* DEBUG 测试色：确认 CSS 链路是否生效；上线确认后立即改回古铜色 */
+/* 归档竖线：覆盖主题 border-image 渐变（浅灰→透明导致"半根"），
+   显式指定古铜色并加宽，避免在浅色主题下 var(--border-color)=8%黑不可见 */
 .archive-list-container .article-item {
   border-image: none !important;
-  border-left-color: #ff0000 !important;
-  border-left-width: 6px !important;
+  border-left-color: rgba(120, 100, 80, 0.7) !important;
+  border-left-width: 3px !important;
 }
