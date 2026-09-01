@@ -115,14 +115,31 @@ body :not(.navbar-container) > a:hover,
   text-underline-offset: 3px;
 }
 
-/* ---- 4. 导航栏：纸感、底部一条发丝线（真实类名 .navbar-container） ---- */
+/* ---- 4. 导航栏：固定顶栏，渐变高斯模糊替代边界横线（真实类名 .navbar-container） ----
+   .main-content-header 是 fixed 顶栏容器（默认高 70px），加宽到 80px；
+   背景改为"上透明 → 下不透明"的纵向渐变，配合 backdrop 高斯模糊：
+   顶边与页面融为一片，底边靠渐深的纸色自然收束，不再画线。 */
+.main-content-header {
+  height: 80px !important;
+}
 .navbar-container {
-  background: rgba(247, 243, 234, 0.92) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid #E4DECF !important;
+  background: linear-gradient(
+    to bottom,
+    rgba(247, 243, 234, 0.25) 0%,
+    rgba(247, 243, 234, 0.78) 55%,
+    rgba(247, 243, 234, 0.97) 100%
+  ) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
+  border-bottom: none !important;
   box-shadow: none !important;
   color: #2E2B26 !important;
+}
+/* 主题滚动收缩时给容器加投影，一并抹掉，保持"无线条"语言 */
+.navbar-shrink .main-content-header,
+.main-content-header.navbar-shrink {
+  height: 80px !important;
+  box-shadow: none !important;
 }
 .navbar-container a,
 .navbar-item {
@@ -474,4 +491,15 @@ body :not(.navbar-container) > a:hover,
 ::selection {
   background: rgba(122, 106, 83, 0.18);
   color: #2E2B26;
+}
+
+/* ---- 13. 标签页：取消按权重虚化，与分类页统一为清晰列表 ----
+   主题给标签云按 data-weight 加 blur（权重越低越虚，悬停标签云才清晰）。
+   虚化文字在纸感极简设计里更像渲染故障，且分类页是纯列表——
+   统一设计语言：两页都保持文字清晰，仅靠字号/计数徽章表达权重。 */
+.tagcloud-content .tag-list a,
+.tagcloud-content:hover .tag-list a {
+  filter: none !important;
+  opacity: 1 !important;
+  transition: none !important;
 }
