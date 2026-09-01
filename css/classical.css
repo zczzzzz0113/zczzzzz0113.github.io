@@ -229,24 +229,33 @@ body :not(.navbar-container) > a:hover,
   animation: clHeroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
 
-/* 打字机副标题：多语言循环，闪动圆点光标 */
+/* 打字机副标题：多语言循环（含 RTL），闪动圆点光标 */
 .cl-hero__type {
   margin: 0;
-  min-height: 1.9em;
+  min-height: 2.2em;
   font-style: italic;
   font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   color: #8C857A;
   letter-spacing: 0.08em;
   line-height: 1.9;
 }
+/* 细分割线：两头渐变淡出 */
+.cl-hero__divider {
+  width: min(280px, 52vw);
+  height: 1px;
+  background: linear-gradient(to right,
+    rgba(122, 106, 83, 0), rgba(122, 106, 83, 0.55) 18%,
+    rgba(122, 106, 83, 0.55) 82%, rgba(122, 106, 83, 0));
+}
+/* 圆点光标：与文字同高；margin-inline-start 使 LTR/RTL 下都贴合文字 */
 .cl-hero__cursor {
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-left: 0.4em;
+  width: 0.82em;
+  height: 0.82em;
+  margin-inline-start: 0.42em;
   border-radius: 50%;
   background: #7A6A53;
-  vertical-align: -0.08em;
+  vertical-align: -0.1em;
 }
 .cl-cursor--idle {
   animation: clCursorBlink 1.1s steps(1, end) infinite;
@@ -262,7 +271,7 @@ body :not(.navbar-container) > a:hover,
 }
 
 @media (max-width: 600px) {
-  .cl-hero__type { min-height: 3.8em; }
+  .cl-hero__type { min-height: 4.4em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
