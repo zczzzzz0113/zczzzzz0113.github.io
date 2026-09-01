@@ -558,13 +558,13 @@ body :not(.navbar-container) > a:hover,
   transition: none !important;
 }
 
-/* ---- 14. 归档页时间轴：恢复主题原始几何 + 古铜色 + 末端渐隐 ----
-   主题原始的 left:-7px / left:-1.79rem 本就精确居中在 2px 竖线上，
-   之前我加 transform、改 left 反而打乱了定位。这里只改「颜色」与「末端渐隐」：
-   - 竖线：古铜 #7a6a53（与 hero 分割线统一），2px，保持主题定位
-   - 末端末项：border-image 古铜→透明渐变，象征时间流逝、渐渐淡出
-   - 时间圆点 .article-item::after：恢复为实心古铜点（原主题近白底+灰边几乎看不见，且被我误设成透明空心环）
-   - 文章圆点 .article-title::after：沿用主题原始定位 left:-1.79rem，仅把近白底改成古铜实色 */
+/* ---- 14. 归档页时间轴：古铜线 + 末端渐隐 + 对比节点 ----
+   竖线：古铜 #7a6a53（与 hero 分割线统一），2px，保留主题原始定位几何
+   末项：border-image 古铜→透明渐变，象征时间流逝渐渐淡出
+   节点设计（恢复「空心环 + 实心点」的经典时间轴观感，且不与线同色）：
+   - 条目节点 .article-item::after：古铜空心环（描边古铜、填充页面底色 #F7F3EA），
+     与实线明显区分，不像之前那样被填成和线同色的实心块
+   - 文章节点 .article-title::after：实心暖墨小点 #2E2B26，与古铜线形成对比，清晰可见 */
 .archive-list-container .article-item {
   border-left: 2px solid #7a6a53 !important;
 }
@@ -572,13 +572,31 @@ body :not(.navbar-container) > a:hover,
 .archive-list-container .article-item:last-child {
   border-image: linear-gradient(to bottom, #7a6a53 20%, rgba(122, 106, 83, 0) 100%) 1 !important;
 }
-/* 时间节点：实心古铜圆点，居中于线上（沿用主题 left:-7px / top:20px / 12px） */
+/* 条目节点：古铜空心环（背景填页面底色，形成空心环，与实线区分） */
 .archive-list-container .article-item::after {
   border: 2px solid #7a6a53 !important;
-  background: #7a6a53 !important;
+  background: #F7F3EA !important;
 }
-/* 文章节点：实心古铜小点，沿用主题原始定位（left:-1.79rem / top:0.5em / 7px），仅改可见颜色 */
+/* 文章节点：实心暖墨小点，与古铜线形成对比，清晰可见 */
 .archive-list-container .article-item .article-title::after {
-  background: #7a6a53 !important;
-  border-color: #7a6a53 !important;
+  background: #2E2B26 !important;
+  border-color: #2E2B26 !important;
+}
+
+/* ---- 15. 移动端公式：横向滑动，避免超出屏幕被裁切 ----
+   KaTeX 默认 .katex-display 已有 overflow-x:auto，但部分移动端浏览器 / 容器会失效，
+   这里用本地 CSS 强制保证；极窄屏再适度缩小字号，让多数公式可直接容纳、超长者可滑动 */
+.katex-display {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0.5em 0 !important;
+  -webkit-overflow-scrolling: touch;
+}
+.katex-display > .katex {
+  white-space: nowrap !important;
+}
+@media (max-width: 640px) {
+  .katex-display {
+    font-size: 0.82em;
+  }
 }
