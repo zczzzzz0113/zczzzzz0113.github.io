@@ -222,11 +222,11 @@
     }
     .cl-hero__title {
       margin: 0;
-      font-family: Georgia, "Source Han Serif SC", "Noto Serif SC",
-        "Songti SC", STZhongsong, STSong, SimSun, serif !important;
+      font-family: Georgia, "Source Han Serif SC Heavy", "Source Han Serif SC Bold",
+        "Noto Serif SC", "Songti SC", STZhongsong, STSong, SimSun, serif !important;
       font-size: clamp(2rem, 5.5vw, 3.2rem) !important;
-      font-weight: 400 !important;
-      letter-spacing: 0.05em !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.06em !important;
       color: #2E2B26 !important;
       line-height: 1.25 !important;
     }
@@ -282,78 +282,97 @@
 
   <script>
   (function () {
-    var el = document.getElementById('cl-type-text');
-    var line = document.getElementById('cl-type-line');
-    var cursor = document.getElementById('cl-cursor');
-    if (!el || el.dataset.typeInit) return;   // 防 pjax 重复初始化
-    el.dataset.typeInit = '1';
+    // 打字机初始化：首载 + pjax 切页返回首页时都要重跑。
+    // 不能用元素上的 data-* 做防重入标记——pjax 会把带标记的 DOM 缓存后
+    // 重新解析，标记跟着回来导致动画不再播放；改用 window 上的元素身份判断。
+    function init() {
+      var el = document.getElementById('cl-type-text');
+      var line = document.getElementById('cl-type-line');
+      var cursor = document.getElementById('cl-cursor');
+      if (!el || !line || !cursor) return;
+      if (window.__clTypeEl === el) return;   // 同一节点已在跑
+      window.__clTypeEl = el;
 
-    var LINES = [
-      { t: "Sic Parvis Magna" },
-      { t: "微末肇基，乃成巍峨" },
-      { t: "From Humble Seeds, Greatness Springs" },
-      { t: "Des Petits Riens Naît la Grandeur" },
-      { t: "De lo Ínfimo Surge lo Sublime" },
-      { t: "Aus Kleinem Keimt Erhabenes" },
-      { t: "Dall'Umile Principio, L'Eccelsa Meta" },
-      { t: "大いなるものは、小さきより生まれる" },
-      { t: "Величие Рождается из Праха" },
-      { t: "مِنَ الصِّغَارِ تَنْبُتُ الْعَظَمَة", rtl: true }
-    ];
-    var BASE_MS = 95;      // 基准打字间隔（约 16 字符时）
-    var FAST_MS = 55;      // 长句加速下限
-    var ERASE_MS = 26;     // 退格间隔（较快）
-    var HOLD_MS = 2200;    // 整句停留
-    var GAP_MS = 450;      // 清空到下一句的停顿
-
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return; // 减弱动效：保持静态首句
-    }
-
-    var idx = 0;
-
-    // 长句打字更快：按长度在 BASE_MS 与 FAST_MS 之间取值
-    function typeDelay(s) {
-      return Math.max(FAST_MS, Math.min(BASE_MS, Math.round(1520 / Math.max(s.length, 1))));
-    }
-
-    function hold() {
-      cursor.classList.add('cl-cursor--idle');
-      setTimeout(next, HOLD_MS);
-    }
-    function next() {
-      idx = (idx + 1) % LINES.length;
-      erase();
-    }
-    function erase() {
-      var s = el.textContent;
-      if (s.length > 0) {
-        el.textContent = s.slice(0, -1);
-        setTimeout(erase, ERASE_MS);
-      } else {
-        setTimeout(typeLine, GAP_MS);
+      // 运行令牌：每次 init 递增，旧循环的 setTimeout 醒来后发现令牌变了就自灭，
+      // 避免被 pjax 换掉的旧节点上的循环永久空转
+      var RUN = window.__clTypeRun = (window.__clTypeRun || 0) + 1;
+      function alive() { return window.__clTypeRun === RUN; }
+      function schedule(fn, ms) {
+        setTimeout(function () { if (alive()) fn(); }, ms);
       }
-    }
-    function typeLine() {
-      cursor.classList.remove('cl-cursor--idle');
-      var item = LINES[idx], s = item.t, k = 0;
-      // 阿拉伯语等 RTL 文案：整行切换书写方向，
-      // 文字靠右、光标居左随打字向左移动，与 LTR 镜像
-      line.setAttribute('dir', item.rtl ? 'rtl' : 'ltr');
-      var d = typeDelay(s);
-      (function step() {
-        if (k <= s.length) {
-          el.textContent = s.slice(0, k);
-          k += 1;
-          setTimeout(step, d);
+
+      var LINES = [
+        { t: "Sic Parvis Magna" },
+        { t: "微末肇基，乃成巍峨" },
+        { t: "From Humble Seeds, Greatness Springs" },
+        { t: "Des Petits Riens Naît la Grandeur" },
+        { t: "De lo Ínfimo Surge lo Sublime" },
+        { t: "Aus Kleinem Keimt Erhabenes" },
+        { t: "Dall'Umile Principio, L'Eccelsa Meta" },
+        { t: "大いなるものは、小さきより生まれる" },
+        { t: "Величие Рождается из Праха" },
+        { t: "مِنَ الصِّغَارِ تَنْبُتُ الْعَظَمَة", rtl: true }
+      ];
+      var BASE_MS = 95;      // 基准打字间隔（约 16 字符时）
+      var FAST_MS = 55;      // 长句加速下限
+      var ERASE_MS = 26;     // 退格间隔（较快）
+      var HOLD_MS = 2200;    // 整句停留
+      var GAP_MS = 450;      // 清空到下一句的停顿
+
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return; // 减弱动效：保持静态首句
+      }
+
+      var idx = 0;
+
+      // 长句打字更快：按长度在 BASE_MS 与 FAST_MS 之间取值
+      function typeDelay(s) {
+        return Math.max(FAST_MS, Math.min(BASE_MS, Math.round(1520 / Math.max(s.length, 1))));
+      }
+
+      function hold() {
+        cursor.classList.add('cl-cursor--idle');
+        schedule(next, HOLD_MS);
+      }
+      function next() {
+        idx = (idx + 1) % LINES.length;
+        erase();
+      }
+      function erase() {
+        var s = el.textContent;
+        if (s.length > 0) {
+          el.textContent = s.slice(0, -1);
+          schedule(erase, ERASE_MS);
         } else {
-          hold();
+          schedule(typeLine, GAP_MS);
         }
-      })();
+      }
+      function typeLine() {
+        cursor.classList.remove('cl-cursor--idle');
+        var item = LINES[idx], s = item.t, k = 0;
+        // 阿拉伯语等 RTL 文案：整行切换书写方向，
+        // 文字靠右、光标居左随打字向左移动，与 LTR 镜像
+        line.setAttribute('dir', item.rtl ? 'rtl' : 'ltr');
+        var d = typeDelay(s);
+        (function step() {
+          if (k <= s.length) {
+            el.textContent = s.slice(0, k);
+            k += 1;
+            schedule(step, d);
+          } else {
+            hold();
+          }
+        })();
+      }
+
+      el.textContent = '';
+      schedule(typeLine, 800);   // 等标题入场后再开始打字
     }
 
-    el.textContent = '';
-    setTimeout(typeLine, 800);   // 等标题入场后再开始打字
+    init();
+    // pjax 切页返回首页时重播（MoOx pjax 在 document 上派发这些事件）
+    document.addEventListener('pjax:complete', init);
+    document.addEventListener('pjax:success', init);
   })();
   </script>
 </section>

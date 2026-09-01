@@ -125,9 +125,9 @@ body :not(.navbar-container) > a:hover,
 .navbar-container {
   background: linear-gradient(
     to bottom,
-    rgba(247, 243, 234, 0.25) 0%,
-    rgba(247, 243, 234, 0.78) 55%,
-    rgba(247, 243, 234, 0.97) 100%
+    rgba(247, 243, 234, 0.08) 0%,
+    rgba(247, 243, 234, 0.5) 55%,
+    rgba(247, 243, 234, 0.82) 100%
   ) !important;
   backdrop-filter: blur(18px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(18px) saturate(140%) !important;
@@ -215,14 +215,14 @@ body :not(.navbar-container) > a:hover,
   gap: clamp(1.4rem, 3.4vh, 2.1rem);
 }
 
-/* 主标题：大而轻——用尺寸与留白撑气场，不用粗重压人 */
+/* 主标题：粗宋体，与左上角站名完全同款（字族/字重/字距一致） */
 .cl-hero__title {
   margin: 0;
   font-size: clamp(2rem, 5.5vw, 3.2rem);
-  font-family: Georgia, "Source Han Serif SC", "Noto Serif SC",
-    "Songti SC", STZhongsong, STSong, SimSun, serif !important;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  font-family: Georgia, "Source Han Serif SC Heavy", "Source Han Serif SC Bold",
+    "Noto Serif SC", "Songti SC", STZhongsong, STSong, SimSun, serif !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: #2E2B26;
   line-height: 1.25;
   opacity: 0;
