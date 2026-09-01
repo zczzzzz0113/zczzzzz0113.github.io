@@ -564,5 +564,5 @@ body :not(.navbar-container) > a:hover,
    视觉上呈现"下半截没颜色"。这里清除 border-image，
    让最后一项沿用上方各条同色实线，竖线贯通全段。 */
 .archive-list-container .article-item:last-child {
-  border-image: none;
+  border-image: none !important;
 }
