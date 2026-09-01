@@ -54,7 +54,7 @@ body,
 .home-article-title, .home-article-content, .home-article-meta-info,
 .home-article-category, .home-article-tag, .home-article-date,
 .post-title, .markdown-body,
-.cl-hero__title, .cl-hero__eyebrow,
+.cl-hero__title, .cl-hero__type,
 .cl-footer-line, .cl-footer-motto,
 h1, h2, h3, h4, h5, h6,
 p, a, li, span, blockquote, figcaption {
@@ -191,7 +191,9 @@ body :not(.navbar-container) > a:hover,
   display: none !important;
 }
 
-/* ---- 5. 首页 Hero：占满全屏，横向铭牌式（细线夹副标题 + 大而轻主标题） ---- */
+/* ---- 5. 首页 Hero：占满全屏，标题在上 + 多语言打字机副标题（闪动圆点光标） ----
+   注意：overrides/home-banner.ejs 里内联了同款关键样式（首帧防闪变），
+   两处需保持同步。 */
 .home-banner-background { display: none !important; }
 
 .cl-hero {
@@ -210,32 +212,7 @@ body :not(.navbar-container) > a:hover,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1.3rem, 3.2vh, 2rem);
-}
-
-/* 展签一行：细线 — SIC PARVIS MAGNA — 细线，像书籍扉页/美术馆展签 */
-.cl-hero__eyebrow-row {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.8rem, 2vw, 1.4rem);
-  opacity: 0;
-  animation: clHeroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-}
-.cl-hero__line {
-  width: clamp(20px, 4vw, 48px);
-  height: 1px;
-  background: #7A6A53;
-  opacity: 0.45;
-}
-.cl-hero__eyebrow {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(0.72rem, 1.3vw, 0.9rem);
-  letter-spacing: clamp(0.18em, 2.5vw, 0.3em);
-  text-transform: uppercase;
-  color: #8C857A;
-  white-space: nowrap;
-  /* 视觉补偿宽字距造成的右偏 */
-  padding-left: clamp(0.18em, 2.5vw, 0.3em);
+  gap: clamp(1.4rem, 3.4vh, 2.1rem);
 }
 
 /* 主标题：大而轻——用尺寸与留白撑气场，不用粗重压人 */
@@ -252,14 +229,45 @@ body :not(.navbar-container) > a:hover,
   animation: clHeroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
 
+/* 打字机副标题：多语言循环，闪动圆点光标 */
+.cl-hero__type {
+  margin: 0;
+  min-height: 1.9em;
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  color: #8C857A;
+  letter-spacing: 0.08em;
+  line-height: 1.9;
+}
+.cl-hero__cursor {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 0.4em;
+  border-radius: 50%;
+  background: #7A6A53;
+  vertical-align: -0.08em;
+}
+.cl-cursor--idle {
+  animation: clCursorBlink 1.1s steps(1, end) infinite;
+}
+@keyframes clCursorBlink {
+  0%, 55%  { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+
 @keyframes clHeroFadeUp {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 600px) {
+  .cl-hero__type { min-height: 3.8em; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .cl-hero__eyebrow-row,
   .cl-hero__title { animation: none; opacity: 1; }
+  .cl-hero__cursor { animation: none; }
 }
 
 /* 左上角 navbar 站名（同步与 hero 标题同款的粗宋体） */
