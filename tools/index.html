@@ -510,47 +510,26 @@
 		
 
 		<p>这里是一些实用的小工具，点击即可使用。</p>
-<div class="tool-grid" data-no-swup>
-  <a class="tool-card" href="/tools/slope-field.html">
-    <div class="tool-card-title">线素场可视化</div>
-  </a>
-  <!-- 工具卡片模板（待添加，复制此块并填写即可）
-  <a class="tool-card" href="/tools/xxx.html">
-    <div class="tool-card-title">工具名称</div>
-  </a>
-  -->
+<!-- 直接复用主题的标签云结构（.tagcloud-content / .tag-list），卡片样式与 /tags/ 页完全一致 -->
+<div class="tagcloud-content" data-no-swup>
+  <ul class="tag-list">
+    <li><a href="/tools/slope-field.html">线素场可视化</a></li>
+    <!-- 模板：新增工具时复制这一行
+    <li><a href="/tools/xxx.html">工具名称</a></li>
+    -->
+  </ul>
 </div>
 <p class="tool-empty">更多工具陆续上架中 🛠️</p>
 <style>
-.tool-grid{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin:24px 0;
-  padding:0;
-  list-style:none;
+/* 只做必要的兜底：抵消 markdown 正文对 ul / a 的默认排版影响，
+   卡片外观本身完全交给主题 tagcloud.styl，跟随主题变量（含暗色模式） */
+.tagcloud-content .tag-list{
+  margin:0;
 }
-.tool-card{
-  display:block;
-  text-align:center;
+.tagcloud-content .tag-list li a{
   text-decoration:none;
-  margin:10px;
-  padding:0.9rem 1.4rem;
-  border-radius:var(--redefine-border-radius-large);
-  box-shadow:var(--redefine-box-shadow);
-  background-color:var(--default-background-color);
-  color:var(--default-text-color);
-  font-size:1.4rem;
-  transition:transform .2s ease, color .2s ease, background-color .2s ease, box-shadow .2s ease;
-}
-.tool-card-title{
-  line-height:1.4;
-}
-.tool-card:hover{
-  transform:scale(1.05);
-  box-shadow:var(--redefine-box-shadow-hover);
-  background-color:var(--primary-color);
-  color:var(--invert-text-color);
+  border-bottom:none;
+  box-sizing:border-box;
 }
 .tool-empty{
   color:#6b6358;
