@@ -509,16 +509,14 @@
 		<h1>小工具</h1>
 		
 
-		<p>这里收集一些我亲手制作的数学小工具，点击即可直接在浏览器里使用。后续会持续补充。</p>
-<div class="tool-grid">
+		<p>这里是一些实用的小工具，点击即可使用。</p>
+<div class="tool-grid" data-no-swup>
   <a class="tool-card" href="/tools/slope-field.html">
     <div class="tool-card-title">线素场可视化</div>
-    <div class="tool-card-desc">输入 dy/dx = f(x, y)，绘制微分方程方向场并积分解曲线</div>
   </a>
   <!-- 工具卡片模板（待添加，复制此块并填写即可）
   <a class="tool-card" href="/tools/xxx.html">
     <div class="tool-card-title">工具名称</div>
-    <div class="tool-card-desc">一句话说明这个工具能做什么</div>
   </a>
   -->
 </div>
@@ -526,34 +524,26 @@
 <style>
 .tool-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
   gap:16px;
   margin:24px 0;
 }
 .tool-card{
   display:block;
-  padding:18px 20px;
+  padding:20px 22px;
   border:1px solid #e2d9c8;
   border-radius:12px;
   text-decoration:none;
   color:#2E2B26;
   background:#FBF8F0;
+  font-weight:600;
+  font-size:1.05rem;
   transition:.2s;
 }
 .tool-card:hover{
   transform:translateY(-3px);
   box-shadow:0 6px 20px rgba(0,0,0,.08);
   border-color:#7a6a53;
-}
-.tool-card-title{
-  font-weight:600;
-  font-size:1.05rem;
-  margin-bottom:6px;
-}
-.tool-card-desc{
-  font-size:.9rem;
-  color:#6b6358;
-  line-height:1.5;
 }
 .tool-empty{
   color:#6b6358;
