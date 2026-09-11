@@ -523,34 +523,34 @@
 <p class="tool-empty">更多工具陆续上架中 🛠️</p>
 <style>
 .tool-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  gap:12px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
   margin:24px 0;
+  padding:0;
+  list-style:none;
 }
 .tool-card{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px 20px;
-  border:1px solid #e2d9c8;
-  border-radius:8px;
-  text-decoration:none;
+  display:block;
   text-align:center;
-  color:#2E2B26;
-  background:#F7F3EA;
-  font-weight:600;
-  font-size:1.2rem;
-  letter-spacing:1px;
-  transition:background .2s, color .2s, border-color .2s;
+  text-decoration:none;
+  margin:10px;
+  padding:0.9rem 1.4rem;
+  border-radius:var(--redefine-border-radius-large);
+  box-shadow:var(--redefine-box-shadow);
+  background-color:var(--default-background-color);
+  color:var(--default-text-color);
+  font-size:1.4rem;
+  transition:transform .2s ease, color .2s ease, background-color .2s ease, box-shadow .2s ease;
 }
 .tool-card-title{
   line-height:1.4;
 }
 .tool-card:hover{
-  background:#EFE7D2;
-  color:#7a6a53;
-  border-color:#7a6a53;
+  transform:scale(1.05);
+  box-shadow:var(--redefine-box-shadow-hover);
+  background-color:var(--primary-color);
+  color:var(--invert-text-color);
 }
 .tool-empty{
   color:#6b6358;
