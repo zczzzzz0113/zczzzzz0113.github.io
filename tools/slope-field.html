@@ -84,7 +84,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://zczzzzz0113.github.io/tools/"/>
+    <link rel="canonical" href="https://zczzzzz0113.github.io/tools/slope-field.html"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -93,14 +93,14 @@
         
         <meta name="description" content="zczzzzz 的个人博客 —— 技术笔记、随笔与杂谈">
 <meta property="og:type" content="website">
-<meta property="og:title" content="小工具">
-<meta property="og:url" content="https://zczzzzz0113.github.io/tools/index.html">
+<meta property="og:title" content="zczzzzz 的博客">
+<meta property="og:url" content="https://zczzzzz0113.github.io/tools/slope-field.html">
 <meta property="og:site_name" content="zczzzzz 的博客">
 <meta property="og:description" content="zczzzzz 的个人博客 —— 技术笔记、随笔与杂谈">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://zczzzzz0113.github.io/images/favicon.svg">
-<meta property="article:published_time" content="2026-09-11T14:24:00.000Z">
-<meta property="article:modified_time" content="2026-09-11T14:24:00.000Z">
+<meta property="article:published_time" content="2026-09-11T14:36:20.329Z">
+<meta property="article:modified_time" content="2026-09-11T14:36:20.329Z">
 <meta property="article:author" content="zczzzzz">
 <meta property="article:tag" content="zczzzzz,blog,博客,技术笔记">
 <meta name="twitter:card" content="summary">
@@ -116,7 +116,7 @@
     
     <title>
         
-            小工具 | zczzzzz 的博客
+            zczzzzz 的博客 - Sic Parvis Magna
         
     </title>
 
@@ -506,60 +506,653 @@
 
 	<div class="page-template-content markdown-body">
 		
-		<h1>小工具</h1>
+		<h1></h1>
 		
 
-		<p>这里收集一些我亲手制作的数学小工具，点击即可直接在浏览器里使用。后续会持续补充。</p>
-<div class="tool-grid">
-  <a class="tool-card" href="/tools/slope-field.html">
-    <div class="tool-card-title">线素场可视化</div>
-    <div class="tool-card-desc">输入 dy/dx = f(x, y)，绘制微分方程方向场并积分解曲线</div>
-  </a>
-  <!-- 工具卡片模板（待添加，复制此块并填写即可）
-  <a class="tool-card" href="/tools/xxx.html">
-    <div class="tool-card-title">工具名称</div>
-    <div class="tool-card-desc">一句话说明这个工具能做什么</div>
-  </a>
-  -->
-</div>
-<p class="tool-empty">更多工具陆续上架中 🛠️</p>
+		<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="dwJnGba1XNPLVKBgaQ9YpI">
+<head data-page-node-id="jNV3QHRn2oA1TEFVxrewzp">
+<meta charset="UTF-8" data-page-node-id="E5noKiNzWQojWt2LKqrJEw">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="p0STO6pNU29XellXWkybRZ">
+<title>线素场可视化</title>
 <style>
-.tool-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:16px;
-  margin:24px 0;
-}
-.tool-card{
-  display:block;
-  padding:18px 20px;
-  border:1px solid #e2d9c8;
-  border-radius:12px;
-  text-decoration:none;
-  color:#2E2B26;
-  background:#FBF8F0;
-  transition:.2s;
-}
-.tool-card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 6px 20px rgba(0,0,0,.08);
-  border-color:#7a6a53;
-}
-.tool-card-title{
-  font-weight:600;
-  font-size:1.05rem;
-  margin-bottom:6px;
-}
-.tool-card-desc{
-  font-size:.9rem;
-  color:#6b6358;
-  line-height:1.5;
-}
-.tool-empty{
-  color:#6b6358;
-  font-style:italic;
-}
+  :root{
+    --bg:#f6f8fb; --panel:#ffffff; --border:#e5e9f0; --text:#0f172a;
+    --muted:#64748b; --accent:#2563eb; --accent-soft:#eff6ff; --err:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--text);overflow:hidden}
+  .app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+
+  .topbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;
+          padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border)}
+  .brand{font-weight:700;font-size:15px;letter-spacing:1px}
+  .math{font-family:Cambria,Cambria Math,Georgia,serif;font-style:italic;font-size:16px;color:var(--muted)}
+  #expr{flex:1;min-width:150px;max-width:460px;padding:8px 12px;border:1px solid var(--border);
+        border-radius:9px;font-family:Consolas,"Courier New",monospace;font-size:14px;
+        outline:none;background:#fbfcfe;color:var(--text);transition:border .15s,box-shadow .15s}
+  #expr::placeholder{color:#b6c0cf}
+  #expr:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.13)}
+  #err{display:none;width:100%;font-size:12px;color:var(--err);padding-left:2px}
+  #err.show{display:block}
+  #gear{border:1px solid var(--border);background:#f1f5f9;border-radius:9px;color:var(--text);
+        font-size:13px;padding:8px 13px;cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+  #gear:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+  .drawer{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 22px;
+          padding:10px 14px 12px;background:var(--panel);border-bottom:1px solid var(--border)}
+  .drawer.hidden{display:none}
+  .group{display:flex;flex-direction:column;gap:6px}
+  .group>label{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:1.5px}
+  .row{display:flex;align-items:center;gap:7px}
+  .val{min-width:30px;text-align:right;color:var(--muted);font-family:Consolas,monospace;font-size:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{border:1px solid var(--border);background:#f1f5f9;border-radius:999px;padding:4px 11px;
+        font-size:12px;font-family:Consolas,monospace;color:var(--text);cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+  input[type=range]{accent-color:var(--accent);width:120px}
+  input[type=number]{width:62px;padding:5px 6px;border:1px solid var(--border);border-radius:7px;
+        font-family:Consolas,monospace;font-size:13px;outline:none;background:#fbfcfe;color:var(--text)}
+  input[type=number]:focus{border-color:var(--accent)}
+  .axis-label{font-family:Cambria,Georgia,serif;font-style:italic;font-weight:700;color:var(--accent);font-size:14px}
+  .btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:8px;
+       font-size:13px;padding:6px 13px;cursor:pointer;transition:all .15s;font-family:inherit}
+  .btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+  main{flex:1;position:relative;min-height:0;background:#fbfcfe;user-select:none}
+  #cv{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
+  #tip{position:absolute;pointer-events:none;background:rgba(15,23,42,.92);color:#fff;
+       padding:5px 10px;border-radius:7px;font-size:12px;font-family:Consolas,monospace;
+       white-space:pre;display:none;z-index:5;line-height:1.6;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+  @media (max-width:600px){
+    input[type=range]{width:96px}
+    .topbar{padding:8px 10px}
+    .drawer{padding:8px 10px 10px;gap:10px 16px}
+  }
 </style>
+</head>
+<body data-page-node-id="gZ14hSQB2CTfDjztyAuBDH">
+<div class="app" data-page-node-id="CdKgeGGXMuGewHMvC23Fby">
+  <div class="topbar" data-page-node-id="RCCwlFwAsNK60akfxEDYDC">
+    <span class="brand" data-page-node-id="To8F4Z86ydIVLrmxOcBjda">线素场</span>
+    <span class="math" data-page-node-id="7WjBnvArdi58Zc4ENHuYBj">dy/dx =</span>
+    <input id="expr" type="text" placeholder="如：y - x" spellcheck="false" autocomplete="off" data-page-node-id="chsKJ5ioZ3b2KXZvjzkbwm">
+    <button id="gear" data-page-node-id="RMYDuIgiHTTikRhZWopZDz">设置</button>
+    <div id="err" data-page-node-id="h674wCXOwhYolFnaT4LBs3"></div>
+  </div>
+
+  <div class="drawer" id="drawer" data-page-node-id="VEHq96ApPXrLjrMGubXoJ7">
+    <div class="group" data-page-node-id="1hBVAjMMUCXW8J0dApLR8m">
+      <label data-page-node-id="6IZPQvXeWOzDBFdlxOozgh">示例</label>
+      <div class="chips" id="chips" data-page-node-id="KnmXuCWzPMfEsHYvDFExtc"></div>
+    </div>
+    <div class="group" data-page-node-id="FDQbzh2JFfpFJCq1txPdZq">
+      <label data-page-node-id="6XOH1PQ393TvLyk4yGkRlO">密度</label>
+      <div class="row" data-page-node-id="eTJBpRT669eB4Xj8Gq0XgF">
+        <input type="range" id="density" min="8" max="100" step="1" value="24" data-page-node-id="OZYft5OXjYmwZOxtLjz2lk">
+        <span class="val" id="densityVal" data-page-node-id="V80OJgLZMNi9wvgCGrOP97">24</span>
+      </div>
+    </div>
+    <div class="group" data-page-node-id="XVdcHc7G10XiycWcikg7tP">
+      <label data-page-node-id="C733GIdvHW9K7vi8iQTNRs">线素长度</label>
+      <div class="row" data-page-node-id="39kLBN9DvsotiPH6MAXins">
+        <input type="range" id="seglen" min="0.2" max="1" step="0.05" value="0.45" data-page-node-id="u57Nctp1VeaKpF0Rqncy0m">
+        <span class="val" id="seglenVal" data-page-node-id="6u6sog19TgUMklX8ZLANix">45%</span>
+      </div>
+    </div>
+    <div class="group" data-page-node-id="odE9R0DzuE1JFfgLcl3BMD">
+      <label data-page-node-id="Qfy221Hu7A2NAMkO9m5KRM">范围</label>
+      <div class="row" data-page-node-id="FOoQzwacQ4MZozMwtzlg9z">
+        <span class="axis-label" data-page-node-id="JnKFUJNcNwNRDHrC6RD4Jk">x</span>
+        <input type="number" id="xmin" step="0.5" value="-5" data-page-node-id="6dhMiO3wjX1FBq0dJW0h7T">
+        <input type="number" id="xmax" step="0.5" value="5" data-page-node-id="9AjxEYS2bHhHyGPCFyVeoh">
+        <span class="axis-label" data-page-node-id="JV6SFjuGr7zuAAL13sUxM0">y</span>
+        <input type="number" id="ymin" step="0.5" value="-5" data-page-node-id="uZYbPwBUXCYCrw1LsrJeDI">
+        <input type="number" id="ymax" step="0.5" value="5" data-page-node-id="HqSOBpo1pEkgB05XqGIelH">
+      </div>
+    </div>
+    <div class="group" data-page-node-id="XVOAIFDSvfFG4pWyRDqDao">
+      <label data-page-node-id="cQOC1gJxg0LTDmAmNM5IFQ">操作</label>
+      <div class="row" data-page-node-id="7wcyzV4jKaUXpktNLTtx74">
+        <button class="btn" id="btnClear" data-page-node-id="s4wCNrmvBPQ6gZ9cfnLL5m">清除曲线</button>
+        <button class="btn" id="btnReset" data-page-node-id="99D75L6i3d8qHdvLZl8AP4">重置</button>
+        <button class="btn" id="btnSave" data-page-node-id="rVrpLa0Z57E8fjR32ugDdJ">PNG</button>
+      </div>
+    </div>
+  </div>
+
+  <main data-page-node-id="qtoLRsv0SxP6VFflPqgdBm">
+    <canvas id="cv" data-page-node-id="XYcn35l9MFkKGHtB0YUm8m"></canvas>
+    <div id="tip" data-page-node-id="PZ3S6zZgBpQAnQEsGEYEcs"></div>
+    <div class="hint" data-page-node-id="hPfI0ZCETBhrqhqnubYGDc">单击添加解曲线 · 拖动初始点 · 右键删除 · 滚轮 / 双指缩放</div>
+  </main>
+</div>
+
+<script>
+'use strict';
+/* ================= 表达式解析器：dy/dx = f(x, y) ================= */
+const FUNCS = {
+  sin:Math.sin, cos:Math.cos, tan:Math.tan,
+  asin:Math.asin, acos:Math.acos, atan:Math.atan,
+  sinh:Math.sinh, cosh:Math.cosh, tanh:Math.tanh,
+  exp:Math.exp, ln:Math.log, log:Math.log, sqrt:Math.sqrt,
+  abs:Math.abs, floor:Math.floor, ceil:Math.ceil, round:Math.round, sign:Math.sign,
+  csc:x=>1/Math.sin(x), sec:x=>1/Math.cos(x), cot:x=>1/Math.tan(x)
+};
+const CONSTS = { pi:Math.PI, e:Math.E, tau:2*Math.PI };
+
+function tokenize(src){
+  const toks=[]; let i=0;
+  const isDigit=c=>c>='0'&&c<='9';
+  const isAlpha=c=>/[a-zA-Z]/.test(c);
+  while(i<src.length){
+    const c=src[i];
+    if(c===' '||c==='\t'){ i++; continue; }
+    if(isDigit(c)||(c==='.'&&isDigit(src[i+1]||''))){
+      let j=i; while(j<src.length&&(isDigit(src[j])||src[j]==='.')) j++;
+      toks.push({t:'num', v:parseFloat(src.slice(i,j))}); i=j; continue;
+    }
+    if(isAlpha(c)){
+      let j=i; while(j<src.length&&isAlpha(src[j])) j++;
+      toks.push({t:'id', v:src.slice(i,j)}); i=j; continue;
+    }
+    if('+-*/^(),'.includes(c)){ toks.push({t:c}); i++; continue; }
+    throw new Error('无法识别的字符 "'+c+'"');
+  }
+  return toks;
+}
+
+function parse(src){
+  const toks=tokenize(src);
+  let p=0;
+  const peek=()=>toks[p];
+  function expect(t,msg){
+    if(!peek()||peek().t!==t) throw new Error(msg||('语法错误：期望 "'+t+'"'));
+    p++;
+  }
+  function atom(){
+    const tk=peek();
+    if(!tk) throw new Error('语法错误：表达式不完整');
+    if(tk.t==='num'){ p++; const v=tk.v; return ()=>v; }
+    if(tk.t==='('){ p++; const n=expr(); expect(')','语法错误：缺少右括号'); return n; }
+    if(tk.t==='id'){
+      const name=tk.v;
+      if(FUNCS[name]){
+        p++; expect('(','函数 '+name+' 需要括号，如 '+name+'(x)');
+        const arg=expr(); expect(')','语法错误：缺少右括号');
+        const fn=FUNCS[name];
+        return (x,y)=>fn(arg(x,y));
+      }
+      if(name in CONSTS){ p++; const v=CONSTS[name]; return ()=>v; }
+      if(name==='x'){ p++; return (x,y)=>x; }
+      if(name==='y'){ p++; return (x,y)=>y; }
+      if(/^[xy]+$/.test(name)){ /* 隐式变量乘积，如 xy = x*y */
+        p++;
+        let node = name[0]==='x' ? (x,y)=>x : (x,y)=>y;
+        for(const c of name.slice(1)){
+          const a=node, b=(c==='x'?(x,y)=>x:(x,y)=>y);
+          node=(x,y)=>a(x,y)*b(x,y);
+        }
+        return node;
+      }
+      throw new Error('未知标识符 "'+name+'"');
+    }
+    throw new Error('语法错误：意外的符号 "'+tk.t+'"');
+  }
+  function power(){
+    const base=atom();
+    if(peek()&&peek().t==='^'){
+      p++; const e=unary();
+      return (x,y)=>Math.pow(base(x,y), e(x,y));
+    }
+    return base;
+  }
+  function unary(){
+    const tk=peek();
+    if(tk&&tk.t==='-'){ p++; const u=unary(); return (x,y)=>-u(x,y); }
+    if(tk&&tk.t==='+'){ p++; return unary(); }
+    return power();
+  }
+  function term(){
+    let n=unary();
+    for(;;){
+      const tk=peek();
+      if(tk&&tk.t==='*'){ p++; const b=unary(); const a=n; n=(x,y)=>a(x,y)*b(x,y); }
+      else if(tk&&tk.t==='/'){ p++; const b=unary(); const a=n; n=(x,y)=>a(x,y)/b(x,y); }
+      else if(tk&&(tk.t==='num'||tk.t==='id'||tk.t==='(')){ /* 隐式乘法 */
+        const b=unary(); const a=n; n=(x,y)=>a(x,y)*b(x,y);
+      }
+      else break;
+    }
+    return n;
+  }
+  function expr(){
+    let n=term();
+    while(peek()&&(peek().t==='+'||peek().t==='-')){
+      const op=peek().t; p++;
+      const b=term(); const a=n;
+      n = op==='+' ? (x,y)=>a(x,y)+b(x,y) : (x,y)=>a(x,y)-b(x,y);
+    }
+    return n;
+  }
+  const root=expr();
+  if(p<toks.length) throw new Error('存在无法解析的内容："' + (toks[p].v!==undefined?toks[p].v:toks[p].t) + '"');
+  return root;
+}
+
+/* ================= 状态 ================= */
+const state = { f:null, density:24, lenFrac:0.675, points:[] };
+const view = { xmin:-5, xmax:5, ymin:-5, ymax:5 };
+const PALETTE = ['#e11d48','#0d9488','#7c3aed','#ea580c','#0284c7','#65a30d','#db2777','#475569'];
+
+const $=s=>document.querySelector(s);
+const canvas=$('#cv'), ctx=canvas.getContext('2d');
+const wrap=document.querySelector('main'), tip=$('#tip');
+const exprInput=$('#expr'), errBox=$('#err');
+let W=0, H=0;
+
+const X=x=>(x-view.xmin)/(view.xmax-view.xmin)*W;
+const Y=y=>H-(y-view.ymin)/(view.ymax-view.ymin)*H;
+const DX=px=>view.xmin+px/W*(view.xmax-view.xmin);
+const DY=py=>view.ymin+(H-py)/H*(view.ymax-view.ymin);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* 强制 x/y 等比刻度：单位像素长度一致（网格恒为正方形），只扩展不裁剪 */
+function fitAspect(){
+  if(W===0||H===0) return;
+  const ux=(view.xmax-view.xmin)/W, uy=(view.ymax-view.ymin)/H; /* 每像素单位数 */
+  if(ux>uy){
+    const c=(view.ymin+view.ymax)/2, half=ux*H/2;
+    view.ymin=c-half; view.ymax=c+half;
+  }else if(uy>ux){
+    const c=(view.xmin+view.xmax)/2, half=uy*W/2;
+    view.xmin=c-half; view.xmax=c+half;
+  }
+}
+
+/* ================= 绘制 ================= */
+function niceStep(range, target){
+  const raw=range/target;
+  const p=Math.pow(10, Math.floor(Math.log10(raw)));
+  const m=raw/p;
+  return (m<1.5?1 : m<3?2 : m<7?5 : 10)*p;
+}
+function fmtNum(v){
+  if(Math.abs(v)<1e-10) return '0';
+  let s=Math.abs(v)>=1000?v.toFixed(0):Math.abs(v)>=10?v.toFixed(1):v.toFixed(2);
+  if(s.includes('.')) s=s.replace(/0+$/,'').replace(/\.$/,'');
+  return s;
+}
+
+function drawGrid(){
+  /* 横纵统一刻度：按较大范围取整步长，配合等比刻度，网格恒为正方形 */
+  const step=niceStep(Math.max(view.xmax-view.xmin, view.ymax-view.ymin), 8);
+  ctx.lineWidth=1;
+  ctx.strokeStyle='#e9edf3';
+  ctx.beginPath();
+  for(let i=Math.ceil(view.xmin/step); i*step<=view.xmax; i++){
+    const px=Math.round(X(i*step))+0.5;
+    ctx.moveTo(px,0); ctx.lineTo(px,H);
+  }
+  for(let j=Math.ceil(view.ymin/step); j*step<=view.ymax; j++){
+    const py=Math.round(Y(j*step))+0.5;
+    ctx.moveTo(0,py); ctx.lineTo(W,py);
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle='#94a3b8';
+  ctx.lineWidth=1.5;
+  const ax=clamp(Y(0),0,H), ay=clamp(X(0),0,W);
+  ctx.beginPath();
+  ctx.moveTo(0,ax); ctx.lineTo(W,ax);
+  ctx.moveTo(ay,0); ctx.lineTo(ay,H);
+  ctx.stroke();
+
+  ctx.fillStyle='#8492a6';
+  ctx.font='11px Consolas, monospace';
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  const labelY=clamp(ax+4,2,H-14);
+  for(let i=Math.ceil(view.xmin/step); i*step<=view.xmax; i++){
+    if(i===0) continue;
+    ctx.fillText(fmtNum(i*step), X(i*step), labelY);
+  }
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  const labelX=clamp(ay-5,26,W-4);
+  for(let j=Math.ceil(view.ymin/step); j*step<=view.ymax; j++){
+    if(j===0) continue;
+    ctx.fillText(fmtNum(j*step), labelX, Y(j*step));
+  }
+  if(view.xmin<0&&view.xmax>0&&view.ymin<0&&view.ymax>0){
+    ctx.textAlign='right'; ctx.textBaseline='top';
+    ctx.fillText('0', X(0)-4, clamp(Y(0)+4,2,H-14));
+  }
+}
+
+function drawField(){
+  const n=state.density;
+  const cellX=W/n, cellY=H/n;
+  const len=Math.min(cellX,cellY)*state.lenFrac;
+  const sx=W/(view.xmax-view.xmin), sy=H/(view.ymax-view.ymin);
+  /* 按色相分桶合并绘制，高密度下仍流畅 */
+  const NB=14, buckets=[];
+  for(let b=0;b<NB;b++) buckets.push([]);
+  for(let i=0;i<n;i++){
+    for(let j=0;j<n;j++){
+      const x=view.xmin+(view.xmax-view.xmin)*(i+0.5)/n;
+      const y=view.ymin+(view.ymax-view.ymin)*(j+0.5)/n;
+      const k=state.f(x,y);
+      if(!isFinite(k)) continue;
+      let ux=sx, uy=-k*sy;                    /* 数据方向 (1,k) → 像素方向 */
+      const L=Math.hypot(ux,uy)||1;
+      ux=ux/L*len/2; uy=uy/L*len/2;
+      const hue=210-(Math.atan(k)/(Math.PI/2))*210;
+      const bi=clamp(Math.floor(hue/15),0,NB-1);
+      const cx=X(x), cy=Y(y);
+      buckets[bi].push(cx-ux, cy-uy, cx+ux, cy+uy);
+    }
+  }
+  ctx.lineWidth=2;
+  ctx.lineCap='round';
+  for(let b=0;b<NB;b++){
+    const arr=buckets[b];
+    if(!arr.length) continue;
+    ctx.strokeStyle='hsla('+(b*15+7)+',62%,45%,0.85)';
+    ctx.beginPath();
+    for(let m=0;m<arr.length;m+=4){
+      ctx.moveTo(arr[m],arr[m+1]);
+      ctx.lineTo(arr[m+2],arr[m+3]);
+    }
+    ctx.stroke();
+  }
+}
+
+/* RK4 积分解曲线 */
+function integrate(arr, h){
+  let x=arr[0][0], y=arr[0][1];
+  const mx=(view.xmax-view.xmin)*0.02, my=(view.ymax-view.ymin)*0.02;
+  const f=state.f;
+  for(let i=0;i<1500;i++){
+    const k1=f(x,y);            if(!isFinite(k1)) break;
+    const k2=f(x+h/2,y+k1*h/2); if(!isFinite(k2)) break;
+    const k3=f(x+h/2,y+k2*h/2); if(!isFinite(k3)) break;
+    const k4=f(x+h,y+k3*h);     if(!isFinite(k4)) break;
+    x+=h;
+    y+=(k1+2*k2+2*k3+k4)*h/6;
+    if(!isFinite(y)||Math.abs(y)>1e7) break;
+    arr.push([x,y]);
+    if(x<view.xmin-mx||x>view.xmax+mx||y<view.ymin-my||y>view.ymax+my) break;
+  }
+}
+function solveCurve(x0,y0){
+  const h=(view.xmax-view.xmin)/400;
+  const fwd=[[x0,y0]], bwd=[[x0,y0]];
+  integrate(fwd, h);
+  integrate(bwd,-h);
+  bwd.reverse();
+  return bwd.concat(fwd.slice(1));
+}
+function drawCurves(){
+  if(!state.f) return;
+  ctx.lineWidth=2.5;
+  ctx.lineJoin='round'; ctx.lineCap='round';
+  state.points.forEach((pt,i)=>{
+    const pts=solveCurve(pt.x,pt.y);
+    ctx.strokeStyle=PALETTE[i%PALETTE.length];
+    ctx.beginPath();
+    for(let m=0;m<pts.length;m++){
+      const px=X(pts[m][0]), py=Y(pts[m][1]);
+      if(m===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  });
+}
+function drawPoints(){
+  state.points.forEach((pt,i)=>{
+    const px=X(pt.x), py=Y(pt.y);
+    ctx.beginPath();
+    ctx.arc(px,py,5.5,0,Math.PI*2);
+    ctx.fillStyle=PALETTE[i%PALETTE.length];
+    ctx.fill();
+    ctx.lineWidth=2;
+    ctx.strokeStyle='#fff';
+    ctx.stroke();
+  });
+}
+
+function draw(){
+  if(W===0) return;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fbfcfe';
+  ctx.fillRect(0,0,W,H);
+  drawGrid();
+  if(state.f){
+    drawField();
+    drawCurves();
+    drawPoints();
+  }
+}
+
+/* ================= 尺寸 ================= */
+function resize(){
+  const DPR=window.devicePixelRatio||1;
+  W=wrap.clientWidth; H=wrap.clientHeight;
+  canvas.width=Math.round(W*DPR);
+  canvas.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  fitAspect(); syncRangeInputs();
+  draw();
+}
+new ResizeObserver(resize).observe(wrap);
+
+/* ================= 交互（鼠标 + 触摸 + 双指缩放） ================= */
+function hitPoint(px,py){
+  let best=-1, bd=144;
+  state.points.forEach((pt,i)=>{
+    const d=Math.hypot(X(pt.x)-px, Y(pt.y)-py);
+    if(d<bd){ bd=d; best=i; }
+  });
+  return best;
+}
+function updateTip(px,py){
+  if(!state.f||px<0||py<0||px>W||py>H){ tip.style.display='none'; return; }
+  const x=DX(px), y=DY(py), k=state.f(x,y);
+  tip.textContent='('+x.toFixed(2)+', '+y.toFixed(2)+')\nk = '+(isFinite(k)?k.toFixed(3):'无定义');
+  tip.style.display='block';
+  const r=tip.getBoundingClientRect();
+  let tx=px+14, ty=py+14;
+  if(tx+r.width>W-6) tx=px-r.width-14;
+  if(ty+r.height>H-6) ty=py-r.height-14;
+  tip.style.left=tx+'px';
+  tip.style.top=ty+'px';
+}
+
+const active=new Map();   // pointerId -> [px,py]
+let tapInfo=null;         // 单指：点击/拖点/平移
+let pinch=null;           // 双指：缩放手势
+
+canvas.addEventListener('pointerdown', e=>{
+  const r=canvas.getBoundingClientRect();
+  const px=e.clientX-r.left, py=e.clientY-r.top;
+  active.set(e.pointerId,[px,py]);
+  canvas.setPointerCapture(e.pointerId);
+  if(active.size===1){
+    tapInfo={sx:px, sy:py, lx:px, ly:py, dragIdx:hitPoint(px,py)};
+  }else{
+    tapInfo=null; /* 第二指落下：取消单指手势，进入捏合 */
+    const pts=[...active.values()];
+    pinch={
+      d0:Math.hypot(pts[0][0]-pts[1][0], pts[0][1]-pts[1][1])||1,
+      view0:{...view},
+      mid0:[(pts[0][0]+pts[1][0])/2, (pts[0][1]+pts[1][1])/2]
+    };
+  }
+});
+canvas.addEventListener('pointermove', e=>{
+  const r=canvas.getBoundingClientRect();
+  const px=e.clientX-r.left, py=e.clientY-r.top;
+  if(active.has(e.pointerId)) active.set(e.pointerId,[px,py]);
+
+  if(pinch&&active.size>=2){
+    const pts=[...active.values()];
+    const d=Math.hypot(pts[0][0]-pts[1][0], pts[0][1]-pts[1][1])||1;
+    const mid=[(pts[0][0]+pts[1][0])/2, (pts[0][1]+pts[1][1])/2];
+    const v0=pinch.view0;
+    const ax=pinch.mid0[0]/W*(v0.xmax-v0.xmin)+v0.xmin;
+    const ay=v0.ymin+(H-pinch.mid0[1])/H*(v0.ymax-v0.ymin);
+    const s=pinch.d0/d;
+    view.xmin=ax-(ax-v0.xmin)*s; view.xmax=ax+(v0.xmax-ax)*s;
+    view.ymin=ay-(ay-v0.ymin)*s; view.ymax=ay+(v0.ymax-ay)*s;
+    const ddx=(mid[0]-pinch.mid0[0])/W*(view.xmax-view.xmin);
+    const ddy=(mid[1]-pinch.mid0[1])/H*(view.ymax-view.ymin);
+    view.xmin-=ddx; view.xmax-=ddx; view.ymin+=ddy; view.ymax+=ddy;
+    draw(); syncRangeInputs();
+    return;
+  }
+
+  if(active.size<=1) updateTip(px,py);
+  if(!tapInfo) return;
+
+  const moved=Math.hypot(px-tapInfo.sx,py-tapInfo.sy)>6;
+  if(tapInfo.dragIdx>=0){
+    state.points[tapInfo.dragIdx].x=DX(px);
+    state.points[tapInfo.dragIdx].y=DY(py);
+    draw();
+  }else if(moved){
+    const ddx=(px-tapInfo.lx)*(view.xmax-view.xmin)/W;
+    const ddy=(py-tapInfo.ly)*(view.ymax-view.ymin)/H;
+    view.xmin-=ddx; view.xmax-=ddx;
+    view.ymin+=ddy; view.ymax+=ddy;
+    draw(); syncRangeInputs();
+  }
+  tapInfo.lx=px; tapInfo.ly=py;
+});
+function endPointer(e){
+  const r=canvas.getBoundingClientRect();
+  const px=e.clientX-r.left, py=e.clientY-r.top;
+  active.delete(e.pointerId);
+  if(pinch){ if(active.size<2) pinch=null; return; }
+  if(tapInfo&&e.type==='pointerup'){
+    const moved=Math.hypot(px-tapInfo.sx,py-tapInfo.sy)>6;
+    if(!moved&&tapInfo.dragIdx<0&&e.button===0){
+      state.points.push({x:DX(px), y:DY(py)});
+      draw();
+    }
+  }
+  tapInfo=null;
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+canvas.addEventListener('pointerleave', ()=>{ tip.style.display='none'; });
+canvas.addEventListener('contextmenu', e=>{
+  const r=canvas.getBoundingClientRect();
+  const i=hitPoint(e.clientX-r.left, e.clientY-r.top);
+  if(i>=0){
+    state.points.splice(i,1);
+    draw();
+    e.preventDefault();
+  }
+});
+wrap.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const r=canvas.getBoundingClientRect();
+  const cx=DX(e.clientX-r.left), cy=DY(e.clientY-r.top);
+  const f=e.deltaY<0?0.88:1.14;
+  view.xmin=cx-(cx-view.xmin)*f; view.xmax=cx+(view.xmax-cx)*f;
+  view.ymin=cy-(cy-view.ymin)*f; view.ymax=cy+(view.ymax-cy)*f;
+  draw(); syncRangeInputs();
+},{passive:false});
+
+/* ================= 控件 ================= */
+function applyExpr(){
+  const src=exprInput.value.trim();
+  if(!src){
+    state.f=null;
+    errBox.classList.remove('show');
+    draw();
+    return;
+  }
+  try{
+    state.f=parse(src);
+    errBox.classList.remove('show');
+    draw();
+  }catch(err){
+    errBox.textContent='⚠ '+err.message;
+    errBox.classList.add('show');
+  }
+}
+let debTimer=null;
+exprInput.addEventListener('input', ()=>{ clearTimeout(debTimer); debTimer=setTimeout(applyExpr,300); });
+exprInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ clearTimeout(debTimer); applyExpr(); } });
+
+const PRESETS=['y - x','x + y','x * y','sin(x) * cos(y)','-y','y / x'];
+const chipsBox=$('#chips');
+PRESETS.forEach(s=>{
+  const b=document.createElement('button');
+  b.className='chip';
+  b.textContent=s;
+  b.addEventListener('click', ()=>{
+    exprInput.value=s;
+    applyExpr();
+    if(window.innerWidth<600) drawer.classList.add('hidden');
+  });
+  chipsBox.appendChild(b);
+});
+
+$('#density').addEventListener('input', e=>{
+  state.density=+e.target.value;
+  $('#densityVal').textContent=state.density;
+  draw();
+});
+$('#seglen').addEventListener('input', e=>{
+  state.lenFrac=+e.target.value*1.5;  /* 滑条 100% = 1.5 格 */
+  $('#seglenVal').textContent=Math.round(e.target.value*100)+'%';
+  draw();
+});
+
+const rangeInputs={ xmin:$('#xmin'), xmax:$('#xmax'), ymin:$('#ymin'), ymax:$('#ymax') };
+function syncRangeInputs(){
+  rangeInputs.xmin.value=Math.round(view.xmin*100)/100;
+  rangeInputs.xmax.value=Math.round(view.xmax*100)/100;
+  rangeInputs.ymin.value=Math.round(view.ymin*100)/100;
+  rangeInputs.ymax.value=Math.round(view.ymax*100)/100;
+}
+Object.values(rangeInputs).forEach(inp=>inp.addEventListener('change', ()=>{
+  const a=parseFloat(rangeInputs.xmin.value), b=parseFloat(rangeInputs.xmax.value);
+  const c=parseFloat(rangeInputs.ymin.value), d=parseFloat(rangeInputs.ymax.value);
+  if(!isFinite(a)||!isFinite(b)||!isFinite(c)||!isFinite(d)||a>=b||c>=d){ syncRangeInputs(); return; }
+  view.xmin=a; view.xmax=b; view.ymin=c; view.ymax=d;
+  fitAspect(); syncRangeInputs();
+  draw();
+}));
+
+const drawer=$('#drawer'), gear=$('#gear');
+gear.addEventListener('click', ()=>{
+  drawer.classList.toggle('hidden');
+  gear.textContent=drawer.classList.contains('hidden')?'设置':'收起';
+});
+
+$('#btnClear').addEventListener('click', ()=>{ state.points=[]; draw(); });
+$('#btnReset').addEventListener('click', ()=>{
+  view.xmin=-5; view.xmax=5; view.ymin=-5; view.ymax=5;
+  fitAspect(); syncRangeInputs(); draw();
+});
+$('#btnSave').addEventListener('click', ()=>{
+  const a=document.createElement('a');
+  a.download='slope-field.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+});
+
+/* ================= 启动 ================= */
+if(window.innerWidth<600) drawer.classList.add('hidden');
+applyExpr();
+resize();
+if(window.innerWidth>=600) exprInput.focus();
+</script>
+</body>
+</html>
 
 	</div>
 
