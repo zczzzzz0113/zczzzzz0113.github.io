@@ -526,6 +526,16 @@
 .tagcloud-content .tag-list{
   margin:0;
 }
+/* 黑点来源：正文区规则 .markdown-body ul:not(.not-markdown) li{list-style:disc}
+   优先级高于主题 tagcloud 的 list-style:none（/tags/ 是独立模板，不吃这条，
+   但 /tools/ 是 md 页面、内容包在 .markdown-body 里，所以被画出了 disc）。
+   这里用同等以上的选择器显式抵消。 */
+.markdown-body ul.tag-list,
+.markdown-body ul.tag-list li{
+  list-style:none !important;
+  padding-left:0 !important;
+  margin-left:0 !important;
+}
 .tagcloud-content .tag-list li a{
   text-decoration:none;
   border-bottom:none;
