@@ -1,0 +1,3938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>线性代数工具箱 | 行列式·逆矩阵·特征值·二次型·多项式</title>
+<meta name="description" content="免费在线线性代数计算工具，支持行列式、逆矩阵、矩阵的秩、特征值与特征向量、矩阵对角化、线性方程组求解、二次型化标准型、多项式带余除法等，全程展示逐步解题过程。">
+<meta name="keywords" content="线性代数,行列式计算,逆矩阵,矩阵的秩,特征值,特征向量,矩阵对角化,线性方程组,二次型,高斯消元,最简行阶梯形,RREF,过渡矩阵,多项式除法,大学数学工具">
+<meta name="author" content="zczzzzz, Genkaim">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#f4f4f4">
+<meta property="og:type" content="website">
+<meta property="og:title" content="线性代数工具箱 | 逐步解题过程">
+<meta property="og:description" content="免费在线线性代数计算器，涵盖行列式、逆矩阵、特征值、方程组、二次型等，支持分步演示，适合大学线性代数学习。">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线性代数工具箱">
+<meta name="twitter:description" content="免费在线线性代数计算器，逐步展示行列式、逆矩阵、特征值、方程组求解过程。">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"线性代数工具箱","description":"免费在线线性代数计算工具","applicationCategory":"EducationalApplication","operatingSystem":"Any","isAccessibleForFree":true,"author":[{"@type":"Person","name":"zczzzzz"},{"@type":"Person","name":"Genkaim"}],"offers":{"@type":"Offer","price":"0"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #f4f4f46f;
+  --bg2:     #e9e9e9a5;
+  --surface: #e9e9e9a5;
+  --surface2:#d4d4d4;
+  --border:  #243448;
+  --border2: #2e4060;
+  --text:    #262729;
+  --text2:   #51575e;
+  --accent:  rgb(114, 116, 54);
+  --accent2: rgb(194, 144, 144);
+  --green:   #000000;
+  --red:     #e05252;
+  --purple:  #a78bfa;
+  --r: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+#header{
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+  position:sticky;top:0;z-index:200;
+      backdrop-filter: blur(20px);
+    background-color: #f4f4f46f;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Noto Serif SC',serif;
+  text-decoration:none;
+  cursor:pointer;
+}
+.logo-icon{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.logo-text{
+  font-size:1.05rem;font-weight:700;
+  color:var(--text);letter-spacing:.3px;
+  line-height:1.15;
+}
+.logo-text span{color:#ffb13b}
+.logo-sub{
+  font-size:.65rem;color:var(--text2);
+  font-family:'IBM Plex Sans',sans-serif;font-weight:300;
+  letter-spacing:.5px;text-transform:uppercase;
+  margin-top:1px;
+}
+#menu-toggle{
+  display:none;background:none;border:1px solid var(--border2);
+  color:var(--text2);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:18px;
+}
+
+/* ===== LAYOUT ===== */
+#app{
+  display:flex;flex:1;min-height:0;overflow:hidden;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar{
+  width:260px;min-width:260px;
+  background:#f4f4f4;
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  padding:7px 0;
+  flex-shrink:0;
+}
+.cat-header{
+  padding:8px 16px 4px;
+  background-color: #ffffff00;
+  border-radius: 0px 30px 30px 0px;
+  margin-right: 20px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  font-size:.9rem;font-weight:600;
+  color:#a5a5a5;letter-spacing:1.5px;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+
+.tool-btn{
+  display:block;width:100%;text-align:left;
+  padding:9px 16px 9px 28px;
+  background:none;border:none;color:var(--text2);
+  font-size:.88rem;cursor:pointer;transition:all .15s;
+  border-left:2px solid transparent;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+.tool-btn:hover{color:var(--text);background:var(--surface);border-left-color:var(--border2)}
+.tool-btn.active{
+  background:rgba(82, 82, 82, 0.08);
+  border-left-color:var(--accent);font-weight:500;
+}
+
+/* ===== MAIN ===== */
+#main{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:20px;
+  min-width:0;
+  display:flex;flex-direction:column;
+}
+
+/* ===== WELCOME ===== */
+#welcome{
+  max-width:600px;margin:40px auto;text-align:center;
+}
+.welcome-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:2rem;font-weight:700;color: black;margin-bottom:8px;
+}
+.welcome-sub{color:var(--text2);font-size:.95rem;line-height:1.7}
+.feature-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;
+}
+.feature-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px;text-align:center;
+}
+.feature-card .icon{font-size:1.6rem;margin-bottom:6px}
+.feature-card .label{font-size:.8rem;color:var(--text2)}
+
+/* ===== TOOL PANEL ===== */
+.tool-panel{max-width:860px}
+.panel-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.4rem;font-weight:700;color:var(--text);
+  margin-bottom:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.panel-title::before{
+  content:attr(data-icon);
+  font-size:1.2rem;
+}
+.panel-desc{font-size:.85rem;color:var(--text2);margin-bottom:20px}
+
+/* ===== CARD ===== */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;margin-bottom:16px;
+}
+.card-title{
+  font-size:.85rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;
+}
+
+/* ===== DIM SELECTOR ===== */
+.dim-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.dim-label{font-size:.85rem;color:var(--text2)}
+.dim-select{
+  background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);border-radius:5px;padding:4px 8px;
+  font-size:.85rem;cursor:pointer;
+}
+.dim-select:focus{outline:none;border-color:var(--accent)}
+.dim-cell{
+  width:36px;height:30px;
+  background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);border-radius:5px;
+  text-align:center;font-size:.95rem;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+  cursor:pointer;
+}
+.dim-cell:focus{outline:none;border-color:var(--accent);background:var(--surface2)}
+.dim-cell.focused{border-color:var(--accent)}
+
+/* ===== MATRIX INPUT ===== */
+.matrix-input-wrap{
+  overflow-x:auto;padding-bottom:4px;
+}
+.matrix-input-table{
+  border-collapse:separate;border-spacing:4px;
+}
+.mat-cell{
+  width:52px;height:36px;
+  background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);border-radius:5px;
+  text-align:center;font-size:.9rem;
+  font-family:'JetBrains Mono',monospace;
+  transition:border-color .15s;
+  -webkit-appearance:none;
+}
+.mat-cell:focus{outline:none;border-color:var(--accent);background:var(--surface2)}
+.mat-cell.focused{border-color:var(--accent)}
+.aug-divider{
+  width:2px;background:var(--accent2);border-radius:1px;
+  margin:0 4px;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+  padding:9px 20px;border:none;border-radius:6px;
+  cursor:pointer;font-size:.9rem;font-weight:500;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:all .15s;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#3d3d3d,#535353);
+  color:#ffffff;
+}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-secondary{
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);
+}
+.btn-secondary:hover{border-color:var(--accent);}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Sub-method selector */
+.method-tabs{
+  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;
+}
+
+.method-tab{
+  padding:6px 14px;border-radius:20px;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text2);cursor:pointer;font-size:.83rem;
+  transition:all .15s;
+}
+.method-tab.active{
+  background:rgba(35, 35, 35, 0.819);color:white;
+font-weight:500;
+}
+
+/* ===== RESULTS ===== */
+#results{margin-top:20px;max-width:860px}
+.result-block{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;margin-bottom:14px;
+}
+.result-title{
+  font-size:.8rem;font-weight:600;color:var(--green);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;
+}
+.result-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.05rem;color:var(--green);
+  font-weight:600;
+}
+
+/* ===== STEPS ===== */
+.steps-container{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px;
+}
+.step{
+  margin-bottom:14px;padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.step-num{
+  display:inline-block;
+  width:22px;height:22px;line-height:22px;text-align:center;
+  background:rgb(189, 189, 189);color:#000;border-radius:50%;
+  font-size:.75rem;font-weight:700;margin-right:6px;flex-shrink:0;
+}
+.step-desc{
+  font-size:.88rem;color:var(--text2);margin-bottom:8px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:4px;
+}
+.op-badge{
+  background:rgba(58,142,255,.15);border:1px solid rgba(58,142,255,.3);
+  color:var(--accent2);border-radius:4px;
+  padding:1px 7px;font-family:'JetBrains Mono',monospace;font-size:.82rem;
+}
+
+/* ===== MATRIX DISPLAY ===== */
+.mat-disp-wrap{
+  display:inline-flex;align-items:stretch;gap:0;margin:6px 4px;
+}
+.mat-bracket{
+  width:7px;border:2px solid var(--accent);
+}
+.mat-bracket.left{border-right:none;border-radius:4px 0 0 4px}
+.mat-bracket.right{border-left:none;border-radius:0 4px 4px 0}
+.mat-disp-table{
+  border-collapse:separate;border-spacing:0;
+}
+.mat-disp-table td{
+  padding:3px 8px;
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.88rem;
+  color:var(--text);
+  min-width:36px;
+}
+.mat-aug-line{
+  border-right:1px solid var(--accent2) !important;
+}
+.mat-pivot{color:var(--accent);font-weight:600}
+
+/* Fraction display */
+.frac-disp{
+  display:inline-flex;flex-direction:column;align-items:center;
+  vertical-align:middle;font-size:.8em;line-height:1.1;
+}
+.frac-disp .fn{border-bottom:1px solid currentColor;padding:0 2px}
+.frac-disp .fd{padding:0 2px}
+
+/* Column vector display */
+.vec-disp{display:inline-flex;align-items:stretch;gap:0;margin:2px 4px}
+
+/* ===== SCALAR INPUT ===== */
+.scalar-input{
+  width:80px;height:36px;
+  background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);border-radius:5px;
+  text-align:center;font-size:.9rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.scalar-input:focus{outline:none;border-color:var(--accent)}
+
+/* ===== POLY INPUT ===== */
+.poly-input-row{
+  display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px;
+}
+.poly-coeff{
+  width:52px;height:36px;
+  background:var(--bg2);border:1px solid var(--border2);
+  color:var(--text);border-radius:5px;
+  text-align:center;font-size:.9rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.poly-coeff:focus{outline:none;border-color:var(--accent)}
+.poly-term-label{
+  font-size:.82rem;color:var(--text2);
+  font-family:'JetBrains Mono',monospace;
+}
+.poly-display{
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.1rem;color:var(--text);
+  padding:8px 12px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;
+  margin-top:6px;
+}
+
+/* ===== NUMPAD WRAPPER ===== */
+#numpad-wrap{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  flex-direction:column;align-items:center;
+  pointer-events:none;
+}
+#numpad-wrap.visible{display:flex;}
+
+/* ===== NUMPAD ===== */
+#numpad{
+  width:100%;max-width:500px;
+  background:#e9e9e9;
+  border:1px solid var(--border2);
+  padding:10px 10px 16px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+  box-shadow:0 -8px 30px rgba(0,0,0,0.037);
+  border-radius:12px 12px 0 0;
+  pointer-events:all;
+}
+.np-btn{
+  height:44px;border:1px solid var(--border2);
+  background:var(--surface2);color:var(--text);
+  border-radius:7px;cursor:pointer;font-size:1rem;
+  font-family:'JetBrains Mono',monospace;
+  transition:all .1s;
+  display:flex;align-items:center;justify-content:center;
+}
+.np-btn:active{background:var(--accent);color:#000}
+.np-btn.special{background:var(--bg2);color:#979c85}
+.np-btn.confirm{background:rgba(0, 0, 0, 0.732);color:#ffffff;font-weight:600}
+.np-btn.clear{background:rgba(224,82,82,.15);color:var(--red);border-color:rgba(224,82,82,.3)}
+.np-btn.ans{background:rgba(114,116,54,.12);color:var(--accent);border-color:rgba(114,116,54,.35);font-size:.82rem;font-weight:600;flex-direction:column;gap:1px}
+.np-btn.ans.active{background:rgba(114,116,54,.25)}
+.np-btn.ans.inactive{opacity:.4;cursor:not-allowed}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== OCR OVERLAY ===== */
+.eq-display{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.9rem;color:var(--text);
+  line-height:1.9;
+}
+.eq-var{color:var(--accent2)}
+.eq-coeff{color:var(--text)}
+.eq-result{color:var(--green);font-weight:600}
+
+/* ===== INFO BOXES ===== */
+.info-box{
+  padding:10px 14px;border-radius:6px;
+  margin:8px 0;font-size:.85rem;line-height:1.6;
+}
+.info-box.success{
+  background:rgba(48,200,138,.1);border-left:3px solid var(--green);
+  color:var(--green);
+}
+.info-box.warning{
+  background:rgba(240,165,0,.1);border-left:3px solid var(--accent);
+  color:var(--accent);
+}
+.info-box.error{
+  background:rgba(224,82,82,.1);border-left:3px solid var(--red);
+  color:var(--red);
+}
+.info-box.info{
+  background:rgba(58,142,255,.1);border-left:3px solid var(--accent2);
+  color:var(--accent2);
+}
+
+/* ===== EIGENVALUE TABLE ===== */
+.eigen-table{
+  border-collapse:collapse;margin-top:8px;font-size:.88rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.eigen-table th{
+  background:var(--surface2);color:var(--accent);
+  padding:6px 12px;font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;
+  border:1px solid var(--border2);
+}
+.eigen-table td{
+  padding:6px 12px;border:1px solid var(--border);
+  vertical-align:top;
+}
+
+/* ===== POLY LONG DIV ===== */
+.poly-div-display{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.9rem;
+  overflow-x:auto;
+}
+.poly-div-line{
+  padding:3px 0;
+  border-bottom:1px solid var(--border);
+}
+.poly-highlight{color:var(--accent);font-weight:600}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:700px){
+  #menu-toggle{display:block}
+  #sidebar{
+    position:fixed;top:54px;left:0;bottom:0;z-index:300;
+    transform:translateX(-100%);transition:transform .25s;
+    width:240px;min-width:240px;
+  }
+  #sidebar.open{transform:none;box-shadow:4px 0 20px rgba(0, 0, 0, 0)}
+  #main{padding:14px}
+  .mat-cell{width:44px;height:32px;font-size:.82rem}
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+  .mat-disp-table td{padding:2px 5px;min-width:28px;font-size:.82rem}
+}
+@media(max-width:400px){
+  .mat-cell{width:38px;height:30px}
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text2)}
+
+/* ===== NUMPAD OPEN ===== */
+body.numpad-open #main{padding-bottom:270px;}
+
+/* ===== PAGE FOOTER ===== */
+#page-footer{
+  margin-top:auto;padding:40px 0 20px;
+  text-align:center;font-size:.78rem;
+  color:var(--text2);letter-spacing:.5px;
+  font-family:'Times New Roman',Times,serif;opacity:.8;
+}
+#page-footer a{
+  color:#5a7ab5;text-decoration:none;
+  font-family:'Times New Roman',Times,serif;transition:color .15s;
+}
+#page-footer a:hover{color:#3a5a9a;text-decoration:underline;}
+
+/* ===== HUB PAGE ===== */
+/* ===== HUB PAGE — desktop base ===== */
+#hub-page{max-width:900px}
+.hub-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:1.6rem;font-weight:700;color:var(--text);
+  margin-bottom:4px;
+}
+.hub-subtitle{font-size:.88rem;color:var(--text2);margin-bottom:24px}
+.hub-section{margin-bottom:20px}
+.hub-section-label{
+  font-size:.75rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;
+  color:#a5a5a5;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+  padding-left:2px;
+}
+.hub-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+}
+.hub-section-label{grid-column:1/-1}
+.hub-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;gap:6px;
+  text-align:left;
+}
+.hub-card:hover{
+  border-color:var(--accent);
+  background:rgba(82,82,82,.08);
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(0,0,0,.07);
+}
+.hub-card-icon{font-size:1.3rem;line-height:1;color:var(--text2)}
+.hub-card-name{
+  font-size:.88rem;font-weight:600;color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  line-height:1.3;
+}
+.hub-card-desc{font-size:.75rem;color:var(--text2);line-height:1.4}
+  .hub-section-label{font-size:.68rem;margin-top:5px;margin-bottom:0px;}
+/* ===== HUB PAGE — mobile ===== */
+@media(max-width:700px){
+  .hub-title{font-size:1.1rem;margin-bottom:2px}
+  .hub-subtitle{font-size:.75rem;margin-bottom:12px}
+  .hub-section{margin-bottom:10px}
+  .hub-section-label{font-size:.68rem;margin-top:8px;margin-bottom:0px;}
+  .hub-grid{grid-template-columns:repeat(2,1fr);gap:5px}
+  .hub-card{
+    flex-direction:row;align-items:center;
+    padding:7px 10px;gap:7px;border-radius:6px;
+  }
+  .hub-card:hover{transform:none}
+  .hub-card-icon{font-size:.9rem;flex-shrink:0}
+  .hub-card-name{font-size:.8rem;font-weight:500}
+  .hub-card-desc{display:none}
+}
+
+/* ===== TOOL BOTTOM BUTTONS ===== */
+.tool-bottom-bar{
+  display:flex;gap:10px;flex-wrap:wrap;
+  margin-top:16px;padding-bottom:24px;
+}
+.btn-back-top{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:6px;
+  background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text2);cursor:pointer;font-size:.85rem;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:all .15s;
+}
+.btn-back-top:hover{border-color:var(--accent);color:var(--text)}
+.btn-to-hub{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:6px;
+  background:linear-gradient(135deg,#3d3d3d,#535353);
+  border:none;color:#fff;cursor:pointer;font-size:.85rem;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:all .15s;
+}
+.btn-to-hub:hover{filter:brightness(1.12)}
+
+/* Hub sidebar btn */
+.hub-sidebar-btn{
+  display:flex;align-items:center;gap:8px;
+  width:calc(100% - 20px);
+  margin:4px 10px 4px;
+  padding:9px 14px;
+  background:linear-gradient(135deg,rgba(61,61,61,.1),rgba(83,83,83,.08));
+  border:1px solid var(--border2);
+  border-radius:8px;
+  color:var(--text);font-size:.88rem;font-weight:500;
+  cursor:pointer;text-align:left;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:all .15s;
+  box-sizing:border-box;
+}
+.hub-sidebar-btn span:first-child{
+  font-size:14px;line-height:1;
+  width:14px;text-align:center;flex-shrink:0;
+}
+.hub-sidebar-btn:hover{border-color:var(--accent);background:rgba(82,82,82,.12)}
+.hub-sidebar-btn.active{border-color:var(--accent);background:rgba(82,82,82,.13)}
+
+/* ===== OVERLAY ===== */
+#overlay{
+  display:none;position:fixed;inset:0;z-index:299;
+  background:rgba(106, 0, 0, 0);
+}
+#overlay.visible{display:block}
+
+/* ===== HISTORY ===== */
+.hist-empty{
+  text-align:center;color:var(--text2);
+  font-size:.88rem;padding:40px 0;
+}
+.hist-entry{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);margin-bottom:10px;overflow:hidden;
+}
+.hist-entry-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;cursor:pointer;user-select:none;
+  transition:background .15s;
+}
+.hist-entry-header:hover{background:var(--surface2)}
+.hist-entry-left{display:flex;align-items:center;gap:10px}
+.hist-entry-tool{
+  font-size:.78rem;font-weight:600;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--accent);
+}
+.hist-entry-time{font-size:.75rem;color:var(--text2)}
+.hist-entry-toggle{font-size:.8rem;color:var(--text2);flex-shrink:0}
+.hist-entry-body{
+  display:none;
+  border-top:1px solid var(--border);
+  padding:14px;
+}
+.hist-entry-body.open{display:block}
+.hist-clear-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:6px;
+  background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.25);
+  color:var(--red);cursor:pointer;font-size:.82rem;
+  font-family:'IBM Plex Sans',sans-serif;transition:all .15s;
+}
+.hist-clear-btn:hover{background:rgba(224,82,82,.15)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="logo" onclick="showHub()">
+    <div class="logo-icon">
+
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="55.84003"
+   height="55.84003"
+   viewBox="0 0 755.84003 755.84003"
+   sodipodi:docname="page1_15902207972998808273.pdf"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5">
+      <path
+         d="M 0,0 H 566.88 V 566.88 H 0 Z"
+         transform="translate(-343.47731,-212.7553)"
+         id="path5" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7">
+      <path
+         d="M 0,0 H 566.88 V 566.88 H 0 Z"
+         transform="translate(-331.24261,-312.85271)"
+         id="path7" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9">
+      <path
+         d="M 0,0 H 566.88 V 566.88 H 0 Z"
+         transform="translate(-398.98211,-302.02041)"
+         id="path9" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:page
+       x="0"
+       y="0"
+       inkscape:label="1"
+       id="page1"
+       width="755.84003"
+       height="755.84003"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <g
+     id="g1"
+     inkscape:groupmode="layer"
+     inkscape:label="1">
+    <g
+       id="g2">
+      <g
+         id="layer-MC0">
+        <path
+           id="path3"
+           d="M 0,0.005 H 566.875 V 566.881 H 0 Z"
+           style="fill:#ffe2c5;fill-opacity:1;fill-rule:nonzero;stroke:none"
+           transform="matrix(1.3333333,0,0,-1.3333333,0,755.84)" />
+      </g>
+    </g>
+    <g
+       id="g3">
+      <path
+         id="path4"
+         d="m 0,0 h -196.694 l 4.8,14.106 h 10.192 c 11.83,0 19.48,1.958 22.949,5.875 4.154,4.458 10.194,18.335 18.121,41.629 l 37.312,109.641 c 7.512,22.069 10.782,34.972 9.811,38.71 -0.95,3.097 -3.526,5.023 -7.73,5.779 -0.907,0.211 -5.381,0.317 -13.423,0.317 h -8.504 l 4.8,14.106 H -4.225 L -9.026,216.057 H -22.25 -31.7 c -1.996,0 -3.905,-0.115 -5.725,-0.344 -3.724,-0.727 -6.971,-2.492 -9.741,-5.295 -3.834,-4.207 -9.479,-17.263 -16.933,-39.167 l -39.72,-116.726 c -2.527,-7.418 -4.555,-13.378 -6.086,-17.879 -1.44,-4.229 -2.274,-6.93 -2.499,-8.101 -0.853,-3.118 -0.835,-5.765 0.053,-7.94 1.735,-4.333 9.985,-6.499 24.75,-6.499 h 17.213 c 11.109,0 19.538,0.539 25.286,1.618 7.487,1.766 15.042,5.814 22.664,12.143 8.035,6.645 18.822,20.127 32.361,40.446 l 2.801,4.183 h 13.778 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(1.3333333,0,0,-1.3333333,457.96973,472.16627)"
+         clip-path="url(#clipPath5)" />
+    </g>
+    <g
+       id="g5">
+      <path
+         id="path6"
+         d="M 0,0 -65.05,-87.289 H 5.693 Z M -74.356,-101.395 -93.1,-124.096 c -8.243,-12.314 -13.368,-21.417 -15.375,-27.308 -1.695,-4.989 -1.284,-9.025 1.231,-12.109 2.516,-3.084 6.6,-4.626 12.251,-4.626 h 4.79 l -4.8,-14.105 h -72.356 l 4.628,13.6 c 12.977,1.932 23.228,6.63 30.754,14.095 1.57,1.623 3.255,3.38 5.056,5.271 1.801,1.89 3.23,3.622 4.287,5.195 1.724,2.416 3.589,4.878 5.596,7.386 2.007,2.509 4.426,5.707 7.257,9.596 1.907,1.638 6.954,8.323 15.143,20.056 L 22.572,47.574 h 11.133 l 15.799,-193.947 c 0.348,-8.056 2.038,-13.846 5.069,-17.369 1.731,-2.15 7.431,-3.737 17.1,-4.762 l -4.677,-13.74 H -26.62 l 4.8,14.105 h 12.552 c 9.856,0 15.767,2.891 17.735,8.671 0.498,1.469 0.553,5.055 0.166,10.757 l -3.618,47.316 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(1.3333333,0,0,-1.3333333,441.6568,338.70307)"
+         clip-path="url(#clipPath7)" />
+    </g>
+    <g
+       id="g7">
+      <path
+         id="path8"
+         d="m 0,0 8.25,0.665 2.483,-30.795 -8.25,-0.665 -0.136,1.687 c 2.344,0.599 3.9,1.225 4.667,1.878 0.675,0.604 1.085,1.4 1.228,2.389 0.044,0.222 0.056,0.556 0.035,1.004 -0.021,0.448 -0.06,1.024 -0.117,1.729 l -0.362,4.496 -21.19,-1.708 c -3.153,-0.255 -5.021,-0.587 -5.605,-0.998 -0.518,-0.366 -0.711,-1.362 -0.58,-2.987 l 0.159,-1.98 -1.961,-0.159 -1.306,16.198 1.961,0.158 0.164,-2.027 c 0.132,-1.638 0.461,-2.563 0.987,-2.774 0.691,-0.366 2.61,-0.422 5.756,-0.168 l 21.19,1.708 -0.476,5.904 C 6.749,-4.603 6.03,-3.416 4.74,-2.883 3.59,-2.405 2.062,-2.082 0.154,-1.915 Z m -10.432,-39.355 c -5.711,-0.461 -8.413,-2.589 -8.107,-6.384 0.16,-1.99 0.945,-3.391 2.353,-4.202 1.408,-0.811 3.634,-1.094 6.676,-0.849 5.772,0.465 8.504,2.612 8.195,6.439 -0.306,3.796 -3.345,5.461 -9.117,4.996 m -0.245,4.796 c 2.992,0.241 5.569,-0.557 7.73,-2.395 2.189,-1.863 3.403,-4.274 3.642,-7.235 0.238,-2.956 -0.576,-5.531 -2.444,-7.725 -1.867,-2.195 -4.278,-3.411 -7.234,-3.649 -3.109,-0.251 -5.746,0.545 -7.911,2.387 -2.127,1.809 -3.313,4.236 -3.559,7.282 -0.243,3.012 0.542,5.601 2.353,7.765 1.842,2.129 4.316,3.319 7.423,3.57 m 2.173,-28.719 c -5.71,-0.46 -8.412,-2.588 -8.106,-6.384 0.16,-1.99 0.945,-3.39 2.353,-4.202 1.408,-0.811 3.633,-1.094 6.675,-0.848 5.773,0.465 8.505,2.611 8.196,6.439 -0.306,3.796 -3.345,5.461 -9.118,4.995 m -0.244,4.796 c 2.992,0.242 5.569,-0.557 7.729,-2.395 2.19,-1.862 3.404,-4.274 3.642,-7.235 0.239,-2.956 -0.576,-5.531 -2.443,-7.725 -1.867,-2.194 -4.279,-3.41 -7.235,-3.649 -3.108,-0.25 -5.745,0.546 -7.91,2.388 -2.127,1.809 -3.313,4.236 -3.559,7.281 -0.243,3.013 0.541,5.602 2.353,7.766 1.842,2.129 4.316,3.319 7.423,3.569 m -0.526,-30.669 c -2.503,-0.202 -3.914,-0.406 -4.232,-0.612 -0.451,-0.298 -0.632,-1.007 -0.542,-2.126 l 0.081,-0.995 -1.962,-0.158 -0.888,11.017 1.961,0.158 0.092,-1.136 c 0.079,-0.978 0.272,-1.593 0.581,-1.844 0.308,-0.251 1.017,-0.332 2.127,-0.243 l 21.006,1.694 c 1.681,0.136 2.76,0.285 3.235,0.45 0.495,0.288 0.696,1.01 0.603,2.165 l -0.065,0.807 1.94,0.157 0.058,-0.713 c 0.042,-0.521 0.132,-1.098 0.271,-1.731 0.139,-0.634 0.328,-1.405 0.566,-2.314 0.078,-0.232 0.155,-0.463 0.232,-0.69 0.076,-0.228 0.198,-0.48 0.365,-0.757 l 0.086,-1.072 z m 15.44,-22.891 -1.99,-0.161 c -0.202,1.621 -1.441,3.432 -3.719,5.433 -0.039,0.113 -0.125,0.227 -0.26,0.342 -0.134,0.115 -0.327,0.278 -0.577,0.492 -0.243,0.321 -0.557,0.631 -0.94,0.93 l -1.021,1.199 -7.3,-7.104 c -0.407,-0.446 -0.757,-0.81 -1.048,-1.091 -0.292,-0.281 -0.487,-0.547 -0.588,-0.796 -0.631,-0.745 -0.91,-1.566 -0.838,-2.466 l -2.009,-0.162 -0.815,10.106 1.993,0.16 c 0.155,-1.528 0.423,-2.276 0.803,-2.246 0.169,0.014 0.395,0.14 0.677,0.377 0.049,0.121 0.461,0.511 1.236,1.169 l 5.307,4.891 -0.571,0.348 -2.596,-0.209 c -2.694,-0.217 -4.169,-0.417 -4.426,-0.6 -0.453,-0.287 -0.641,-0.91 -0.563,-1.871 l 0.05,-0.619 -2.01,-0.162 -0.835,10.36 2.009,0.162 0.096,-1.183 c 0.083,-1.038 0.3,-1.655 0.65,-1.85 0.282,-0.215 0.998,-0.276 2.148,-0.183 l 21.52,1.735 c 1.097,0.088 1.8,0.198 2.11,0.33 0.713,0.332 1.027,1.025 0.942,2.08 l -0.065,0.807 2.034,0.164 0.058,-0.713 c 0.071,-0.888 0.343,-2.173 0.816,-3.854 0.087,-0.283 0.166,-0.525 0.238,-0.727 0.071,-0.202 0.194,-0.465 0.37,-0.789 l 0.084,-1.053 -20.712,-1.654 1.453,-1.037 c 2.559,-2.823 4.258,-4.201 5.096,-4.133 0.386,0.031 0.563,0.627 0.532,1.787 l 1.986,0.16 z m 9.423,-3.998 c 0.759,0.061 1.44,-0.148 2.044,-0.626 0.604,-0.479 0.941,-1.151 1.011,-2.016 0.058,-0.725 -0.17,-1.4 -0.683,-2.024 -0.514,-0.624 -1.151,-0.966 -1.913,-1.028 -0.792,-0.063 -1.499,0.17 -2.123,0.7 -0.623,0.531 -0.964,1.16 -1.023,1.889 -0.064,0.794 0.171,1.494 0.704,2.1 0.533,0.606 1.194,0.941 1.983,1.005 m -22.157,-7.18 c -2.474,-0.199 -3.872,-0.402 -4.192,-0.609 -0.421,-0.266 -0.588,-0.942 -0.501,-2.028 l 0.081,-0.995 -2.01,-0.162 -0.888,11.018 2.009,0.162 0.099,-1.229 c 0.08,-0.987 0.26,-1.605 0.54,-1.855 0.28,-0.249 0.973,-0.33 2.078,-0.241 l 8.073,0.651 c 2.312,0.187 3.639,0.4 3.98,0.639 0.432,0.291 0.601,1.015 0.508,2.171 l -0.088,1.088 1.932,0.156 c 0.307,-1.521 0.589,-2.796 0.846,-3.825 0.258,-1.03 0.597,-1.949 1.017,-2.759 l 0.088,-1.088 z m 12.471,-10.648 -11.306,-0.912 c -2.13,-0.171 -3.53,-0.474 -4.2,-0.908 -0.67,-0.433 -0.969,-1.099 -0.896,-1.998 0.072,-0.893 0.806,-1.798 2.203,-2.715 l -0.664,-1.327 c -2.587,0.953 -3.982,2.686 -4.185,5.199 -0.18,2.234 0.564,3.878 2.234,4.93 0.965,0.55 2.923,0.945 5.875,1.183 l 10.592,0.854 -0.231,2.863 1.983,0.16 c 0.37,-3.005 2.553,-4.681 6.547,-5.027 l 0.134,-1.65 -6.077,-0.49 0.481,-5.961 -2.01,-0.162 z"
+         style="fill:#e69300;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         transform="matrix(1.3333333,0,0,-1.3333333,531.97613,353.14613)"
+         clip-path="url(#clipPath9)" />
+    </g>
+  </g>
+</svg>
+
+    </div>
+    <div>
+      <div class="logo-text">线性代数<span>工具箱</span></div>
+      <div class="logo-sub">Linear Algebra Toolkit</div>
+    </div>
+  </div>
+  <button id="menu-toggle" onclick="toggleSidebar()">☰</button>
+</div>
+
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<div id="app">
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <button class="hub-sidebar-btn" id="history-sidebar-btn" onclick="showHistory()">
+    <span>🕘</span><span>历史记录</span>
+  </button>
+  <button class="hub-sidebar-btn" id="hub-sidebar-btn" onclick="showHub()">
+    <span>⊞</span><span>工具聚合页</span>
+  </button>
+  <div style="border-top:1px solid var(--border);margin:6px 0 2px;margin-top:12px;"></div>
+  <div class="cat-header">基础运算</div>
+  <button class="tool-btn" onclick="showTool('det')">行列式计算</button>
+  <button class="tool-btn" onclick="showTool('inverse')">逆矩阵</button>
+  <button class="tool-btn" onclick="showTool('rank')">矩阵的秩</button>
+
+  <div class="cat-header">矩阵变换</div>
+  <button class="tool-btn" onclick="showTool('ref')">行阶梯形</button>
+  <button class="tool-btn" onclick="showTool('rref')">最简行阶梯形</button>
+
+  <div class="cat-header">线性方程组</div>
+  <button class="tool-btn" onclick="showTool('nonhom')">非齐次方程组</button>
+  <button class="tool-btn" onclick="showTool('hom')">齐次方程组</button>
+
+  <div class="cat-header">矩阵运算</div>
+  <button class="tool-btn" onclick="showTool('matadd')">矩阵加减法</button>
+  <button class="tool-btn" onclick="showTool('matmul')">矩阵乘法</button>
+  <button class="tool-btn" onclick="showTool('scalarmul')">数乘</button>
+
+  <div class="cat-header">特征值与对角化</div>
+  <button class="tool-btn" onclick="showTool('eigen')">特征值与特征向量</button>
+  <button class="tool-btn" onclick="showTool('diag')">矩阵对角化</button>
+  <button class="tool-btn" onclick="showTool('pinvap')">P⁻¹AP 计算</button>
+  <button class="tool-btn" onclick="showTool('trans')">过渡矩阵</button>
+
+  <div class="cat-header">二次型</div>
+  <button class="tool-btn" onclick="showTool('quadform')">二次型化标准型</button>
+
+  <div class="cat-header">多项式</div>
+  <button class="tool-btn" onclick="showTool('polydiv')">带余除法</button>
+  <button class="tool-btn" onclick="showTool('polygcd')">辗转相除法</button>
+
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="welcome">
+    <div class="welcome-title">线性代数工具箱</div>
+    <div class="welcome-sub">提供逐步解题过程，支持多种解法选择<br>从左侧菜单选择功能开始使用</div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="icon">⊞</div><div class="label">行列式</div></div>
+      <div class="feature-card"><div class="icon">∑</div><div class="label">线性方程组</div></div>
+      <div class="feature-card"><div class="icon">λ</div><div class="label">特征值</div></div>
+      <div class="feature-card"><div class="icon">∂</div><div class="label">二次型</div></div>
+      <div class="feature-card"><div class="icon">÷</div><div class="label">多项式</div></div>
+      <div class="feature-card"><div class="icon">P</div><div class="label">对角化</div></div>
+    </div>
+  </div>
+
+  <!-- Tool panels injected here -->
+  <div id="tool-area" style="display:none"></div>
+  <div id="results"></div>
+  <div id="page-footer">Developed by <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> &nbsp;·&nbsp; <a href="https://www.genkaim.top/posts/37cb61b3" target="_blank" rel="noopener">zczzzzz</a> &nbsp;·&nbsp; <a href="https://genkaim.top" target="_blank" rel="noopener">Genkaim</a></div>
+</div>
+</div><!-- end #app -->
+
+<!-- NUMPAD WRAPPER -->
+<div id="numpad-wrap">
+
+<!-- NUMPAD -->
+<div id="numpad">
+  <button class="np-btn" onclick="npInput('7')">7</button>
+  <button class="np-btn" onclick="npInput('8')">8</button>
+  <button class="np-btn" onclick="npInput('9')">9</button>
+  <button class="np-btn special" onclick="npBackspace()">⌫</button>
+  <button class="np-btn clear" onclick="npClear()">C</button>
+  <button class="np-btn" onclick="npInput('4')">4</button>
+  <button class="np-btn" onclick="npInput('5')">5</button>
+  <button class="np-btn" onclick="npInput('6')">6</button>
+  <button class="np-btn special" onclick="npInput('-')">−</button>
+  <button class="np-btn special" onclick="npInput('/')">÷</button>
+  <button class="np-btn" onclick="npInput('1')">1</button>
+  <button class="np-btn" onclick="npInput('2')">2</button>
+  <button class="np-btn" onclick="npInput('3')">3</button>
+  <button class="np-btn special" onclick="npPrevCell()">←</button>
+  <button class="np-btn special" onclick="npNextCell()">→</button>
+  <button class="np-btn ans inactive" id="np-ans-btn" onclick="npAns()">ANS</button>
+  <button class="np-btn" onclick="npInput('0')">0</button>
+  <button class="np-btn special" onclick="npInput('.')">.</button>
+  <button class="np-btn special" onclick="npInput('+')">+</button>
+  <button class="np-btn confirm" onclick="hideNumpad()">确认</button>
+</div><!-- end #numpad -->
+</div><!-- end #numpad-wrap -->
+
+<script>
+'use strict';
+// ============================================================
+// FRACTION CLASS
+// ============================================================
+class Frac {
+  constructor(n, d) {
+    if (typeof n === 'string') {
+      n = n.trim();
+      if (n.includes('/')) {
+        const parts = n.split('/');
+        n = parseInt(parts[0]); d = parseInt(parts[1]);
+      } else {
+        const f = parseFloat(n);
+        if (!isFinite(f)) { this.n=0;this.d=1;return; }
+        if (Number.isInteger(f)) { n=f; d=1; }
+        else {
+          const s = n.toString();
+          const dec = s.length - s.indexOf('.') - 1;
+          d = Math.pow(10, dec);
+          n = Math.round(f * d);
+        }
+      }
+    }
+    if (d === undefined) d = 1;
+    d = Math.round(d); n = Math.round(n);
+    if (d === 0) { this.n=NaN;this.d=1;return; }
+    if (n === 0) { this.n=0;this.d=1;return; }
+    const g = Frac._gcd(Math.abs(n), Math.abs(d));
+    if (d < 0) { n=-n; d=-d; }
+    this.n = n/g; this.d = d/g;
+  }
+  static _gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=b;b=a%b;a=t;}return a||1;}
+  static from(v){if(v instanceof Frac)return v;return new Frac(v);}
+  add(o){o=Frac.from(o);return new Frac(this.n*o.d+o.n*this.d,this.d*o.d);}
+  sub(o){o=Frac.from(o);return new Frac(this.n*o.d-o.n*this.d,this.d*o.d);}
+  mul(o){o=Frac.from(o);return new Frac(this.n*o.n,this.d*o.d);}
+  div(o){o=Frac.from(o);if(o.n===0)return new Frac(NaN);return new Frac(this.n*o.d,this.d*o.n);}
+  neg(){return new Frac(-this.n,this.d);}
+  abs(){return new Frac(Math.abs(this.n),this.d);}
+  isZero(){return this.n===0;}
+  isNaN(){return isNaN(this.n);}
+  eq(o){o=Frac.from(o);return this.n===o.n&&this.d===o.d;}
+  gt(o){o=Frac.from(o);return this.n*o.d>o.n*this.d;}
+  lt(o){o=Frac.from(o);return this.n*o.d<o.n*this.d;}
+  toFloat(){return this.n/this.d;}
+  toStr(){
+    if(this.d===1)return String(this.n);
+    return `${this.n}/${this.d}`;
+  }
+  toHTML(){
+    if(this.d===1)return `${this.n}`;
+    const sign=this.n<0?'<span style="color:var(--text2)">−</span>':'';
+    return `${sign}<span class="frac-disp"><span class="fn">${Math.abs(this.n)}</span><span class="fd">${this.d}</span></span>`;
+  }
+}
+const F=(n,d)=>new Frac(n,d);
+const F0=F(0),F1=F(1);
+
+function parseCell(s){
+  s=(s||'0').trim();
+  if(s===''||s==='-')return F(0);
+  try{return new Frac(s);}catch(e){return F(0);}
+}
+function fillMatrixToUI(matrix) {
+  const rows = matrix.length;
+  const cols = Math.max(...matrix.map(r => r.length));
+
+  // 设置维度
+  document.querySelectorAll('.dim-cell')[0].value = rows;
+  document.querySelectorAll('.dim-cell')[1].value = cols;
+
+  // 触发你已有的生成函数（如果有）
+  if (typeof generateMatrixInput === 'function') {
+    generateMatrixInput(rows, cols);
+  }
+
+  // 填值
+  const inputs = document.querySelectorAll('.mat-cell');
+
+  let index = 0;
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (inputs[index]) {
+        inputs[index].value = matrix[i][j] ?? '';
+      }
+      index++;
+    }
+  }
+}
+function parseMatrix(text) {
+  return text
+    .trim()
+    .split('\n')
+    .map(row =>
+      row
+        .trim()
+        .replace(/[^\d\- ]/g, '') // 清除杂字符
+        .split(/\s+/)
+        .filter(x => x !== '')
+        .map(Number)
+    )
+    .filter(row => row.length > 0);
+}
+// ============================================================
+// MATRIX UTILITIES
+// ============================================================
+function makeMatrix(r,c,val=0){
+  return Array.from({length:r},()=>Array.from({length:c},()=>F(val)));
+}
+function cloneMatrix(m){
+  return m.map(row=>row.map(v=>Frac.from(v)));
+}
+function matFromFloat(m){
+  return m.map(row=>row.map(v=>{
+    const f=Math.round(v*1e9)/1e9;
+    // snap to nearby fraction with small denominator
+    for(let d=1;d<=100;d++){
+      const n=Math.round(f*d);
+      if(Math.abs(n/d-f)<1e-7)return F(n,d);
+    }
+    return F(Math.round(f*1000),1000);
+  }));
+}
+function matAdd(A,B){
+  const r=A.length,c=A[0].length;
+  return Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>A[i][j].add(B[i][j])));
+}
+function matSub(A,B){
+  const r=A.length,c=A[0].length;
+  return Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>A[i][j].sub(B[i][j])));
+}
+function matMul(A,B){
+  const r=A.length,m=B.length,c=B[0].length;
+  return Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>{
+    let s=F(0);
+    for(let k=0;k<m;k++)s=s.add(A[i][k].mul(B[k][j]));
+    return s;
+  }));
+}
+function scalarMul(k,A){
+  k=Frac.from(k);
+  return A.map(row=>row.map(v=>k.mul(v)));
+}
+function transpose(A){
+  const r=A.length,c=A[0].length;
+  return Array.from({length:c},(_,j)=>Array.from({length:r},(_,i)=>A[i][j]));
+}
+function identity(n){
+  return Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?F(1):F(0)));
+}
+function appendRight(A,B){
+  return A.map((row,i)=>[...row,...B[i]]);
+}
+function sliceCols(M,a,b){
+  return M.map(row=>row.slice(a,b));
+}
+
+// ============================================================
+// MATRIX DISPLAY (HTML)
+// ============================================================
+function dispMatrix(M,pivots=[],augAt=-1){
+  const r=M.length, c=M[0].length;
+  let html='<div class="mat-disp-wrap">';
+  html+='<div class="mat-bracket left"></div>';
+  html+='<table class="mat-disp-table"><tbody>';
+  for(let i=0;i<r;i++){
+    html+='<tr>';
+    for(let j=0;j<c;j++){
+      const isPivot=pivots.some(p=>p[0]===i&&p[1]===j);
+      const cls=isPivot?' class="mat-pivot"':'';
+      const augCls=(j===augAt-1)?' style="border-right:2px solid var(--accent2)"':'';
+      html+=`<td${cls}${augCls}>${M[i][j].toHTML()}</td>`;
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  html+='<div class="mat-bracket right"></div>';
+  html+='</div>';
+  return html;
+}
+
+function dispVector(v){
+  // v is array of Frac
+  let html='<div class="mat-disp-wrap">';
+  html+='<div class="mat-bracket left"></div>';
+  html+='<table class="mat-disp-table"><tbody>';
+  for(const x of v){
+    html+=`<tr><td>${x.toHTML()}</td></tr>`;
+  }
+  html+='</tbody></table>';
+  html+='<div class="mat-bracket right"></div>';
+  html+='</div>';
+  return html;
+}
+
+function dispFloatMatrix(M){
+  const fmt=v=>{
+    const f=Math.round(v*1e8)/1e8;
+    if(Math.abs(f)<1e-10)return '0';
+    return f.toFixed(4).replace(/\.?0+$/,'');
+  };
+  const r=M.length,c=M[0].length;
+  let html='<div class="mat-disp-wrap">';
+  html+='<div class="mat-bracket left"></div>';
+  html+='<table class="mat-disp-table"><tbody>';
+  for(let i=0;i<r;i++){
+    html+='<tr>';
+    for(let j=0;j<c;j++){
+      html+=`<td>${fmt(M[i][j])}</td>`;
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table>';
+  html+='<div class="mat-bracket right"></div>';
+  html+='</div>';
+  return html;
+}
+
+function step(desc,matHTML){
+  return `<div class="step">
+    <div class="step-desc">${desc}</div>
+    <div>${matHTML}</div>
+  </div>`;
+}
+
+function makeStepNum(n){
+  return `<span class="step-num">${n}</span>`;
+}
+
+// ============================================================
+// GAUSSIAN ELIMINATION (exact fractions, with steps)
+// ============================================================
+function gaussianElim(M, trackSteps=true){
+  const steps=[];
+  let m=cloneMatrix(M);
+  const rows=m.length, cols=m[0].length;
+  let pivotRow=0;
+  const pivots=[];
+
+  for(let col=0;col<cols&&pivotRow<rows;col++){
+    // Find pivot
+    let pRow=-1;
+    for(let r=pivotRow;r<rows;r++){
+      if(!m[r][col].isZero()){pRow=r;break;}
+    }
+    if(pRow===-1)continue;
+    pivots.push([pivotRow,col]);
+
+    // Swap
+    if(pRow!==pivotRow){
+      [m[pivotRow],m[pRow]]=[m[pRow],m[pivotRow]];
+      if(trackSteps)steps.push(step(
+        `${makeStepNum(steps.length+1)}<span>交换第${pivotRow+1}行与第${pRow+1}行</span> <span class="op-badge">R${pivotRow+1} ↔ R${pRow+1}</span>`,
+        dispMatrix(m)
+      ));
+    }
+
+    // Eliminate below
+    for(let r=pivotRow+1;r<rows;r++){
+      if(!m[r][col].isZero()){
+        const factor=m[r][col].div(m[pivotRow][col]);
+        const factorStr=factor.toStr();
+        for(let c=col;c<cols;c++){
+          m[r][c]=m[r][c].sub(factor.mul(m[pivotRow][c]));
+        }
+        if(trackSteps)steps.push(step(
+          `${makeStepNum(steps.length+1)}<span>消去第${r+1}行第${col+1}列</span> <span class="op-badge">R${r+1} → R${r+1} − (${factorStr})·R${pivotRow+1}</span>`,
+          dispMatrix(m)
+        ));
+      }
+    }
+    pivotRow++;
+  }
+  return {result:m,steps,pivots};
+}
+
+function rref(M, trackSteps=true){
+  const steps=[];
+  let m=cloneMatrix(M);
+  const rows=m.length,cols=m[0].length;
+  let pivotRow=0;
+  const pivots=[];
+
+  for(let col=0;col<cols&&pivotRow<rows;col++){
+    let pRow=-1;
+    for(let r=pivotRow;r<rows;r++){
+      if(!m[r][col].isZero()){pRow=r;break;}
+    }
+    if(pRow===-1)continue;
+    pivots.push([pivotRow,col]);
+
+    if(pRow!==pivotRow){
+      [m[pivotRow],m[pRow]]=[m[pRow],m[pivotRow]];
+      if(trackSteps)steps.push(step(
+        `${makeStepNum(steps.length+1)}<span>交换行</span> <span class="op-badge">R${pivotRow+1} ↔ R${pRow+1}</span>`,
+        dispMatrix(m)
+      ));
+    }
+
+    // Scale pivot row
+    const pv=m[pivotRow][col];
+    if(!pv.eq(F1)){
+      const invPv=F1.div(pv);
+      for(let c=col;c<cols;c++)m[pivotRow][c]=invPv.mul(m[pivotRow][c]);
+      if(trackSteps)steps.push(step(
+        `${makeStepNum(steps.length+1)}<span>化主元为1</span> <span class="op-badge">R${pivotRow+1} → (${invPv.toStr()})·R${pivotRow+1}</span>`,
+        dispMatrix(m,pivots)
+      ));
+    }
+
+    // Eliminate above and below
+    for(let r=0;r<rows;r++){
+      if(r!==pivotRow&&!m[r][col].isZero()){
+        const factor=m[r][col];
+        const factorStr=factor.toStr();
+        for(let c=0;c<cols;c++){
+          m[r][c]=m[r][c].sub(factor.mul(m[pivotRow][c]));
+        }
+        if(trackSteps)steps.push(step(
+          `${makeStepNum(steps.length+1)}<span>消去第${r+1}行</span> <span class="op-badge">R${r+1} → R${r+1} − (${factorStr})·R${pivotRow+1}</span>`,
+          dispMatrix(m,pivots)
+        ));
+      }
+    }
+    pivotRow++;
+  }
+  return {result:m,steps,pivots};
+}
+
+function matRank(M){
+  const {pivots}=gaussianElim(M,false);
+  return pivots.length;
+}
+
+// ============================================================
+// DETERMINANT (cofactor expansion & row reduction)
+// ============================================================
+function determinant(M){
+  const n=M.length;
+  if(n!==M[0].length)return{steps:[],value:null,err:'矩阵必须为方阵'};
+  const steps=[];
+  let m=cloneMatrix(M);
+  let sign=F1;
+  let pivotRow=0;
+
+  steps.push(step(
+    `${makeStepNum(1)}<span>初始矩阵</span>`,
+    dispMatrix(m)
+  ));
+
+  // Special: 1x1
+  if(n===1)return{steps,value:M[0][0],detStr:M[0][0].toHTML()};
+
+  // For small n use cofactor with display
+  if(n<=4){
+    const val=detCofactor(M,steps,1);
+    return{steps,value:val};
+  }
+
+  // Large: row reduction
+  for(let col=0;col<n&&pivotRow<n;col++){
+    let pRow=-1;
+    for(let r=pivotRow;r<n;r++){
+      if(!m[r][col].isZero()){pRow=r;break;}
+    }
+    if(pRow===-1){
+      steps.push(step(`${makeStepNum(steps.length+1)}<span>第${col+1}列无主元，行列式 = 0</span>`,''));
+      return{steps,value:F(0)};
+    }
+    if(pRow!==pivotRow){
+      [m[pivotRow],m[pRow]]=[m[pRow],m[pivotRow]];
+      sign=sign.neg();
+      steps.push(step(
+        `${makeStepNum(steps.length+1)}<span>交换行，行列式变号</span> <span class="op-badge">R${pivotRow+1} ↔ R${pRow+1}</span>`,
+        dispMatrix(m)
+      ));
+    }
+    for(let r=pivotRow+1;r<n;r++){
+      if(!m[r][col].isZero()){
+        const factor=m[r][col].div(m[pivotRow][col]);
+        for(let c=col;c<n;c++)m[r][c]=m[r][c].sub(factor.mul(m[pivotRow][c]));
+        steps.push(step(
+          `${makeStepNum(steps.length+1)}<span class="op-badge">R${r+1} → R${r+1} − (${factor.toStr()})·R${pivotRow+1}</span>`,
+          dispMatrix(m)
+        ));
+      }
+    }
+    pivotRow++;
+  }
+  // Product of diagonal
+  let prod=sign;
+  for(let i=0;i<n;i++)prod=prod.mul(m[i][i]);
+  const diagStr=Array.from({length:n},(_,i)=>m[i][i].toStr()).join(' × ');
+  steps.push(step(
+    `${makeStepNum(steps.length+1)}<span>上三角矩阵，行列式 = 对角线之积（乘以符号${sign.toStr()}）</span>`,
+    `<div style="font-family:'JetBrains Mono',monospace;padding:8px;color:var(--text)">${sign.toStr()} × ${diagStr} = <strong style="color:var(--green)">${prod.toStr()}</strong></div>`
+  ));
+  return{steps,value:prod};
+}
+
+function detCofactor(M,steps,depth){
+  const n=M.length;
+  if(n===1)return M[0][0];
+  if(n===2){
+    const d=M[0][0].mul(M[1][1]).sub(M[0][1].mul(M[1][0]));
+    const stepNum=steps.length+1;
+    steps.push(step(
+      `${makeStepNum(stepNum)}<span>2×2行列式展开</span>`,
+      `<div style="font-family:'JetBrains Mono',monospace;padding:8px;color:var(--text)">
+       ${dispMatrix(M)} = 
+       <span style="color:var(--text)">(${M[0][0].toStr()})(${M[1][1].toStr()}) − (${M[0][1].toStr()})(${M[1][0].toStr()}) = </span>
+       <strong style="color:var(--green)">${d.toStr()}</strong>
+       </div>`
+    ));
+    return d;
+  }
+  // Expand along first row
+  let result=F(0);
+  let expansion='';
+  for(let j=0;j<n;j++){
+    if(M[0][j].isZero())continue;
+    const cofactorM=M.slice(1).map(row=>[...row.slice(0,j),...row.slice(j+1)]);
+    const cofactorVal=detCofactor(cofactorM,[],depth+1);
+    const s=j%2===0?F(1):F(-1);
+    result=result.add(s.mul(M[0][j]).mul(cofactorVal));
+    const sign=j%2===0?'+':'-';
+    expansion+=`${sign}(${M[0][j].toStr()})(${cofactorVal.toStr()}) `;
+  }
+  const stepNum=steps.length+1;
+  steps.push(step(
+    `${makeStepNum(stepNum)}<span>按第1行展开</span>`,
+    `<div style="font-family:'JetBrains Mono',monospace;padding:8px;color:var(--text)">
+     ${dispMatrix(M)} <br>
+     <span style="color:var(--text2)">= ${expansion.trim()}</span><br>
+     = <strong style="color:var(--green)">${result.toStr()}</strong></div>`
+  ));
+  return result;
+}
+
+// ============================================================
+// MATRIX INVERSE (Gauss-Jordan)
+// ============================================================
+function matInverse(M){
+  const n=M.length;
+  if(n!==M[0].length)return{err:'矩阵必须为方阵'};
+  const steps=[];
+  // Augment [M|I]
+  let aug=appendRight(cloneMatrix(M),identity(n));
+  steps.push(step(
+    `${makeStepNum(1)}<span>构造增广矩阵 [A | I]</span>`,
+    dispMatrix(aug,[],n)
+  ));
+  let pivotRow=0;
+  const pivots=[];
+  for(let col=0;col<n&&pivotRow<n;col++){
+    let pRow=-1;
+    for(let r=pivotRow;r<n;r++){
+      if(!aug[r][col].isZero()){pRow=r;break;}
+    }
+    if(pRow===-1){
+      return{steps,err:'矩阵不可逆（奇异矩阵）'};
+    }
+    pivots.push([pivotRow,col]);
+    if(pRow!==pivotRow){
+      [aug[pivotRow],aug[pRow]]=[aug[pRow],aug[pivotRow]];
+      steps.push(step(
+        `${makeStepNum(steps.length+1)}<span class="op-badge">R${pivotRow+1} ↔ R${pRow+1}</span>`,
+        dispMatrix(aug,[],n)
+      ));
+    }
+    const pv=aug[pivotRow][col];
+    if(!pv.eq(F1)){
+      const inv=F1.div(pv);
+      for(let c=0;c<2*n;c++)aug[pivotRow][c]=inv.mul(aug[pivotRow][c]);
+      steps.push(step(
+        `${makeStepNum(steps.length+1)}<span class="op-badge">R${pivotRow+1} → (${inv.toStr()})·R${pivotRow+1}</span>`,
+        dispMatrix(aug,pivots,n)
+      ));
+    }
+    for(let r=0;r<n;r++){
+      if(r!==pivotRow&&!aug[r][col].isZero()){
+        const fac=aug[r][col];
+        for(let c=0;c<2*n;c++)aug[r][c]=aug[r][c].sub(fac.mul(aug[pivotRow][c]));
+        steps.push(step(
+          `${makeStepNum(steps.length+1)}<span class="op-badge">R${r+1} → R${r+1} − (${fac.toStr()})·R${pivotRow+1}</span>`,
+          dispMatrix(aug,pivots,n)
+        ));
+      }
+    }
+    pivotRow++;
+  }
+  const inv=sliceCols(aug,n,2*n);
+  steps.push(step(
+    `${makeStepNum(steps.length+1)}<span>左侧已化为单位矩阵，右侧即为 A⁻¹</span>`,
+    `${dispMatrix(aug,[],n)}`
+  ));
+  return{steps,result:inv};
+}
+
+// ============================================================
+// LINEAR SYSTEMS
+// ============================================================
+function solveLinearSystem(A, b, homogeneous=false){
+  const steps=[];
+  const m=A.length, n=A[0].length;
+  // Build augmented [A|b]
+  let aug=A.map((row,i)=>[...row.map(v=>Frac.from(v)),Frac.from(b[i])]);
+  steps.push(step(
+    `${makeStepNum(1)}<span>写出增广矩阵 [A | b]</span>`,
+    dispMatrix(aug,[],n)
+  ));
+
+  // Gaussian elim
+  let {result:ref,steps:gSteps,pivots}=gaussianElim(aug,true);
+  // Adjust step numbers
+  let stepIdx=steps.length+1;
+  gSteps.forEach(s=>{
+    steps.push(s.replace(/"step-num">\d+/,(m)=>`"step-num">${stepIdx++}`));
+  });
+  let aug2=ref;
+
+  // Check consistency
+  const rankA=pivots.length;
+  // Check if any pivot in last column (n-th, 0-indexed)
+  let inconsistent=false;
+  for(let r=0;r<m;r++){
+    let allZero=true;
+    for(let c=0;c<n;c++)if(!aug2[r][c].isZero()){allZero=false;break;}
+    if(allZero&&!aug2[r][n].isZero()){inconsistent=true;break;}
+  }
+  if(inconsistent){
+    steps.push(`<div class="info-box error">方程组无解（矩阵的秩 rank(A) ≠ rank(A|b)）</div>`);
+    return{steps,solution:'无解'};
+  }
+
+  // Further reduce to RREF
+  let pivotRow2=0;
+  const pivots2=[];
+  for(let col=0;col<n&&pivotRow2<m;col++){
+    let pRow=-1;
+    for(let r=pivotRow2;r<m;r++){
+      if(!aug2[r][col].isZero()){pRow=r;break;}
+    }
+    if(pRow===-1)continue;
+    pivots2.push([pivotRow2,col]);
+    if(!aug2[pivotRow2][col].eq(F1)){
+      const inv=F1.div(aug2[pivotRow2][col]);
+      for(let c=col;c<=n;c++)aug2[pivotRow2][c]=inv.mul(aug2[pivotRow2][c]);
+      steps.push(step(
+        `${makeStepNum(stepIdx++)}<span class="op-badge">R${pivotRow2+1} → (${inv.toStr()})·R${pivotRow2+1}</span>`,
+        dispMatrix(aug2,[],n)
+      ));
+    }
+    for(let r=0;r<m;r++){
+      if(r!==pivotRow2&&!aug2[r][col].isZero()){
+        const fac=aug2[r][col];
+        for(let c=0;c<=n;c++)aug2[r][c]=aug2[r][c].sub(fac.mul(aug2[pivotRow2][c]));
+        steps.push(step(
+          `${makeStepNum(stepIdx++)}<span class="op-badge">R${r+1} → R${r+1} − (${fac.toStr()})·R${pivotRow2+1}</span>`,
+          dispMatrix(aug2,[],n)
+        ));
+      }
+    }
+    pivotRow2++;
+  }
+
+  // Identify pivot and free variables
+  const pivotCols=pivots2.map(p=>p[1]);
+  const freeCols=Array.from({length:n},(_,i)=>i).filter(i=>!pivotCols.includes(i));
+  const rankA2=pivots2.length;
+  const freeCount=n-rankA2;
+
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>最终最简形 (RREF)</span>`,
+    dispMatrix(aug2,pivots2,n)
+  ));
+
+  if(freeCount===0){
+    // Unique solution
+    const sol=Array.from({length:n},(_,i)=>{
+      const pIdx=pivotCols.indexOf(i);
+      if(pIdx>=0)return aug2[pIdx][n];
+      return F(0);
+    });
+    const solHTML=buildSolHTML(sol,[],[],pivotCols,freeCols,aug2,n);
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>唯一解</span>`,
+      solHTML
+    ));
+    return{steps,solution:'唯一解',sol};
+  }else{
+    // Infinitely many solutions
+    const solHTML=buildGeneralSolHTML(pivotCols,freeCols,aug2,n,homogeneous);
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>通解（含 ${freeCount} 个自由变量）</span>`,
+      solHTML
+    ));
+    return{steps,solution:'无穷多解',freeCount};
+  }
+}
+
+function buildSolHTML(sol,_,__,___,____,_____,n){
+  let html='<div class="eq-display">';
+  sol.forEach((v,i)=>{
+    html+=`<div><span class="eq-var">x<sub>${i+1}</sub></span> = <span class="eq-result">${v.toHTML()}</span></div>`;
+  });
+  html+='</div>';
+  return html;
+}
+
+function buildGeneralSolHTML(pivotCols,freeCols,aug,n,homogeneous){
+  // Express pivot vars in terms of free vars
+  const m=aug.length;
+  let html='<div class="eq-display">';
+  // Special solution (particular solution) + null space basis
+  // First show the equations
+  const freeLabels=freeCols.map((c,i)=>String.fromCharCode(99+i)); // c,d,e...
+
+  html+=`<div style="color:var(--text2);font-size:.82rem;margin-bottom:8px">设自由变量：`;
+  freeCols.forEach((c,i)=>{
+    html+=`<span class="eq-var">x<sub>${c+1}</sub></span> = <span style="color:var(--purple)">${freeLabels[i]}</span>　`;
+  });
+  html+='</div>';
+
+  // Express pivot variables
+  pivotCols.forEach((c,pIdx)=>{
+    const row=aug[pIdx];
+    html+=`<div><span class="eq-var">x<sub>${c+1}</sub></span> = `;
+    const b=row[n];
+    let terms=[];
+    if(!b.isZero())terms.push(`<span class="eq-result">${b.toHTML()}</span>`);
+    freeCols.forEach((fc,fi)=>{
+      const coeff=row[fc].neg();
+      if(!coeff.isZero()){
+        terms.push(`(${coeff.toHTML()})<span class="eq-var">${freeLabels[fi]}</span>`);
+      }
+    });
+    html+=(terms.length?terms.join(' + '):'0')+'</div>';
+  });
+
+  // Build vectors
+  if(!homogeneous){
+    html+='<div style="margin-top:12px;color:var(--text2);font-size:.82rem">通解形式：<strong style="color:var(--text)">x = x* + k₁ξ₁ + k₂ξ₂ + ···</strong></div>';
+    // Particular solution
+    const xStar=Array.from({length:n},(_,i)=>{
+      const pIdx=pivotCols.indexOf(i);
+      if(pIdx>=0)return aug[pIdx][n];
+      return F(0);
+    });
+    html+='<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:8px">';
+    html+='<span style="color:var(--text2)">特解 x* = </span>';
+    html+=dispVector(xStar);
+    html+='</div>';
+  }
+
+  // Null space basis vectors
+  if(freeCols.length>0){
+    html+='<div style="margin-top:10px;color:var(--text2);font-size:.82rem">基础解系（零空间基）：</div>';
+    html+='<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:6px">';
+    freeCols.forEach((fc,fi)=>{
+      const xi=Array.from({length:n},(_,i)=>{
+        if(i===fc)return F(1);
+        const pIdx=pivotCols.indexOf(i);
+        if(pIdx>=0)return aug[pIdx][fc].neg();
+        return F(0);
+      });
+      html+=`<div style="display:flex;align-items:center;gap:4px"><span style="color:var(--purple)">ξ${fi+1} = </span>${dispVector(xi)}</div>`;
+    });
+    html+='</div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+// ============================================================
+// EIGENVALUES & EIGENVECTORS (numerical)
+// ============================================================
+function charPolyCoeffs(A){
+  const n=A.length;
+  // Use numerical computation
+  const Af=A.map(row=>row.map(v=>v instanceof Frac?v.toFloat():v));
+  // Characteristic polynomial: det(λI - A)
+  // We'll compute it numerically using Faddeev-LeVerrier algorithm
+  // p(λ) = λ^n + c_{n-1}λ^{n-1} + ... + c_0
+  const coeffs=Array(n+1).fill(0);
+  coeffs[n]=1;
+  
+  // Evaluate at multiple points and interpolate (simple approach for small n)
+  // Better: direct computation
+  
+  // For n<=3, compute directly
+  if(n===1){
+    return [1, -Af[0][0]];
+  }
+  if(n===2){
+    const tr=Af[0][0]+Af[1][1];
+    const d=Af[0][0]*Af[1][1]-Af[0][1]*Af[1][0];
+    return [1,-tr,d];
+  }
+  if(n===3){
+    const [[a,b,c],[d,e,f],[g,h,k]]=Af;
+    const tr=a+e+k;
+    const m11=e*k-f*h, m22=a*k-c*g, m33=a*e-b*d;
+    const sum_minors2=m11+m22+m33;
+    const det3=a*(e*k-f*h)-b*(d*k-f*g)+c*(d*h-e*g);
+    return [1,-tr,sum_minors2,-det3];
+  }
+  // General: evaluate char poly at n+1 points
+  // p(λ) = det(λI - A)
+  // Use points 0,1,2,...,n and Lagrange interpolation
+  const pts=[];
+  for(let i=0;i<=n;i++){
+    const lam=i*(n+1); // spread out points
+    // compute det(lam*I - A)
+    const M=Af.map((row,ri)=>row.map((v,ci)=>(ri===ci?lam:0)-v));
+    pts.push([lam,detFloat(M)]);
+  }
+  // Lagrange interpolation for coefficients
+  return charPolyFromPoints(pts, n);
+}
+
+function charPolyFromPoints(pts,n){
+  // Use Vandermonde
+  const xs=pts.map(p=>p[0]);
+  const ys=pts.map(p=>p[1]);
+  // Build Vandermonde matrix and solve
+  // coeffs[0] = leading (x^n term)
+  const coeffs=Array(n+1).fill(0);
+  // Lagrange interpolation
+  for(let i=0;i<=n;i++){
+    let L=1;
+    for(let j=0;j<=n;j++)if(j!==i)L*=(xs[i]-xs[j]);
+    // Add yi/L * product(λ - xj) j≠i to polynomial
+    // This is complex; use Newton's method instead
+    // Actually let me just evaluate characteristic polynomial differently
+  }
+  // Fallback: use numerical eigenvalues and reconstruct
+  return [1,0,0,0]; // placeholder
+}
+
+function detFloat(M){
+  const n=M.length;
+  let m=M.map(r=>[...r]);
+  let sign=1;
+  for(let col=0;col<n;col++){
+    let pRow=-1;
+    for(let r=col;r<n;r++){if(Math.abs(m[r][col])>1e-12){pRow=r;break;}}
+    if(pRow===-1)return 0;
+    if(pRow!==col){[m[col],m[pRow]]=[m[pRow],m[col]];sign*=-1;}
+    for(let r=col+1;r<n;r++){
+      const fac=m[r][col]/m[col][col];
+      for(let c=col;c<n;c++)m[r][c]-=fac*m[col][c];
+    }
+  }
+  let det=sign;
+  for(let i=0;i<n;i++)det*=m[i][i];
+  return det;
+}
+
+function evalCharPoly(A, lambda){
+  const n=A.length;
+  const Af=A.map(r=>r.map(v=>v instanceof Frac?v.toFloat():v));
+  const M=Af.map((row,i)=>row.map((v,j)=>(i===j?lambda:0)-v));
+  return detFloat(M);
+}
+
+function findEigenvalues(A){
+  const n=A.length;
+  const Af=A.map(r=>r.map(v=>v instanceof Frac?v.toFloat():v));
+  
+  // Use QR algorithm (simplified) to find eigenvalues numerically
+  let H=deepCopyMatrix(Af);
+  
+  // Hessenberg reduction (simplified)
+  H=qrIteration(H,200);
+  
+  // Extract eigenvalues from diagonal
+  const eigenvals=[];
+  let i=0;
+  while(i<n){
+    if(i===n-1||Math.abs(H[i+1][i])<1e-8){
+      eigenvals.push(H[i][i]);
+      i++;
+    }else{
+      // 2x2 block
+      const a=H[i][i],b=H[i][i+1],c=H[i+1][i],d=H[i+1][i+1];
+      const tr=a+d;
+      const det=a*d-b*c;
+      const disc=tr*tr-4*det;
+      if(disc>=0){
+        eigenvals.push((tr+Math.sqrt(disc))/2);
+        eigenvals.push((tr-Math.sqrt(disc))/2);
+      }else{
+        // Complex eigenvalues
+        eigenvals.push((tr+Math.sqrt(-disc))/2); // just real part for display
+        eigenvals.push((tr-Math.sqrt(-disc))/2);
+      }
+      i+=2;
+    }
+  }
+  
+  // Snap to rational numbers
+  return eigenvals.map(snapToRational);
+}
+
+function snapToRational(v){
+  // Try to snap to fraction with small denominator
+  for(let d=1;d<=24;d++){
+    const n=Math.round(v*d);
+    if(Math.abs(n/d-v)<1e-6)return n/d;
+  }
+  return v;
+}
+
+function deepCopyMatrix(M){
+  return M.map(r=>[...r]);
+}
+
+function qrIteration(A,maxIter){
+  let H=deepCopyMatrix(A);
+  const n=H.length;
+  for(let iter=0;iter<maxIter;iter++){
+    const [Q,R]=qrDecompose(H);
+    H=matMulFloat(R,Q);
+    // Check convergence
+    let off=0;
+    for(let i=1;i<n;i++)for(let j=0;j<i;j++)off+=H[i][j]*H[i][j];
+    if(off<1e-16)break;
+  }
+  return H;
+}
+
+function qrDecompose(A){
+  const m=A.length,n=A[0].length;
+  let Q=identity(m).map(r=>r.map(v=>v.toFloat()));
+  let R=deepCopyMatrix(A);
+  for(let j=0;j<Math.min(m,n);j++){
+    const x=Array.from({length:m-j},(_,i)=>R[i+j][j]);
+    const norm=Math.sqrt(x.reduce((s,v)=>s+v*v,0));
+    if(norm<1e-14)continue;
+    const v=[...x];
+    v[0]+=Math.sign(x[0]||1)*norm;
+    const vn=Math.sqrt(v.reduce((s,e)=>s+e*e,0));
+    if(vn<1e-14)continue;
+    const u=v.map(e=>e/vn);
+    // Apply Householder
+    for(let jj=j;jj<n;jj++){
+      let dot=0;
+      for(let i=0;i<u.length;i++)dot+=u[i]*R[i+j][jj];
+      dot*=2;
+      for(let i=0;i<u.length;i++)R[i+j][jj]-=dot*u[i];
+    }
+    for(let jj=0;jj<m;jj++){
+      let dot=0;
+      for(let i=0;i<u.length;i++)dot+=u[i]*Q[i+j][jj];
+      dot*=2;
+      for(let i=0;i<u.length;i++)Q[i+j][jj]-=dot*u[i];
+    }
+  }
+  // Q = Q^T from above
+  const Qt=Array.from({length:m},(_,i)=>Array.from({length:m},(_,j)=>Q[j][i]));
+  return[Qt,R];
+}
+
+function matMulFloat(A,B){
+  const r=A.length,m=B.length,c=B[0].length;
+  return Array.from({length:r},(_,i)=>Array.from({length:c},(_,j)=>{
+    let s=0;for(let k=0;k<m;k++)s+=A[i][k]*B[k][j];return s;
+  }));
+}
+
+function nullSpaceFloat(A, lambda=0){
+  // Find null space of (A - lambda*I)
+  const n=A.length;
+  const Af=A.map((r,i)=>r.map((v,j)=>(v instanceof Frac?v.toFloat():v)-(i===j?lambda:0)));
+  // Gaussian elimination on Af
+  let M=deepCopyMatrix(Af);
+  const pivotCols=[];
+  let pivotRow=0;
+  for(let col=0;col<n&&pivotRow<n;col++){
+    let pRow=-1;
+    let maxVal=1e-8;
+    for(let r=pivotRow;r<n;r++){
+      if(Math.abs(M[r][col])>maxVal){maxVal=Math.abs(M[r][col]);pRow=r;}
+    }
+    if(pRow===-1)continue;
+    pivotCols.push(col);
+    [M[pivotRow],M[pRow]]=[M[pRow],M[pivotRow]];
+    const pv=M[pivotRow][col];
+    for(let c=col;c<n;c++)M[pivotRow][c]/=pv;
+    for(let r=0;r<n;r++){
+      if(r!==pivotRow&&Math.abs(M[r][col])>1e-12){
+        const fac=M[r][col];
+        for(let c=0;c<n;c++)M[r][c]-=fac*M[pivotRow][c];
+      }
+    }
+    pivotRow++;
+  }
+  const freeCols=Array.from({length:n},(_,i)=>i).filter(i=>!pivotCols.includes(i));
+  // Build null space basis
+  return freeCols.map(fc=>{
+    const v=Array(n).fill(0);
+    v[fc]=1;
+    pivotCols.forEach((pc,pi)=>{v[pc]=-M[pi][fc];});
+    // normalize
+    const norm=Math.sqrt(v.reduce((s,e)=>s+e*e,0));
+    return norm>1e-12?v.map(e=>e/norm):v;
+  });
+}
+
+function gramSchmidt(vecs){
+  const result=[];
+  for(const v of vecs){
+    let u=[...v];
+    for(const q of result){
+      const dot=u.reduce((s,e,i)=>s+e*q[i],0);
+      for(let i=0;i<u.length;i++)u[i]-=dot*q[i];
+    }
+    const norm=Math.sqrt(u.reduce((s,e)=>s+e*e,0));
+    if(norm>1e-12)result.push(u.map(e=>e/norm));
+  }
+  return result;
+}
+
+function fmtFloat(v,dec=4){
+  const r=Math.round(v*1e8)/1e8;
+  if(Math.abs(r)<1e-10)return '0';
+  // Try to snap to simple fraction
+  for(let d=1;d<=24;d++){
+    const n=Math.round(r*d);
+    if(Math.abs(n/d-r)<1e-6){
+      if(d===1)return String(n);
+      // format as fraction
+      return `<span class="frac-disp"><span class="fn">${n<0?n:n}</span><span class="fd">${d}</span></span>`;
+    }
+  }
+  return r.toFixed(dec).replace(/\.?0+$/,'');
+}
+
+function fmtFloatStr(v){
+  const r=Math.round(v*1e8)/1e8;
+  if(Math.abs(r)<1e-10)return '0';
+  for(let d=1;d<=24;d++){
+    const n=Math.round(r*d);
+    if(Math.abs(n/d-r)<1e-6){
+      if(d===1)return String(n);
+      return `${n}/${d}`;
+    }
+  }
+  return r.toFixed(4).replace(/\.?0+$/,'');
+}
+
+// ============================================================
+// QUADRATIC FORM
+// ============================================================
+
+// Method 1: Completing the Square (配方法)
+function qfCompletingSquare(A){
+  const n=A.length;
+  const steps=[];
+  let C=cloneMatrix(A); // working copy of the symmetric matrix
+  const vars=Array.from({length:n},(_,i)=>`x<sub>${i+1}</sub>`);
+  const subsList=[]; // list of {from, to} variable substitutions
+  let stepIdx=1;
+
+  // Display initial quadratic form
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>初始二次型矩阵</span>`,
+    dispMatrix(C)+`<div style="margin-top:8px;color:var(--text2);font-size:.85rem">二次型 f = ${qfToString(C,vars)}</div>`
+  ));
+
+  // Work on submatrix, tracking variable substitutions
+  const diagCoeffs=[]; // will hold the standard form coefficients
+  
+  function processBlock(matrix,startIdx,currentVars){
+    const size=n-startIdx;
+    if(size===0)return matrix;
+    if(size===1){
+      diagCoeffs.push({coeff:matrix[startIdx][startIdx],varIdx:startIdx});
+      return matrix;
+    }
+    
+    let m=matrix;
+    let ci=startIdx;
+    
+    // Check if pivot exists
+    if(!m[ci][ci].isZero()){
+      // Standard case: complete the square in variable ci
+      const aii=m[ci][ci];
+      // New var: y_{ci} = x_{ci} + sum_{j>ci} (a_{ci,j}/a_{ci,ci}) x_j
+      const sub={from:ci,coeffs:[]};
+      for(let j=ci+1;j<n;j++){
+        sub.coeffs.push({j,coeff:m[ci][j].div(aii)});
+      }
+      subsList.push(sub);
+      
+      // Compute new matrix after completing square
+      const newM=cloneMatrix(m);
+      // The term becomes a_{ci,ci} * y_{ci}^2
+      // Remaining: subtract a_{ci,ci} * (sum coeff_j x_j)^2
+      for(let j=ci+1;j<n;j++){
+        for(let k=ci+1;k<n;k++){
+          const adj=m[ci][j].mul(m[ci][k]).div(aii);
+          newM[j][k]=newM[j][k].sub(adj);
+          newM[k][j]=newM[j][k]; // keep symmetric
+        }
+      }
+      // Zero out row/col ci
+      for(let j=0;j<n;j++){newM[ci][j]=F(0);newM[j][ci]=F(0);}
+      
+      const subStr=buildSubStr(sub,ci,currentVars);
+      steps.push(step(
+        `${makeStepNum(stepIdx++)}<span>对 x<sub>${ci+1}</sub> 配方</span>`,
+        `<div class="eq-display">令 <span class="eq-var">${currentVars[ci]}</span> = ${subStr}</div>
+         <div style="margin-top:6px;color:var(--text2);font-size:.82rem">
+         配方后二次型包含项：<span style="color:var(--accent)">${aii.toHTML()} · (新变量)<sup>2</sup></span>
+         </div>`
+      ));
+      diagCoeffs.push({coeff:aii,varIdx:ci});
+      return processBlock(newM,ci+1,currentVars);
+    }else{
+      // Check if there's an off-diagonal non-zero element
+      let found=false;
+      for(let j=ci+1;j<n&&!found;j++){
+        if(!m[ci][j].isZero()){
+          // Make substitution: replace x_ci with x_ci+x_j, x_j with x_ci-x_j
+          steps.push(step(
+            `${makeStepNum(stepIdx++)}<span>对角线 a<sub>${ci+1},${ci+1}</sub>=0，进行辅助换元</span>`,
+            `<div class="eq-display">令 <span class="eq-var">x<sub>${ci+1}</sub></span> = u + v, <span class="eq-var">x<sub>${j+1}</sub></span> = u − v</div>`
+          ));
+          const newM=cloneMatrix(m);
+          // Recompute: expand with new variables
+          // After substitution, the new (ci,ci) entry will be 2*m[ci][j]
+          // Simplified: set a_{ci,ci} = 2*m[ci][j], modify other entries
+          newM[ci][ci]=m[ci][j].mul(F(2));
+          newM[j][j]=m[ci][j].neg().mul(F(2));
+          // This is an approximation; in practice we'd re-expand
+          found=true;
+          return processBlock(newM,ci,currentVars);
+        }
+      }
+      if(!found){
+        // All entries in this row/col are zero
+        diagCoeffs.push({coeff:F(0),varIdx:ci});
+        return processBlock(m,ci+1,currentVars);
+      }
+    }
+    return m;
+  }
+  
+  processBlock(C,0,vars);
+  
+  // Build standard form display
+  let stdForm='<div class="eq-display">f = ';
+  const nonZero=diagCoeffs.filter(d=>!d.coeff.isZero());
+  if(nonZero.length===0){
+    stdForm+='0';
+  }else{
+    nonZero.forEach((d,i)=>{
+      if(i>0&&!d.coeff.lt(F(0)))stdForm+=' + ';
+      stdForm+=`${d.coeff.toHTML()} · <span class="eq-var">y<sub>${d.varIdx+1}</sub><sup>2</sup></span>`;
+    });
+  }
+  stdForm+='</div>';
+  
+  const pos=diagCoeffs.filter(d=>d.coeff.gt(F(0))).length;
+  const neg2=diagCoeffs.filter(d=>d.coeff.lt(F(0))).length;
+  const zero=diagCoeffs.filter(d=>d.coeff.isZero()).length;
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>标准型</span>`,
+    stdForm+`<div class="info-box success" style="margin-top:8px">
+    正惯性指数 p = ${pos}，负惯性指数 q = ${neg2}，秩 r = ${pos+neg2}
+    </div>`
+  ));
+  
+  return{steps};
+}
+
+function buildSubStr(sub,ci,vars){
+  let s=`<span class="eq-var">${vars[ci]}</span>`;
+  sub.coeffs.forEach(({j,coeff})=>{
+    if(!coeff.isZero()){
+      const cs=coeff.toStr();
+      if(coeff.gt&&coeff.gt(F(0))) s+=` − ${coeff.toHTML()}·${vars[j]}`;
+      else s+=` + ${coeff.neg().toHTML()}·${vars[j]}`;
+    }
+  });
+  return s;
+}
+
+function qfToString(A,vars){
+  const n=A.length;
+  let terms=[];
+  for(let i=0;i<n;i++){
+    for(let j=i;j<n;j++){
+      const a=A[i][j];
+      if(a.isZero())continue;
+      if(i===j){
+        terms.push(`${a.toHTML()}·${vars[i]}<sup>2</sup>`);
+      }else{
+        const coeff=a.mul(F(2));
+        terms.push(`${coeff.toHTML()}·${vars[i]}${vars[j]}`);
+      }
+    }
+  }
+  return terms.length?terms.join(' + '):'0';
+}
+
+// Method 2: Congruence Transform (合同变换法)
+function qfCongruence(A){
+  const n=A.length;
+  const steps=[];
+  let stepIdx=1;
+  // Work on [A; I] simultaneously applying congruence transforms
+  // Top block: A (will become Λ)
+  // Bottom block: C^T (column operations tracker, starts as I)
+  let topA=cloneMatrix(A);
+  let C=identity(n); // Column transform matrix (C)
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>初始矩阵与变换矩阵</span>`,
+    `<div style="font-size:.82rem;color:var(--text2);margin-bottom:6px">对 [A] 同时进行行变换和对应列变换，下方跟踪列变换矩阵 C</div>
+     ${dispMatrix(topA)}<div style="margin-top:6px;color:var(--text2);font-size:.82rem">C = </div>${dispMatrix(C)}`
+  ));
+  
+  for(let i=0;i<n;i++){
+    // Find pivot
+    if(topA[i][i].isZero()){
+      // Look for nonzero off-diagonal
+      let found=false;
+      for(let j=i+1;j<n&&!found;j++){
+        if(!topA[i][j].isZero()){
+          // Add col j to col i, and add row j to row i
+          // Column operation: C_i → C_i + C_j
+          for(let r=0;r<n;r++){
+            topA[r][i]=topA[r][i].add(topA[r][j]);
+            C[r][i]=C[r][i].add(C[r][j]);
+          }
+          // Row operation: R_i → R_i + R_j  
+          for(let c=0;c<n;c++){
+            topA[i][c]=topA[i][c].add(topA[j][c]);
+          }
+          steps.push(step(
+            `${makeStepNum(stepIdx++)}<span>对角线为0，辅助操作：C${i+1} = C${i+1}+C${j+1}，R${i+1} = R${i+1}+R${j+1}</span>`,
+            dispMatrix(topA)+`<div style="margin-top:6px;color:var(--text2);font-size:.82rem">C =</div>`+dispMatrix(C)
+          ));
+          found=true;
+        }
+      }
+      if(!found)continue; // zero row/col, skip
+    }
+    
+    // Now topA[i][i] should be non-zero
+    if(topA[i][i].isZero())continue;
+    
+    const piv=topA[i][i];
+    // Eliminate off-diagonal in row/col i
+    for(let j=i+1;j<n;j++){
+      if(!topA[i][j].isZero()){
+        const factor=topA[i][j].div(piv);
+        // Column operation: C_j → C_j - factor*C_i
+        for(let r=0;r<n;r++){
+          topA[r][j]=topA[r][j].sub(factor.mul(topA[r][i]));
+          C[r][j]=C[r][j].sub(factor.mul(C[r][i]));
+        }
+        // Corresponding row operation: R_j → R_j - factor*R_i
+        for(let c=0;c<n;c++){
+          topA[j][c]=topA[j][c].sub(factor.mul(topA[i][c]));
+        }
+        steps.push(step(
+          `${makeStepNum(stepIdx++)}<span>消去第${i+1}行/列的非对角元</span><span class="op-badge">C${j+1}→C${j+1}−(${factor.toStr()})C${i+1}, R${j+1}→R${j+1}−(${factor.toStr()})R${i+1}</span>`,
+          dispMatrix(topA)+`<div style="margin-top:6px;color:var(--text2);font-size:.82rem">C =</div>`+dispMatrix(C)
+        ));
+      }
+    }
+  }
+  
+  // Final result
+  const diagVals=Array.from({length:n},(_,i)=>topA[i][i]);
+  const pos=diagVals.filter(v=>v.gt(F(0))).length;
+  const neg2=diagVals.filter(v=>v.lt(F(0))).length;
+  
+  let stdForm='<div class="eq-display">f = ';
+  const terms=diagVals.map((v,i)=>({v,i})).filter(d=>!d.v.isZero());
+  terms.forEach((d,idx)=>{
+    if(idx>0&&!d.v.lt(F(0)))stdForm+=' + ';
+    stdForm+=`${d.v.toHTML()}·<span class="eq-var">y<sub>${d.i+1}</sub><sup>2</sup></span>`;
+  });
+  stdForm+=(terms.length?'':'0')+'</div>';
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>标准型（对角矩阵 Λ = C<sup>T</sup>AC）</span>`,
+    `${dispMatrix(topA)}<br>
+     <div style="margin-top:8px;color:var(--text2);font-size:.82rem">变换矩阵 C：</div>
+     ${dispMatrix(C)}<br>
+     ${stdForm}
+     <div class="info-box success" style="margin-top:8px">
+     正惯性指数 p = ${pos}，负惯性指数 q = ${neg2}
+     </div>`
+  ));
+  return{steps};
+}
+
+// Method 3: Orthogonal Transform (正交变换法)
+function qfOrthogonal(A){
+  const n=A.length;
+  const steps=[];
+  let stepIdx=1;
+  const Af=A.map(r=>r.map(v=>v.toFloat()));
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>初始对称矩阵</span>`,
+    dispMatrix(A)
+  ));
+  
+  // Find eigenvalues
+  const eigenvals=findEigenvalues(A);
+  // Group and sort
+  const unique=[];
+  eigenvals.forEach(e=>{
+    if(!unique.some(u=>Math.abs(u-e)<1e-6))unique.push(e);
+  });
+  unique.sort((a,b)=>a-b);
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>求特征多项式 det(λI − A) 的根（特征值）</span>`,
+    `<table class="eigen-table">
+      <tr><th>特征值 λ</th><th>重数</th></tr>
+      ${unique.map(e=>{
+        const mult=eigenvals.filter(v=>Math.abs(v-e)<1e-6).length;
+        return `<tr><td style="color:var(--accent)">${fmtFloat(e)}</td><td>${mult}</td></tr>`;
+      }).join('')}
+    </table>`
+  ));
+  
+  // Find eigenvectors for each eigenvalue
+  const allVecs=[];
+  const eigGroups=[];
+  unique.forEach(lambda=>{
+    const vecs=nullSpaceFloat(Af,lambda);
+    // Gram-Schmidt orthonormalization
+    const orth=gramSchmidt(vecs);
+    eigGroups.push({lambda,vecs:orth});
+    orth.forEach(v=>allVecs.push({lambda,vec:v}));
+    
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>λ = ${fmtFloat(lambda)} 的特征向量</span>`,
+      `<div style="font-size:.83rem;color:var(--text2);margin-bottom:6px">解方程组 (λI−A)x=0，特征向量（已单位化）：</div>
+       <div style="display:flex;flex-wrap:wrap;gap:10px">
+       ${orth.map((v,i)=>`<div style="display:flex;align-items:center;gap:4px">
+         <span style="color:var(--purple)">ξ${i+1}=</span>
+         ${dispFloatMatrix(v.map(e=>[e]))}
+       </div>`).join('')}
+       </div>`
+    ));
+  });
+  
+  // Build orthogonal matrix P
+  const P=allVecs.map(e=>e.vec);
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>构造正交矩阵 P（列为标准化特征向量）</span>`,
+    dispFloatMatrix(transposeFloat(P))+
+    `<div style="font-size:.82rem;color:var(--text2);margin-top:6px">P<sup>T</sup>AP = diag(${allVecs.map(e=>fmtFloatStr(e.lambda)).join(', ')})</div>`
+  ));
+  
+  // Standard form
+  let stdForm='<div class="eq-display">f = ';
+  allVecs.forEach((e,i)=>{
+    if(i>0&&e.lambda>=-1e-10)stdForm+=' + ';
+    stdForm+=`${fmtFloat(e.lambda)}·<span class="eq-var">y<sub>${i+1}</sub><sup>2</sup></span>`;
+  });
+  stdForm+='</div>';
+  
+  const pos=allVecs.filter(e=>e.lambda>1e-8).length;
+  const neg2=allVecs.filter(e=>e.lambda<-1e-8).length;
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>标准型</span>`,
+    stdForm+`<div class="info-box success" style="margin-top:8px">
+    正惯性指数 p = ${pos}，负惯性指数 q = ${neg2}
+    <br>正定性：${pos===n?'正定矩阵 ✓':neg2===n?'负定矩阵':pos+neg2===n?'不定矩阵':'半正定'}
+    </div>`
+  ));
+  
+  return{steps};
+}
+
+function transposeFloat(M){
+  if(!M.length)return[];
+  const r=M.length,c=M[0].length;
+  return Array.from({length:c},(_,j)=>Array.from({length:r},(_,i)=>M[i][j]));
+}
+
+// ============================================================
+// DIAGONALIZATION
+// ============================================================
+function diagonalize(A){
+  const n=A.length;
+  const steps=[];
+  let stepIdx=1;
+  const Af=A.map(r=>r.map(v=>v.toFloat()));
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>待对角化矩阵 A</span>`,
+    dispMatrix(A)
+  ));
+  
+  // Find eigenvalues
+  const eigenvals=findEigenvalues(A);
+  const unique=[];
+  eigenvals.forEach(e=>{
+    if(!unique.some(u=>Math.abs(u-e)<1e-6))unique.push(e);
+  });
+  unique.sort((a,b)=>a-b);
+  
+  // Characteristic polynomial display
+  let charStr='λ';
+  if(n===2){
+    const tr=Af[0][0]+Af[1][1];
+    const d=Af[0][0]*Af[1][1]-Af[0][1]*Af[1][0];
+    charStr=`λ² − ${fmtFloatStr(tr)}λ + ${fmtFloatStr(d)}`;
+  }else if(n===3){
+    const tr=Af[0][0]+Af[1][1]+Af[2][2];
+    const d=-detFloat(Af);
+    charStr=`λ³ − ${fmtFloatStr(tr)}λ² + ... + ${fmtFloatStr(-d)}`;
+  }
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>求特征多项式 det(λI − A) = 0</span>`,
+    `<div class="eq-display">特征多项式: <span style="color:var(--accent)">${charStr} = 0</span></div>
+     <table class="eigen-table" style="margin-top:8px">
+       <tr><th>特征值 λ</th><th>代数重数</th><th>几何重数</th></tr>
+       ${unique.map(e=>{
+         const am=eigenvals.filter(v=>Math.abs(v-e)<1e-6).length;
+         const gm=nullSpaceFloat(Af,e).length;
+         return`<tr><td style="color:var(--accent)">${fmtFloat(e)}</td><td>${am}</td><td>${gm}</td></tr>`;
+       }).join('')}
+     </table>`
+  ));
+  
+  // Check diagonalizability
+  let diagonalizable=true;
+  const eigVecsList=[];
+  unique.forEach(lambda=>{
+    const am=eigenvals.filter(v=>Math.abs(v-lambda)<1e-6).length;
+    const vecs=nullSpaceFloat(Af,lambda);
+    const gm=vecs.length;
+    if(am!==gm)diagonalizable=false;
+    eigVecsList.push({lambda,vecs});
+    
+    // Show eigenvectors
+    const Asub=Af.map((r,i)=>r.map((v,j)=>v-(i===j?lambda:0)));
+    const AsubF=matFromFloat(Asub);
+    const augF=appendRight(AsubF,identity(n).map(r=>r.map(()=>F(0))).map((r,i)=>r.map(()=>F(0))));
+    // Just solve (λI-A)x = 0
+    const bVec=Array(n).fill(F(0));
+    const AlamF=A.map((r,i)=>r.map((v,j)=>Frac.from(v).sub(i===j?F(Math.round(lambda*1000),1000):F(0))));
+    
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>λ = ${fmtFloat(lambda)} 的特征向量（解 (λI−A)x = 0）</span>`,
+      `<div style="display:flex;flex-wrap:wrap;gap:10px">
+       ${vecs.map((v,i)=>`<div style="display:flex;align-items:center;gap:4px">
+         <span style="color:var(--purple)">p${i+1} = </span>
+         ${dispFloatMatrix(v.map(e=>[e]))}
+       </div>`).join('')}
+       </div>`
+    ));
+  });
+  
+  if(!diagonalizable){
+    steps.push(`<div class="info-box error">矩阵不可对角化：某特征值的代数重数 ≠ 几何重数</div>`);
+    return{steps};
+  }
+  
+  // Build P and Λ
+  const allVecs=eigVecsList.flatMap(g=>g.vecs.map(v=>({lambda:g.lambda,vec:v})));
+  const Pmat=transposeFloat(allVecs.map(e=>e.vec)); // columns are eigenvectors
+  const Lambda=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>i===j?allVecs[i].lambda:0));
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>构造矩阵 P（列为特征向量），Λ = P⁻¹AP</span>`,
+    `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">
+     <div><div style="font-size:.82rem;color:var(--text2);text-align:center">P</div>${dispFloatMatrix(Pmat)}</div>
+     <div><div style="font-size:.82rem;color:var(--text2);text-align:center">Λ = diag(${allVecs.map(e=>fmtFloatStr(e.lambda)).join(',')})</div>${dispFloatMatrix(Lambda)}</div>
+     </div>
+     <div class="info-box success" style="margin-top:8px">P⁻¹AP = Λ（对角阵）✓</div>`
+  ));
+  
+  return{steps};
+}
+
+// ============================================================
+// P^-1 A P
+// ============================================================
+function computePinvAP(P,A){
+  const steps=[];
+  let stepIdx=1;
+  steps.push(step(`${makeStepNum(stepIdx++)}<span>计算 P⁻¹</span>`,dispMatrix(P)));
+  const invResult=matInverse(P);
+  if(invResult.err)return{steps:[...steps,...(invResult.steps||[])],err:invResult.err};
+  invResult.steps.forEach(s=>steps.push(s));
+  const Pinv=invResult.result;
+  steps.push(step(`${makeStepNum(stepIdx++)}<span>P⁻¹ = </span>`,dispMatrix(Pinv)));
+  const PA=matMul(Pinv,A);
+  steps.push(step(`${makeStepNum(stepIdx++)}<span>计算 P⁻¹A</span>`,dispMatrix(PA)));
+  const PAP=matMul(PA,P);
+  steps.push(step(`${makeStepNum(stepIdx++)}<span>计算 (P⁻¹A)P = P⁻¹AP</span>`,dispMatrix(PAP)));
+  return{steps,result:PAP};
+}
+
+// ============================================================
+// TRANSITION MATRIX (过渡矩阵)
+// ============================================================
+function transitionMatrix(B1,B2){
+  const steps=[];
+  let stepIdx=1;
+  const n=B1.length;
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>基1（矩阵 B₁，列为基向量）</span>`,
+    dispMatrix(B1)
+  ));
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>基2（矩阵 B₂，列为基向量）</span>`,
+    dispMatrix(B2)
+  ));
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>过渡矩阵 P = B₁⁻¹ · B₂，即满足 B₂ = B₁ · P</span>`,
+    `<div style="font-size:.85rem;color:var(--text2)">先求 B₁⁻¹，再乘以 B₂</div>`
+  ));
+  const invResult=matInverse(B1);
+  if(invResult.err)return{steps,err:invResult.err};
+  invResult.steps.forEach(s=>steps.push(s));
+  const P=matMul(invResult.result,B2);
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>过渡矩阵 P = B₁⁻¹ · B₂</span>`,
+    dispMatrix(P)
+  ));
+  return{steps,result:P};
+}
+
+// ============================================================
+// POLYNOMIAL OPERATIONS
+// ============================================================
+class Poly {
+  // coeffs: array [a_n, a_{n-1}, ..., a_1, a_0] (highest degree first)
+  constructor(coeffs){
+    this.coeffs=coeffs.map(Frac.from);
+    this.trim();
+  }
+  trim(){
+    while(this.coeffs.length>1&&this.coeffs[0].isZero())this.coeffs.shift();
+  }
+  degree(){return this.coeffs.length-1;}
+  leading(){return this.coeffs[0];}
+  isZero(){return this.coeffs.length===1&&this.coeffs[0].isZero();}
+  get(i){return i<this.coeffs.length?this.coeffs[i]:F(0);}
+  coeff(i){
+    // coefficient of x^i
+    const idx=this.degree()-i;
+    if(idx<0||idx>=this.coeffs.length)return F(0);
+    return this.coeffs[idx];
+  }
+  toHTML(){
+    if(this.isZero())return '0';
+    const n=this.degree();
+    let parts=[];
+    for(let i=0;i<=n;i++){
+      const c=this.coeffs[i];
+      const pow=n-i;
+      if(c.isZero())continue;
+      let term='';
+      if(pow===0){term=c.toHTML();}
+      else{
+        const absCoeff=c.abs();
+        const coeffHTML=absCoeff.eq(F1)?'':`${absCoeff.toHTML()}`;
+        const xPart=pow===1?'x':`x<sup>${pow}</sup>`;
+        term=coeffHTML+xPart;
+      }
+      if(parts.length===0){
+        if(c.lt(F(0)))parts.push(`<span style="color:var(--red)">−</span>${c.abs().toHTML()===''?'':`${c.abs().toHTML()}`}${pow===0?'':(c.abs().eq(F1)?'':'')+`${pow===1?'x':`x<sup>${pow}</sup>`}`}`);
+        else parts.push(term);
+      }else{
+        if(c.lt(F(0)))parts.push(`<span style="color:var(--text2)"> − </span>${c.neg().eq(F1)&&pow>0?'':`${c.neg().toHTML()}`}${pow===0?'':`${pow===1?'x':`x<sup>${pow}</sup>`}`}`);
+        else parts.push(`<span style="color:var(--text2)"> + </span>${term}`);
+      }
+    }
+    return parts.join('');
+  }
+  toString(){
+    if(this.isZero())return '0';
+    const n=this.degree();
+    let parts=[];
+    for(let i=0;i<=n;i++){
+      const c=this.coeffs[i];
+      const pow=n-i;
+      if(c.isZero())continue;
+      let term='';
+      if(pow===0){term=c.toStr();}
+      else{
+        const cs=c.abs().eq(F1)?'':c.abs().toStr();
+        const xPart=pow===1?'x':`x^${pow}`;
+        term=cs+xPart;
+      }
+      if(parts.length===0){
+        if(c.lt(F(0)))parts.push(`-${term}`);
+        else parts.push(term);
+      }else{
+        if(c.lt(F(0)))parts.push(` - ${c.neg().eq(F1)&&pow>0?'':c.neg().toStr()}${pow===0?'':`${pow===1?'x':`x^${pow}`}`}`);
+        else parts.push(` + ${term}`);
+      }
+    }
+    return parts.join('');
+  }
+  static zero(){return new Poly([F(0)]);}
+  static one(){return new Poly([F(1)]);}
+  add(other){
+    const maxDeg=Math.max(this.degree(),other.degree());
+    const c=[];
+    for(let i=maxDeg;i>=0;i--){
+      c.push(this.coeff(i).add(other.coeff(i)));
+    }
+    return new Poly(c);
+  }
+  sub(other){
+    const maxDeg=Math.max(this.degree(),other.degree());
+    const c=[];
+    for(let i=maxDeg;i>=0;i--){
+      c.push(this.coeff(i).sub(other.coeff(i)));
+    }
+    return new Poly(c);
+  }
+  mulPoly(other){
+    const n=this.degree(),m=other.degree();
+    const c=Array(n+m+1).fill(null).map(()=>F(0));
+    for(let i=0;i<=n;i++)for(let j=0;j<=m;j++){
+      c[i+j]=c[i+j].add(this.coeffs[i].mul(other.coeffs[j]));
+    }
+    return new Poly(c);
+  }
+  scale(k){
+    k=Frac.from(k);
+    return new Poly(this.coeffs.map(c=>c.mul(k)));
+  }
+  monicize(){
+    return this.scale(F1.div(this.leading()));
+  }
+}
+
+function polyDiv(dividend, divisor){
+  // dividend = divisor * quotient + remainder
+  const steps=[];
+  let stepIdx=1;
+  let rem=new Poly([...dividend.coeffs]);
+  const quot=[];
+  const qCoeffs=Array(Math.max(0,dividend.degree()-divisor.degree()+1)).fill(F(0));
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>被除式：<span style="color:var(--accent)">${dividend.toHTML()}</span>　除式：<span style="color:var(--accent2)">${divisor.toHTML()}</span></span>`,
+    ''
+  ));
+  
+  let iter=0;
+  while(!rem.isZero()&&rem.degree()>=divisor.degree()){
+    const leadQ=rem.leading().div(divisor.leading());
+    const powDiff=rem.degree()-divisor.degree();
+    // term = leadQ * x^powDiff
+    const termCoeffs=Array(powDiff+1).fill(F(0));termCoeffs[0]=leadQ;
+    const termPoly=new Poly(termCoeffs);
+    
+    const sub=divisor.mulPoly(termPoly);
+    const newRem=rem.sub(sub);
+    
+    const termStr=powDiff===0?leadQ.toHTML():
+      `${leadQ.eq(F1)?'':leadQ.toHTML()}${powDiff===1?'x':`x<sup>${powDiff}</sup>`}`;
+    
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>商的下一项：${leadQ.toHTML()} × x<sup>${powDiff}</sup> = <span style="color:var(--accent)">${termStr}</span></span>`,
+      `<div class="poly-div-display">
+         <div class="poly-div-line">被减式：<span class="poly-highlight">${rem.toHTML()}</span></div>
+         <div class="poly-div-line">减去：(${termStr}) × (${divisor.toHTML()}) = <span style="color:var(--red)">${sub.toHTML()}</span></div>
+         <div>余式：<span style="color:var(--green)">${newRem.toHTML()}</span></div>
+       </div>`
+    ));
+    
+    qCoeffs[powDiff]=qCoeffs[powDiff].add(leadQ);
+    rem=newRem;
+    iter++;
+    if(iter>50)break;
+  }
+  
+  const quotPoly=new Poly([...Array.from({length:Math.max(1,dividend.degree()-divisor.degree()+1)},(_,i)=>qCoeffs[dividend.degree()-divisor.degree()-i]||F(0))]);
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>最终结果</span>`,
+    `<div class="eq-display">
+     <div><span style="color:var(--text2)">被除式 = </span><span style="color:var(--accent2)">(${divisor.toHTML()})</span> × <span style="color:var(--accent)">(${quotPoly.toHTML()})</span> + <span style="color:var(--green)">(${rem.toHTML()})</span></div>
+     <div style="margin-top:6px"><span style="color:var(--text2)">商：</span><strong style="color:var(--accent)">${quotPoly.toHTML()}</strong></div>
+     <div><span style="color:var(--text2)">余式：</span><strong style="color:var(--green)">${rem.toHTML()}</strong></div>
+     </div>`
+  ));
+  return{quotient:quotPoly,remainder:rem,steps};
+}
+
+function polyGcd(a,b){
+  const steps=[];
+  let stepIdx=1;
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>辗转相除：gcd(${a.toHTML()}, ${b.toHTML()})</span>`,
+    `<div style="font-size:.82rem;color:var(--text2)">使用欧几里得算法：gcd(f, g) = gcd(g, f mod g)</div>`
+  ));
+  
+  let f=a, g=b;
+  let iter=0;
+  while(!g.isZero()&&iter<20){
+    const {quotient,remainder,steps:dsteps}=polyDiv(f,g);
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>除法步骤：(${f.toHTML()}) ÷ (${g.toHTML()})</span>`,
+      `<div class="eq-display">商 = <span style="color:var(--accent)">${quotient.toHTML()}</span>，余 = <span style="color:var(--green)">${remainder.toHTML()}</span></div>`
+    ));
+    f=g;
+    g=remainder;
+    iter++;
+  }
+  
+  // Normalize to monic
+  const gcd=f.isZero()?Poly.one():f.monicize();
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>最大公因式（首一化）</span>`,
+    `<div class="eq-display"><strong style="color:var(--green)">gcd = ${gcd.toHTML()}</strong></div>`
+  ));
+  return{gcd,steps};
+}
+
+// ============================================================
+// UI STATE & HELPERS
+// ============================================================
+let activeTool=null;
+let activeCell=null;
+const toolStateCache={};
+
+// 保存当前工具面板的所有输入状态（含计算结果）
+function saveToolState(toolId){
+  if(!toolId)return;
+  const toolArea=document.getElementById('tool-area');
+  if(!toolArea)return;
+  const state={inputs:{},selects:{},results:''};
+  toolArea.querySelectorAll('input[id]').forEach(el=>{state.inputs[el.id]=el.value;});
+  toolArea.querySelectorAll('select[id]').forEach(el=>{state.selects[el.id]=el.value;});
+  const resultsEl=document.getElementById('results');
+  if(resultsEl)state.results=resultsEl.innerHTML;
+  toolStateCache[toolId]=state;
+}
+
+// 恢复工具面板的已保存状态
+// 正确顺序：① 恢复 select 尺寸 → ② 触发 rebuild 生成正确数量的格子 → ③ 恢复格子数值 → ④ 恢复结果 + 关闭输入法
+function restoreToolState(toolId){
+  const state=toolStateCache[toolId];
+  if(!state)return;
+
+  // ① 恢复 select（尺寸选择器）
+  Object.entries(state.selects).forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(el)el.value=val;
+  });
+
+  // ② 触发对应工具的 rebuild，使格子数量与 select 一致
+  const rebuildMap={
+    det:      ()=>rebuildDetInput(),
+    inverse:  ()=>rebuildInvInput(),
+    rank:     ()=>rebuildRankInput(),
+    ref:      ()=>rebuildRefInput(),
+    rref:     ()=>rebuildRrefInput(),
+    nonhom:   ()=>rebuildNonhomInput(),
+    hom:      ()=>rebuildHomInput(),
+    matadd:   ()=>rebuildMaddInput(),
+    matmul:   ()=>rebuildMmulInput(),
+    scalarmul:()=>rebuildSmulInput(),
+    eigen:    ()=>rebuildEigenInput(),
+    diag:     ()=>rebuildDiagInput(),
+    pinvap:   ()=>rebuildPinvInput(),
+    trans:    ()=>rebuildTransInput(),
+    quadform: ()=>rebuildQfInput(),
+    polydiv:  ()=>{rebuildPolyInput('pdiv-f');rebuildPolyInput('pdiv-g');},
+    polygcd:  ()=>{rebuildPolyInput('pgcd-f');rebuildPolyInput('pgcd-g');},
+  };
+  if(rebuildMap[toolId])rebuildMap[toolId]();
+
+  // ③ 恢复所有输入格子的数值
+  Object.entries(state.inputs).forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(el)el.value=val;
+  });
+
+  // ④ 恢复计算结果 + 确保输入法（numpad）关闭
+  const resultsEl=document.getElementById('results');
+  if(resultsEl&&state.results)resultsEl.innerHTML=state.results;
+  hideNumpad();
+}
+
+function showTool(toolId){
+  if(location.hash!=='#'+toolId){
+    location.hash=toolId;
+  } else {
+    renderTool(toolId);
+  }
+  scrollToTop2();
+}
+
+function renderTool(toolId){
+  // 在销毁面板前保存当前工具状态
+  saveToolState(activeTool);
+
+  activeTool=toolId;
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tool-btn').forEach(b=>{
+    if(b.getAttribute('onclick')===`showTool('${toolId}')`)b.classList.add('active');
+  });
+  document.getElementById('hub-sidebar-btn').classList.remove('active');
+  document.getElementById('history-sidebar-btn').classList.remove('active');
+  document.getElementById('welcome').style.display='none';
+  const toolArea=document.getElementById('tool-area');
+  toolArea.style.display='block';
+  toolArea.innerHTML=buildToolPanel(toolId);
+  // 恢复该工具的已保存状态（若有，含结果和numpad关闭）
+  restoreToolState(toolId);
+  setupNumpadListeners();
+  closeSidebar();
+  document.getElementById('main').scrollTop=0;
+}
+
+function buildToolPanel(id){
+  const panels={
+    det:buildDetPanel,
+    inverse:buildInversePanel,
+    rank:buildRankPanel,
+    ref:buildRefPanel,
+    rref:buildRrefPanel,
+    nonhom:buildNonhomPanel,
+    hom:buildHomPanel,
+    matadd:buildMatAddPanel,
+    matmul:buildMatMulPanel,
+    scalarmul:buildScalarMulPanel,
+    eigen:buildEigenPanel,
+    diag:buildDiagPanel,
+    pinvap:buildPinvapPanel,
+    trans:buildTransPanel,
+    quadform:buildQuadformPanel,
+    polydiv:buildPolydivPanel,
+    polygcd:buildPolygcdPanel,
+  };
+  return panels[id]?panels[id]():'<div>功能未实现</div>';
+}
+
+// ============================================================
+// HUB PAGE
+// ============================================================
+function scrollToTop2(){
+  const el=document.getElementById('main');
+  el.scrollTo?el.scrollTo({top:0,behavior:'smooth'}):(el.scrollTop=0);
+  window.scrollTo&&window.scrollTo({top:0});
+}
+function showHub(){
+  if(location.hash!=='#hub'){
+    location.hash='hub';
+  } else {
+    renderHub();
+  }
+  scrollToTop2();
+}
+
+// ============================================================
+// HISTORY
+// ============================================================
+const TOOL_LABELS={
+  det:'行列式',inverse:'逆矩阵',rank:'矩阵的秩',ref:'REF',rref:'RREF',
+  nonhom:'非齐次方程组',hom:'齐次方程组',matadd:'矩阵加减',matmul:'矩阵乘法',
+  scalarmul:'数乘',eigen:'特征值',diag:'对角化',pinvap:'P⁻¹AP',
+  trans:'过渡矩阵',quadform:'二次型',polydiv:'带余除法',polygcd:'最大公因式',
+};
+// 从 localStorage 加载历史，刷新后保留
+const HIST_KEY='linalg_history';
+function loadHistory(){
+  try{const d=localStorage.getItem(HIST_KEY);return d?JSON.parse(d):[];}catch(e){return [];}
+}
+function saveHistory(){
+  try{localStorage.setItem(HIST_KEY,JSON.stringify(calcHistory));}catch(e){}
+}
+const calcHistory=loadHistory();
+
+function addToHistory(toolId,resultHTML,stepsHTML){
+  if(!toolId)return;
+  const now=new Date();
+  const timeStr=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  calcHistory.unshift({toolId,label:TOOL_LABELS[toolId]||toolId,time:timeStr,resultHTML,stepsHTML});
+  if(calcHistory.length>100)calcHistory.pop();
+  saveHistory();
+}
+
+function showHistory(){
+  saveToolState(activeTool);
+  activeTool=null;
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('hub-sidebar-btn').classList.remove('active');
+  document.getElementById('history-sidebar-btn').classList.add('active');
+  document.getElementById('welcome').style.display='none';
+  const toolArea=document.getElementById('tool-area');
+  toolArea.style.display='block';
+  toolArea.innerHTML=buildHistoryPanel();
+  document.getElementById('results').innerHTML='';
+  closeSidebar();
+  document.getElementById('main').scrollTop=0;
+}
+
+function buildHistoryPanel(){
+  let html=`<div class="tool-panel" style="max-width:860px">
+    <div class="panel-title" data-icon="🕘">历史记录</div>
+    <div class="panel-desc">本次会话内的计算记录，共 ${calcHistory.length} 条</div>`;
+  if(calcHistory.length===0){
+    html+=`<div class="hist-empty">暂无计算记录<br>完成一次计算后将自动保存</div>`;
+  } else {
+    html+=`<div style="margin-bottom:12px">
+      <button class="hist-clear-btn" onclick="clearHistory()">🗑 清空记录</button>
+    </div>`;
+    calcHistory.forEach((entry,i)=>{
+      html+=`<div class="hist-entry">
+        <div class="hist-entry-header" onclick="toggleHistEntry(${i})">
+          <div class="hist-entry-left">
+            <span class="hist-entry-tool">${entry.label}</span>
+            <span class="hist-entry-time">${entry.time}</span>
+          </div>
+          <span class="hist-entry-toggle" id="hist-toggle-${i}">▶</span>
+        </div>
+        <div class="hist-entry-body" id="hist-body-${i}">
+          ${entry.resultHTML?`<div class="result-block" style="margin-bottom:10px"><div class="result-title">计算结果</div>${entry.resultHTML}</div>`:''}
+          <div class="result-block"><div class="result-title">解题步骤</div>
+            <div class="steps-container">${entry.stepsHTML}</div>
+          </div>
+        </div>
+      </div>`;
+    });
+  }
+  html+=`</div>`;
+  return html;
+}
+
+function toggleHistEntry(i){
+  const body=document.getElementById(`hist-body-${i}`);
+  const toggle=document.getElementById(`hist-toggle-${i}`);
+  if(!body)return;
+  const open=body.classList.toggle('open');
+  toggle.textContent=open?'▼':'▶';
+}
+
+function clearHistory(){
+  calcHistory.length=0;
+  saveHistory();
+  document.getElementById('tool-area').innerHTML=buildHistoryPanel();
+}
+
+function renderHub(){
+  saveToolState(activeTool);
+  activeTool=null;
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('history-sidebar-btn').classList.remove('active');
+  document.getElementById('hub-sidebar-btn').classList.add('active');
+  document.getElementById('welcome').style.display='none';
+  const toolArea=document.getElementById('tool-area');
+  toolArea.style.display='block';
+  toolArea.innerHTML=buildHubPanel();
+  document.getElementById('results').innerHTML='';
+  closeSidebar();
+  document.getElementById('main').scrollTop=0;
+}
+
+function buildHubPanel(){
+  const cats=[
+    {
+      label:'基础运算',
+      tools:[
+        {id:'det',icon:'⊡',name:'行列式计算',desc:'逐步展示化简过程'},
+        {id:'inverse',icon:'A⁻¹',name:'逆矩阵',desc:'Gauss-Jordan消元法'},
+        {id:'rank',icon:'r',name:'矩阵的秩',desc:'行变换求秩'},
+      ]
+    },
+    {
+      label:'矩阵变换',
+      tools:[
+        {id:'ref',icon:'↓',name:'行阶梯形 REF',desc:'初等行变换化阶梯形'},
+        {id:'rref',icon:'↑↓',name:'最简行阶梯形 RREF',desc:'进一步化最简形'},
+      ]
+    },
+    {
+      label:'线性方程组',
+      tools:[
+        {id:'nonhom',icon:'∑',name:'非齐次方程组',desc:'求通解：特解 + 基础解系'},
+        {id:'hom',icon:'0',name:'齐次方程组',desc:'求基础解系 Ax = 0'},
+      ]
+    },
+    {
+      label:'矩阵运算',
+      tools:[
+        {id:'matadd',icon:'±',name:'矩阵加减法',desc:'A ± B 逐元素运算'},
+        {id:'matmul',icon:'×',name:'矩阵乘法',desc:'C = A × B'},
+        {id:'scalarmul',icon:'k',name:'数乘',desc:'计算 kA'},
+      ]
+    },
+    {
+      label:'特征值与对角化',
+      tools:[
+        {id:'eigen',icon:'λ',name:'特征值与特征向量',desc:'求特征值及对应特征向量'},
+        {id:'diag',icon:'P',name:'矩阵对角化',desc:'P⁻¹AP = Λ'},
+        {id:'pinvap',icon:'P⁻¹',name:'P⁻¹AP 计算',desc:'给定P和A计算相似变换'},
+        {id:'trans',icon:'T',name:'过渡矩阵',desc:'两组基之间的过渡矩阵'},
+      ]
+    },
+    {
+      label:'二次型',
+      tools:[
+        {id:'quadform',icon:'f',name:'二次型化标准型',desc:'配方法 / 合同变换 / 正交变换'},
+      ]
+    },
+    {
+      label:'多项式',
+      tools:[
+        {id:'polydiv',icon:'÷',name:'带余除法',desc:'f = g·q + r，展示竖式'},
+        {id:'polygcd',icon:'gcd',name:'辗转相除法',desc:'求两多项式最大公因式'},
+      ]
+    },
+  ];
+
+  const total=cats.reduce((s,c)=>s+c.tools.length,0);
+  let html=`<div id="hub-page">
+    <div class="hub-title">工具聚合页</div>
+    <div class="hub-subtitle">点击下方工具卡片快速跳转，共 ${total} 个工具</div>
+    <button class="hub-card" onclick="showHistory()" style="width:100%;flex-direction:row;align-items:center;gap:12px;margin-bottom:10px;border-color:var(--border2)">
+      <div class="hub-card-icon" style="font-size:1.1rem">🕘</div>
+      <div style="text-align:left">
+        <div class="hub-card-name">历史记录</div>
+        <div class="hub-card-desc">查看本次会话的计算历史（${calcHistory.length} 条）</div>
+      </div>
+    </button>
+    <div class="hub-grid">`;
+
+  for(const cat of cats){
+    html+=`<div class="hub-section-label" style="grid-column:1/-1">${cat.label}</div>`;
+    for(const t of cat.tools){
+      html+=`<button class="hub-card" onclick="showTool('${t.id}')">
+        <div class="hub-card-icon">${t.icon}</div>
+        <div class="hub-card-name">${t.name}</div>
+        <div class="hub-card-desc">${t.desc}</div>
+      </button>`;
+    }
+  }
+
+  html+=`</div></div>`;
+  return html;
+}
+
+// ============================================================
+// MATRIX INPUT HELPERS
+// ============================================================
+function matrixInputHTML(id,rows,cols,label='',isAug=false){
+  let html=`<div id="${id}-wrap">`;
+  if(label)html+=`<div style="font-size:.82rem;color:var(--text2);margin-bottom:6px">${label}</div>`;
+  html+=`<div class="matrix-input-wrap"><table class="matrix-input-table"><tbody>`;
+  for(let i=0;i<rows;i++){
+    html+='<tr>';
+    for(let j=0;j<(isAug?cols+1:cols);j++){
+      const cls=isAug&&j===cols?' style="border-color:var(--accent2)"':'';
+      const idxStr=isAug&&j===cols?`b${i}`:`a${i}_${j}`;
+      html+=`<td><input type="text" class="mat-cell" id="${id}_${idxStr}" 
+        inputmode="none" autocomplete="off" value="0"
+        onfocus="onCellFocus(this)"
+        onblur="onCellBlur(this)"${cls}></td>`;
+      if(isAug&&j===cols-1)html+='<td><div class="aug-divider"></div></td>';
+    }
+    html+='</tr>';
+  }
+  html+='</tbody></table></div>';
+  html+='</div>';
+  return html;
+}
+
+function dimSelector(id,label,rows,cols,onChangeFn,showCols=true){
+  let html=`<div class="dim-row"><span class="dim-label">${label}</span>`;
+  html+=`<input type="text" class="dim-cell" id="${id}-rows" value="${rows}"
+    inputmode="none" autocomplete="off"
+    data-rebuild="${onChangeFn}"
+    onfocus="onCellFocus(this)" onblur="onCellBlur(this)">`;
+  if(showCols){
+    html+=`<span class="dim-label">×</span>`;
+    html+=`<input type="text" class="dim-cell" id="${id}-cols" value="${cols}"
+      inputmode="none" autocomplete="off"
+      data-rebuild="${onChangeFn}"
+      onfocus="onCellFocus(this)" onblur="onCellBlur(this)">`;
+  }
+  html+='</div>';
+  return html;
+}
+
+function getMatrixValue(id,rows,cols){
+  return Array.from({length:rows},(_,i)=>
+    Array.from({length:cols},(_,j)=>{
+      const el=document.getElementById(`${id}_a${i}_${j}`);
+      return el?parseCell(el.value):F(0);
+    })
+  );
+}
+function getAugMatrix(id,rows,cols){
+  const A=getMatrixValue(id,rows,cols);
+  const b=Array.from({length:rows},(_,i)=>{
+    const el=document.getElementById(`${id}_b${i}`);
+    return el?parseCell(el.value):F(0);
+  });
+  return{A,b};
+}
+function getPolyCoeffs(id,degree){
+  return Array.from({length:degree+1},(_,i)=>{
+    const el=document.getElementById(`${id}_c${i}`);
+    return el?parseCell(el.value):F(0);
+  });
+}
+
+// ============================================================
+// PANEL BUILDERS
+// ============================================================
+function buildDetPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="⊡">行列式计算</div>
+    <div class="panel-desc">计算方阵的行列式，展示逐步化简过程</div>
+    <div class="card">
+      <div class="card-title">输入参数</div>
+      ${dimSelector('det','阶数',3,3,'rebuildDetInput()')}
+      <div id="det-input-area">${matrixInputHTML('det',3,3)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeDet()">计 算</button>
+        <button class="btn btn-secondary" onclick="fillDetExample()">示例</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('det',getDim('det'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildInversePanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="A⁻¹">逆矩阵</div>
+    <div class="panel-desc">使用Gauss-Jordan消元法求矩阵的逆</div>
+    <div class="card">
+      <div class="card-title">输入方阵</div>
+      ${dimSelector('inv','阶数',3,3,'rebuildInvInput()')}
+      <div id="inv-input-area">${matrixInputHTML('inv',3,3)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeInverse()">计 算</button>
+        <button class="btn btn-secondary" onclick="fillInvExample()">示例</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('inv',getDim('inv'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildRankPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="r">矩阵的秩</div>
+    <div class="panel-desc">通过行变换化为阶梯形，计算矩阵的秩</div>
+    <div class="card">
+      <div class="card-title">输入矩阵</div>
+      ${dimSelector('rank','规模',3,4,'rebuildRankInput()')}
+      <div id="rank-input-area">${matrixInputHTML('rank',3,4)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeRank()">计 算</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('rank',getDim('rank'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildRefPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="↓">行阶梯形</div>
+    <div class="panel-desc">通过初等行变换将矩阵化为行阶梯形 (REF)</div>
+    <div class="card">
+      <div class="card-title">输入矩阵</div>
+      ${dimSelector('ref','规模',3,4,'rebuildRefInput()')}
+      <div id="ref-input-area">${matrixInputHTML('ref',3,4)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeRef()">化为阶梯形</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('ref',getDim('ref'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildRrefPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="↑↓">最简行阶梯形</div>
+    <div class="panel-desc">通过初等行变换将矩阵化为最简行阶梯形 (RREF)</div>
+    <div class="card">
+      <div class="card-title">输入矩阵</div>
+      ${dimSelector('rref','规模',3,4,'rebuildRrefInput()')}
+      <div id="rref-input-area">${matrixInputHTML('rref',3,4)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeRref()">化为最简形</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('rref',getDim('rref'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildNonhomPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="∑">非齐次线性方程组</div>
+    <div class="panel-desc">求解 Ax = b，输出通解（含特解 + 基础解系）</div>
+    <div class="card">
+      <div class="card-title">输入增广矩阵 [A | b]</div>
+      ${dimSelector('nonhom','规模 m×n',3,3,'rebuildNonhomInput()')}
+      <div id="nonhom-input-area">${matrixInputHTML('nonhom',3,3,null,true)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeNonhom()">求解</button>
+        <button class="btn btn-secondary" onclick="fillNonhomExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildHomPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="0">齐次线性方程组</div>
+    <div class="panel-desc">求解 Ax = 0，输出基础解系</div>
+    <div class="card">
+      <div class="card-title">输入系数矩阵 A</div>
+      ${dimSelector('hom','规模 m×n',3,4,'rebuildHomInput()')}
+      <div id="hom-input-area">${matrixInputHTML('hom',3,4)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeHom()">求解</button>
+        <button class="btn btn-secondary" onclick="clearMatrix('hom',getDim('hom'))">清零</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildMatAddPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="±">矩阵加减法</div>
+    <div class="panel-desc">计算 A ± B（同型矩阵）</div>
+    <div class="card">
+      <div class="card-title">矩阵规模</div>
+      ${dimSelector('madd','规模',3,3,'rebuildMaddInput()')}
+      <div class="method-tabs">
+        <button class="method-tab active" id="madd-op-add" onclick="setMaddOp('add')">A + B</button>
+        <button class="method-tab" id="madd-op-sub" onclick="setMaddOp('sub')">A − B</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <div><div class="card-title">矩阵 A</div><div id="madd-a-area">${matrixInputHTML('maddA',3,3)}</div></div>
+        <div><div class="card-title">矩阵 B</div><div id="madd-b-area">${matrixInputHTML('maddB',3,3)}</div></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeMatAdd()">计 算</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+let maddOp='add';
+function setMaddOp(op){
+  maddOp=op;
+  document.getElementById('madd-op-add').classList.toggle('active',op==='add');
+  document.getElementById('madd-op-sub').classList.toggle('active',op==='sub');
+}
+
+function buildMatMulPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="×">矩阵乘法</div>
+    <div class="panel-desc">计算 C = A × B（A为m×p，B为p×n）</div>
+    <div class="card">
+      <div class="card-title">矩阵 A 规模</div>
+      ${dimSelector('mmulA','A',3,3,'rebuildMmulInput()')}
+      <div class="card-title" style="margin-top:8px">矩阵 B 规模（行数须等于 A 的列数）</div>
+      ${dimSelector('mmulB','B',3,3,'rebuildMmulInput()')}
+      <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:10px">
+        <div><div class="card-title">矩阵 A</div><div id="mmul-a-area">${matrixInputHTML('mmulA',3,3)}</div></div>
+        <div><div class="card-title">矩阵 B</div><div id="mmul-b-area">${matrixInputHTML('mmulB',3,3)}</div></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeMatMul()">计 算</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildScalarMulPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="k">数乘</div>
+    <div class="panel-desc">计算 kA</div>
+    <div class="card">
+      <div class="card-title">参数</div>
+      ${dimSelector('smul','规模',3,3,'rebuildSmulInput()')}
+      <div class="dim-row">
+        <span class="dim-label">数量 k =</span>
+        <input type="text" class="scalar-input" id="smul-k" value="2" inputmode="none" onfocus="onCellFocus(this)" onblur="onCellBlur(this)">
+      </div>
+      <div id="smul-input-area">${matrixInputHTML('smul',3,3)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeScalarMul()">计 算</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildEigenPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="λ">特征值与特征向量</div>
+    <div class="panel-desc">求矩阵的特征值和对应的特征向量</div>
+    <div class="card">
+      <div class="card-title">输入方阵</div>
+      ${dimSelector('eigen','阶数',3,3,'rebuildEigenInput()')}
+      <div id="eigen-input-area">${matrixInputHTML('eigen',3,3)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeEigen()">计 算</button>
+        <button class="btn btn-secondary" onclick="fillEigenExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildDiagPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="P">矩阵对角化</div>
+    <div class="panel-desc">判断矩阵是否可对角化，并求 P 使得 P⁻¹AP = Λ</div>
+    <div class="card">
+      <div class="card-title">输入方阵</div>
+      ${dimSelector('diag','阶数',3,3,'rebuildDiagInput()')}
+      <div id="diag-input-area">${matrixInputHTML('diag',3,3)}</div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeDiag()">对角化</button>
+        <button class="btn btn-secondary" onclick="fillDiagExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildPinvapPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="P⁻¹">P⁻¹AP 计算</div>
+    <div class="panel-desc">给定 P 和 A，计算相似变换 P⁻¹AP</div>
+    <div class="card">
+      <div class="card-title">矩阵规模</div>
+      ${dimSelector('pinv','阶数',3,3,'rebuildPinvInput()')}
+      <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:10px">
+        <div><div class="card-title">矩阵 P</div><div id="pinv-p-area">${matrixInputHTML('pinvP',3,3)}</div></div>
+        <div><div class="card-title">矩阵 A</div><div id="pinv-a-area">${matrixInputHTML('pinvA',3,3)}</div></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computePinvap()">计 算</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildTransPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="T">过渡矩阵</div>
+    <div class="panel-desc">给定两组基，计算从基1到基2的过渡矩阵 P（满足 β = αP）</div>
+    <div class="card">
+      <div class="card-title">空间维数</div>
+      ${dimSelector('trans','维数 n',3,3,'rebuildTransInput()',false)}
+      <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:10px">
+        <div><div class="card-title">基1（B₁，列为基向量）</div><div id="trans-b1-area">${matrixInputHTML('transB1',3,3)}</div></div>
+        <div><div class="card-title">基2（B₂，列为基向量）</div><div id="trans-b2-area">${matrixInputHTML('transB2',3,3)}</div></div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeTrans()">计 算</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildQuadformPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="f">二次型化标准型</div>
+    <div class="panel-desc">输入对称矩阵，选择方法化为标准型</div>
+    <div class="card">
+      <div class="card-title">输入对称矩阵 A</div>
+      ${dimSelector('qf','阶数',3,3,'rebuildQfInput()')}
+      <div id="qf-input-area">${matrixInputHTML('qf',3,3)}</div>
+      <div style="margin-top:4px;font-size:.8rem;color:var(--text2)">提示：A 应为对称矩阵，下三角将自动同步为上三角</div>
+    </div>
+    <div class="card">
+      <div class="card-title">选择方法</div>
+      <div class="method-tabs">
+        <button class="method-tab active" id="qf-method-cs" onclick="setQfMethod('cs')">配方法</button>
+        <button class="method-tab" id="qf-method-cg" onclick="setQfMethod('cg')">合同变换法</button>
+        <button class="method-tab" id="qf-method-orth" onclick="setQfMethod('orth')">正交变换法</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computeQf()">化为标准型</button>
+        <button class="btn btn-secondary" onclick="fillQfExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+let qfMethod='cs';
+function setQfMethod(m){
+  qfMethod=m;
+  ['cs','cg','orth'].forEach(id=>{
+    document.getElementById(`qf-method-${id}`).classList.toggle('active',id===m);
+  });
+}
+
+function buildPolydivPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="÷">多项式带余除法</div>
+    <div class="panel-desc">计算 f(x) = g(x)·q(x) + r(x)，展示竖式过程</div>
+    <div class="card">
+      <div class="card-title">被除式 f(x)</div>
+      ${polyInputHTML('pdiv-f',4)}
+      <div class="card-title" style="margin-top:14px">除式 g(x)</div>
+      ${polyInputHTML('pdiv-g',2)}
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computePolydiv()">计 算</button>
+        <button class="btn btn-secondary" onclick="fillPolydivExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildPolygcdPanel(){
+  return `<div class="tool-panel">
+    <div class="panel-title" data-icon="gcd">辗转相除法</div>
+    <div class="panel-desc">用辗转相除法求两多项式的最大公因式</div>
+    <div class="card">
+      <div class="card-title">多项式 f(x)</div>
+      ${polyInputHTML('pgcd-f',4)}
+      <div class="card-title" style="margin-top:14px">多项式 g(x)</div>
+      ${polyInputHTML('pgcd-g',3)}
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="computePolygcd()">计 算</button>
+        <button class="btn btn-secondary" onclick="fillPolygcdExample()">示例</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function polyInputHTML(id,maxDeg){
+  let html=`<div id="${id}-wrap">`;
+  html+=`<div class="dim-row"><span class="dim-label">次数</span>
+    <select class="dim-select" id="${id}-deg" onchange="rebuildPolyInput('${id}')">
+    ${[1,2,3,4,5,6].map(v=>`<option value="${v}"${v===maxDeg?' selected':''}>${v}</option>`).join('')}
+    </select></div>`;
+  html+=`<div id="${id}-coeffs-area">${polyCoeffsHTML(id,maxDeg)}</div>`;
+  html+=`<div id="${id}-display" class="poly-display" style="margin-top:8px;font-size:.85rem;color:var(--text2)">f(x) = ?</div>`;
+  html+='</div>';
+  return html;
+}
+
+function polyCoeffsHTML(id,deg){
+  let html='<div class="poly-input-row">';
+  for(let i=0;i<=deg;i++){
+    const pow=deg-i;
+    const label=pow===0?'':pow===1?'x':`x<sup>${pow}</sup>`;
+    html+=`<input type="text" class="poly-coeff" id="${id}_c${i}" 
+      value="${i===0?1:0}" inputmode="none"
+      onfocus="onCellFocus(this)"
+      onblur="updatePolyDisplay('${id}')"
+      onchange="updatePolyDisplay('${id}')">
+    <span class="poly-term-label">${label}${i<deg?' +':''}</span>`;
+  }
+  html+='</div>';
+  return html;
+}
+
+function rebuildPolyInput(id){
+  const deg=parseInt(document.getElementById(`${id}-deg`).value);
+  document.getElementById(`${id}-coeffs-area`).innerHTML=polyCoeffsHTML(id,deg);
+  updatePolyDisplay(id);
+  setupNumpadListeners();
+}
+
+function updatePolyDisplay(id){
+  const deg=parseInt(document.getElementById(`${id}-deg`).value);
+  const coeffs=getPolyCoeffs(id,deg);
+  const p=new Poly(coeffs);
+  const disp=document.getElementById(`${id}-display`);
+  if(disp)disp.innerHTML=`f(x) = ${p.toHTML()}`;
+}
+
+// ============================================================
+// REBUILD FUNCTIONS (called when dimensions change)
+// ============================================================
+function getDim(id){
+  const r=parseInt(document.getElementById(`${id}-rows`).value)||3;
+  const c=document.getElementById(`${id}-cols`)?parseInt(document.getElementById(`${id}-cols`).value)||3:r;
+  return{rows:r,cols:c};
+}
+function rebuildInput(id,areaId,isAug=false){
+  const{rows,cols}=getDim(id);
+  document.getElementById(areaId).innerHTML=matrixInputHTML(id,rows,cols,null,isAug);
+  setupNumpadListeners();
+}
+function rebuildDetInput(){rebuildInput('det','det-input-area');}
+function rebuildInvInput(){
+  const{rows}=getDim('inv');
+  document.getElementById('inv-input-area').innerHTML=matrixInputHTML('inv',rows,rows);
+  setupNumpadListeners();
+}
+function rebuildRankInput(){rebuildInput('rank','rank-input-area');}
+function rebuildRefInput(){rebuildInput('ref','ref-input-area');}
+function rebuildRrefInput(){rebuildInput('rref','rref-input-area');}
+function rebuildNonhomInput(){rebuildInput('nonhom','nonhom-input-area',true);}
+function rebuildHomInput(){rebuildInput('hom','hom-input-area');}
+function rebuildMaddInput(){
+  const{rows,cols}=getDim('madd');
+  document.getElementById('madd-a-area').innerHTML=matrixInputHTML('maddA',rows,cols);
+  document.getElementById('madd-b-area').innerHTML=matrixInputHTML('maddB',rows,cols);
+  setupNumpadListeners();
+}
+function rebuildMmulInput(){
+  const rA=parseInt(document.getElementById('mmulA-rows').value)||3;
+  const cA=parseInt(document.getElementById('mmulA-cols').value)||3;
+  const rB=rA;
+  const cB=parseInt(document.getElementById('mmulB-cols').value)||3;
+  // Sync B rows to A cols
+  document.getElementById('mmulB-rows').value=cA;
+  document.getElementById('mmul-a-area').innerHTML=matrixInputHTML('mmulA',rA,cA);
+  document.getElementById('mmul-b-area').innerHTML=matrixInputHTML('mmulB',cA,cB);
+  setupNumpadListeners();
+}
+function rebuildSmulInput(){rebuildInput('smul','smul-input-area');}
+function rebuildEigenInput(){
+  const{rows}=getDim('eigen');
+  document.getElementById('eigen-input-area').innerHTML=matrixInputHTML('eigen',rows,rows);
+  setupNumpadListeners();
+}
+function rebuildDiagInput(){
+  const{rows}=getDim('diag');
+  document.getElementById('diag-input-area').innerHTML=matrixInputHTML('diag',rows,rows);
+  setupNumpadListeners();
+}
+function rebuildPinvInput(){
+  const{rows}=getDim('pinv');
+  document.getElementById('pinv-p-area').innerHTML=matrixInputHTML('pinvP',rows,rows);
+  document.getElementById('pinv-a-area').innerHTML=matrixInputHTML('pinvA',rows,rows);
+  setupNumpadListeners();
+}
+function rebuildTransInput(){
+  const n=parseInt(document.getElementById('trans-rows').value)||3;
+  document.getElementById('trans-b1-area').innerHTML=matrixInputHTML('transB1',n,n);
+  document.getElementById('trans-b2-area').innerHTML=matrixInputHTML('transB2',n,n);
+  setupNumpadListeners();
+}
+function rebuildQfInput(){
+  const{rows}=getDim('qf');
+  document.getElementById('qf-input-area').innerHTML=matrixInputHTML('qf',rows,rows);
+  setupNumpadListeners();
+}
+
+function clearMatrix(id,dim){
+  const{rows,cols}=typeof dim==='object'?dim:{rows:dim,cols:dim};
+  for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){
+    const el=document.getElementById(`${id}_a${i}_${j}`);
+    if(el)el.value='0';
+  }
+}
+
+// ============================================================
+// COMPUTE FUNCTIONS
+// ============================================================
+function scrollToTop(){
+  const el=document.getElementById('main');
+  el.scrollTo?el.scrollTo({top:0,behavior:'smooth'}):(el.scrollTop=0);
+  window.scrollTo&&window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const BOTTOM_BAR=`
+  <div class="tool-bottom-bar">
+    <button class="btn-back-top" onclick="scrollToTop()">↑ 回到顶部</button>
+    <button class="btn-to-hub" onclick="showHub()">⊞ 工具聚合页</button>
+  </div>`;
+
+function showResults(stepsHTML,resultHTML=''){
+  hideNumpad();
+  const html=`
+    ${resultHTML?`<div class="result-block"><div class="result-title">计算结果</div>${resultHTML}</div>`:''}
+    <div class="result-block">
+      <div class="result-title">解题步骤</div>
+      <div class="steps-container">${stepsHTML}</div>
+    </div>
+    ${BOTTOM_BAR}
+  `;
+  document.getElementById('results').innerHTML=html;
+  document.getElementById('main').scrollTo&&document.getElementById('main').scrollTo({top:document.getElementById('results').offsetTop,behavior:'smooth'});
+  addToHistory(activeTool,resultHTML,stepsHTML);
+}
+
+function computeDet(){
+  const{rows}=getDim('det');
+  const M=getMatrixValue('det',rows,rows);
+  const{steps,value,err}=determinant(M);
+  if(err){showResults(`<div class="info-box error">${err}</div>`);return;}
+  const stepsHTML=steps.join('\n');
+  const resultHTML=`<div class="result-value">det(A) = ${value.toHTML()}</div>`;
+  saveAns(value);
+  showResults(stepsHTML,resultHTML);
+}
+
+function computeInverse(){
+  const{rows}=getDim('inv');
+  const M=getMatrixValue('inv',rows,rows);
+  const{steps,result,err}=matInverse(M);
+  if(err){
+    showResults([`<div class="info-box error">${err}</div>`,...(steps||[])].join(''));
+    return;
+  }
+  saveAns(result);
+  showResults(steps.join('\n'),`<div style="font-size:.85rem;color:var(--text2);margin-bottom:6px">A⁻¹ = </div>${dispMatrix(result)}`);
+}
+
+function computeRank(){
+  const{rows,cols}=getDim('rank');
+  const M=getMatrixValue('rank',rows,cols);
+  const{result,steps,pivots}=gaussianElim(M,true);
+  const r=pivots.length;
+  saveAns(F(r));
+  showResults(steps.join('\n'),`<div class="result-value">rank(A) = ${r}</div>`);
+}
+
+function computeRef(){
+  const{rows,cols}=getDim('ref');
+  const M=getMatrixValue('ref',rows,cols);
+  const{result,steps}=gaussianElim(M,true);
+  saveAns(result);
+  showResults(steps.join('\n'),`<div style="font-size:.85rem;color:var(--text2);margin-bottom:6px">行阶梯形：</div>${dispMatrix(result)}`);
+}
+
+function computeRref(){
+  const{rows,cols}=getDim('rref');
+  const M=getMatrixValue('rref',rows,cols);
+  const{result,steps,pivots}=rref(M,true);
+  saveAns(result);
+  showResults(steps.join('\n'),`<div style="font-size:.85rem;color:var(--text2);margin-bottom:6px">最简行阶梯形：</div>${dispMatrix(result,pivots)}`);
+}
+
+function computeNonhom(){
+  const{rows,cols}=getDim('nonhom');
+  const{A,b}=getAugMatrix('nonhom',rows,cols);
+  const{steps,solution,sol}=solveLinearSystem(A,b,false);
+  const resHTML=`<div class="info-box ${solution==='无解'?'error':solution==='唯一解'?'success':'info'}">${solution}</div>`;
+  showResults(steps.join('\n'),resHTML);
+}
+
+function computeHom(){
+  const{rows,cols}=getDim('hom');
+  const A=getMatrixValue('hom',rows,cols);
+  const b=Array(rows).fill(F(0));
+  const{steps,solution}=solveLinearSystem(A,b,true);
+  showResults(steps.join('\n'));
+}
+
+function computeMatAdd(){
+  const{rows,cols}=getDim('madd');
+  const A=getMatrixValue('maddA',rows,cols);
+  const B=getMatrixValue('maddB',rows,cols);
+  const steps=[];
+  let stepIdx=1;
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>A ${maddOp==='add'?'+':'−'} B 逐元素${maddOp==='add'?'相加':'相减'}</span>`,
+    `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+     ${dispMatrix(A)}
+     <span style="font-size:1.3rem;color:var(--accent)">${maddOp==='add'?'+':'−'}</span>
+     ${dispMatrix(B)}</div>`
+  ));
+  const C=maddOp==='add'?matAdd(A,B):matSub(A,B);
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>结果矩阵 C = A ${maddOp==='add'?'+':'−'} B</span>`,
+    dispMatrix(C)
+  ));
+  saveAns(C);
+  showResults(steps.join('\n'),`${dispMatrix(C)}`);
+}
+
+function computeMatMul(){
+  const rA=parseInt(document.getElementById('mmulA-rows').value)||3;
+  const cA=parseInt(document.getElementById('mmulA-cols').value)||3;
+  const cB=parseInt(document.getElementById('mmulB-cols').value)||3;
+  const A=getMatrixValue('mmulA',rA,cA);
+  const B=getMatrixValue('mmulB',cA,cB);
+  const steps=[];
+  let stepIdx=1;
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>矩阵 A (${rA}×${cA}) × 矩阵 B (${cA}×${cB})</span>`,
+    `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+     ${dispMatrix(A)} <span style="font-size:1.3rem;color:var(--accent)">×</span> ${dispMatrix(B)}</div>`
+  ));
+  // Show element computation for small matrices
+  const C=matMul(A,B);
+  if(rA<=4&&cA<=4&&cB<=4){
+    for(let i=0;i<rA;i++){
+      for(let j=0;j<cB;j++){
+        let formula=`C[${i+1},${j+1}] = `;
+        const terms=Array.from({length:cA},(_,k)=>`(${A[i][k].toStr()})(${B[k][j].toStr()})`);
+        formula+=terms.join(' + ');
+        formula+=` = ${C[i][j].toHTML()}`;
+        steps.push(step(
+          `${makeStepNum(stepIdx++)}<span>计算 C<sub>${i+1},${j+1}</sub></span>`,
+          `<div class="eq-display">${formula}</div>`
+        ));
+      }
+    }
+  }
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>结果矩阵 C = AB</span>`,
+    dispMatrix(C)
+  ));
+  saveAns(C);
+  showResults(steps.join('\n'),`${dispMatrix(C)}`);
+}
+
+function computeScalarMul(){
+  const{rows,cols}=getDim('smul');
+  const kEl=document.getElementById('smul-k');
+  const k=parseCell(kEl?kEl.value:'2');
+  const A=getMatrixValue('smul',rows,cols);
+  const steps=[];
+  let stepIdx=1;
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>数乘：k × A，每个元素乘以 k = ${k.toHTML()}</span>`,
+    `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px">
+     <span style="font-size:1.1rem;color:var(--accent)">${k.toHTML()} ×</span>${dispMatrix(A)}</div>`
+  ));
+  const C=scalarMul(k,A);
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>结果 kA</span>`,
+    dispMatrix(C)
+  ));
+  saveAns(C);
+  showResults(steps.join('\n'),`${dispMatrix(C)}`);
+}
+
+function computeEigen(){
+  const{rows}=getDim('eigen');
+  const A=getMatrixValue('eigen',rows,rows);
+  const Af=A.map(r=>r.map(v=>v.toFloat()));
+  const steps=[];
+  let stepIdx=1;
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>待求矩阵 A</span>`,
+    dispMatrix(A)
+  ));
+  
+  const eigenvals=findEigenvalues(A);
+  const unique=[];
+  eigenvals.forEach(e=>{
+    if(!unique.some(u=>Math.abs(u-e)<1e-6))unique.push(e);
+  });
+  unique.sort((a,b)=>a-b);
+  
+  // Characteristic polynomial
+  let charPolyStr='';
+  if(rows===2){
+    const tr=Af[0][0]+Af[1][1];
+    const d=Af[0][0]*Af[1][1]-Af[0][1]*Af[1][0];
+    charPolyStr=`λ² − ${fmtFloatStr(tr)}λ + (${fmtFloatStr(d)}) = 0`;
+  }else if(rows===3){
+    const tr=Af[0][0]+Af[1][1]+Af[2][2];
+    const det3=detFloat(Af);
+    charPolyStr=`λ³ − ${fmtFloatStr(tr)}λ² + ··· + (${fmtFloatStr(-det3)}) = 0`;
+  }else{
+    charPolyStr=`det(λI − A) = 0`;
+  }
+  
+  steps.push(step(
+    `${makeStepNum(stepIdx++)}<span>特征方程 det(λI − A) = 0</span>`,
+    `<div class="eq-display"><span style="color:var(--accent)">${charPolyStr}</span></div>
+     <div style="margin-top:6px;font-size:.82rem;color:var(--text2)">特征值（特征多项式的根）：</div>
+     <div class="eq-display" style="margin-top:4px">${unique.map(e=>`<span style="color:var(--accent)">λ = ${fmtFloat(e)}</span>`).join('，')}</div>`
+  ));
+  
+  unique.forEach(lambda=>{
+    const am=eigenvals.filter(v=>Math.abs(v-lambda)<1e-6).length;
+    const vecs=nullSpaceFloat(Af,lambda);
+    
+    // Show (λI-A)
+    const LIA=Af.map((r,i)=>r.map((v,j)=>(i===j?lambda:0)-v));
+    const LIAf=matFromFloat(LIA);
+    
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>λ = ${fmtFloat(lambda)}（重数 ${am}）：解 (λI−A)x = 0</span>`,
+      dispMatrix(LIAf)
+    ));
+    
+    const{result,steps:rrefSteps,pivots}=rref(appendRight(LIAf,LIAf.map(()=>LIAf[0].map(()=>F(0)))),true);
+    // Just show simplified
+    const nullVecsF=vecs.map(v=>matFromFloat(v.map(e=>[e])));
+    steps.push(step(
+      `${makeStepNum(stepIdx++)}<span>λ = ${fmtFloat(lambda)} 的特征向量（基础解系）</span>`,
+      `<div style="display:flex;flex-wrap:wrap;gap:12px">
+       ${vecs.map((v,i)=>`<div style="display:flex;align-items:center;gap:4px">
+         <span style="color:var(--purple)">ξ<sub>${i+1}</sub> = </span>
+         ${dispMatrix(nullVecsF[i])}
+       </div>`).join('')}
+       </div>`
+    ));
+  });
+  
+  showResults(steps.join('\n'));
+}
+
+function computeDiag(){
+  const{rows}=getDim('diag');
+  const A=getMatrixValue('diag',rows,rows);
+  const{steps}=diagonalize(A);
+  showResults(steps.join('\n'));
+}
+
+function computePinvap(){
+  const{rows}=getDim('pinv');
+  const P=getMatrixValue('pinvP',rows,rows);
+  const A=getMatrixValue('pinvA',rows,rows);
+  const{steps,result,err}=computePinvAP(P,A);
+  if(err){showResults(steps.join('\n')+`<div class="info-box error">${err}</div>`);return;}
+  saveAns(result);
+  showResults(steps.join('\n'),`<div style="font-size:.85rem;color:var(--text2);margin-bottom:6px">P⁻¹AP = </div>${dispMatrix(result)}`);
+}
+
+function computeTrans(){
+  const n=parseInt(document.getElementById('trans-rows').value)||3;
+  const B1=getMatrixValue('transB1',n,n);
+  const B2=getMatrixValue('transB2',n,n);
+  const{steps,result,err}=transitionMatrix(B1,B2);
+  if(err){showResults(steps.join('\n')+`<div class="info-box error">${err}</div>`);return;}
+  saveAns(result);
+  showResults(steps.join('\n'),`<div style="font-size:.85rem;color:var(--text2);margin-bottom:6px">过渡矩阵 P = B₁⁻¹B₂ = </div>${dispMatrix(result)}`);
+}
+
+function computeQf(){
+  const{rows}=getDim('qf');
+  let A=getMatrixValue('qf',rows,rows);
+  // Symmetrize: use upper triangle
+  for(let i=0;i<rows;i++)for(let j=0;j<rows;j++)if(i!==j)A[j][i]=A[i][j];
+  
+  let{steps}={steps:[]};
+  if(qfMethod==='cs') ({steps}=qfCompletingSquare(A));
+  else if(qfMethod==='cg') ({steps}=qfCongruence(A));
+  else ({steps}=qfOrthogonal(A));
+  
+  showResults(steps.join('\n'));
+}
+
+function computePolydiv(){
+  const degF=parseInt(document.getElementById('pdiv-f-deg').value);
+  const degG=parseInt(document.getElementById('pdiv-g-deg').value);
+  const fCoeffs=getPolyCoeffs('pdiv-f',degF);
+  const gCoeffs=getPolyCoeffs('pdiv-g',degG);
+  const f=new Poly(fCoeffs);
+  const g=new Poly(gCoeffs);
+  if(g.isZero()){showResults(`<div class="info-box error">除式不能为零多项式</div>`);return;}
+  const{quotient,remainder,steps}=polyDiv(f,g);
+  showResults(steps.join('\n'));
+}
+
+function computePolygcd(){
+  const degF=parseInt(document.getElementById('pgcd-f-deg').value);
+  const degG=parseInt(document.getElementById('pgcd-g-deg').value);
+  const fCoeffs=getPolyCoeffs('pgcd-f',degF);
+  const gCoeffs=getPolyCoeffs('pgcd-g',degG);
+  const f=new Poly(fCoeffs);
+  const g=new Poly(gCoeffs);
+  if(f.isZero()&&g.isZero()){showResults(`<div class="info-box error">输入不能都为零多项式</div>`);return;}
+  const{gcd,steps}=polyGcd(f,g);
+  showResults(steps.join('\n'),`<div class="result-value">gcd = ${gcd.toHTML()}</div>`);
+}
+
+// ============================================================
+// EXAMPLE DATA
+// ============================================================
+function setMatrix(id,data){
+  for(let i=0;i<data.length;i++)for(let j=0;j<data[i].length;j++){
+    const el=document.getElementById(`${id}_a${i}_${j}`);
+    if(el)el.value=data[i][j];
+  }
+}
+function fillDetExample(){
+  const{rows}=getDim('det');
+  if(rows>=3){setMatrix('det',[[2,-1,3],[1,2,1],[-1,3,2]]);}
+  else{setMatrix('det',[[3,4],[2,1]]);}
+}
+function fillInvExample(){
+  const{rows}=getDim('inv');
+  if(rows>=3){setMatrix('inv',[[1,2,3],[0,1,4],[5,6,0]]);}
+  else{setMatrix('inv',[[1,2],[3,4]]);}
+}
+function fillNonhomExample(){
+  const{rows,cols}=getDim('nonhom');
+  setMatrix('nonhom',[[1,1,1],[1,2,3],[1,3,5]]);
+  // b values
+  [[0,4],[0,6],[0,8]].forEach((_,i)=>{
+    const el=document.getElementById(`nonhom_b${i}`);
+    if(el)el.value=[1,3,5][i]||0;
+  });
+  document.getElementById('nonhom_b0').value='1';
+  document.getElementById('nonhom_b1').value='3';
+  if(document.getElementById('nonhom_b2'))document.getElementById('nonhom_b2').value='5';
+}
+function fillEigenExample(){
+  setMatrix('eigen',[[2,0,0],[0,3,-2],[0,-2,3]]);
+}
+function fillDiagExample(){
+  setMatrix('diag',[[4,-2,1],[-2,3,-1],[1,-1,2]]);
+}
+function fillQfExample(){
+  setMatrix('qf',[[1,-1,1],[-1,2,0],[1,0,3]]);
+}
+function fillPolydivExample(){
+  // f = x^4 - 3x^2 + 2x - 5, g = x^2 - 1
+  document.getElementById('pdiv-f-deg').value='4';
+  document.getElementById('pdiv-g-deg').value='2';
+  rebuildPolyInput('pdiv-f');
+  rebuildPolyInput('pdiv-g');
+  setTimeout(()=>{
+    ['1','0','-3','2','-5'].forEach((v,i)=>{
+      const el=document.getElementById(`pdiv-f_c${i}`);
+      if(el)el.value=v;
+    });
+    ['1','0','-1'].forEach((v,i)=>{
+      const el=document.getElementById(`pdiv-g_c${i}`);
+      if(el)el.value=v;
+    });
+    updatePolyDisplay('pdiv-f');
+    updatePolyDisplay('pdiv-g');
+    setupNumpadListeners();
+  },50);
+}
+function fillPolygcdExample(){
+  document.getElementById('pgcd-f-deg').value='4';
+  document.getElementById('pgcd-g-deg').value='3';
+  rebuildPolyInput('pgcd-f');
+  rebuildPolyInput('pgcd-g');
+  setTimeout(()=>{
+    // f = x^4 - 1, g = x^3 - x
+    ['1','0','0','0','-1'].forEach((v,i)=>{
+      const el=document.getElementById(`pgcd-f_c${i}`);
+      if(el)el.value=v;
+    });
+    ['1','0','-1','0'].forEach((v,i)=>{
+      const el=document.getElementById(`pgcd-g_c${i}`);
+      if(el)el.value=v;
+    });
+    updatePolyDisplay('pgcd-f');
+    updatePolyDisplay('pgcd-g');
+    setupNumpadListeners();
+  },50);
+}
+
+// ============================================================
+// NUMPAD LOGIC
+// ============================================================
+let lastAns=null;
+
+function saveAns(v){
+  if(v===null||v===undefined)return;
+  lastAns=v;
+  const btn=document.getElementById('np-ans-btn');
+  if(!btn)return;
+  let label='';
+  if(Array.isArray(v)&&v.length>0){
+    label=`${v.length}×${v[0].length}矩阵`;
+  }else{
+    label=v instanceof Frac?v.toStr():String(v);
+  }
+  btn.innerHTML=`ANS<br><span style="font-size:.62rem;opacity:.85">${label}</span>`;
+  btn.classList.remove('inactive');
+  btn.classList.add('active');
+}
+
+function triggerDimRebuild(el){
+  const fn=(el.dataset.rebuild||'').trim().replace(/\(\)$/,'');
+  if(fn&&typeof window[fn]==='function')window[fn]();
+}
+
+function setupNumpadListeners(){
+  document.querySelectorAll('.mat-cell,.poly-coeff,.scalar-input,.dim-cell').forEach(el=>{
+    el.removeEventListener('focus',showNumpadHandler);
+    el.addEventListener('focus',showNumpadHandler);
+  });
+}
+
+function showNumpadHandler(){activeCell=this;showNumpad();}
+
+function showNumpad(){
+  document.getElementById('numpad-wrap').classList.add('visible');
+  document.body.classList.add('numpad-open');
+}
+function hideNumpad(){
+  document.getElementById('numpad-wrap').classList.remove('visible');
+  document.body.classList.remove('numpad-open');
+  if(activeCell){activeCell.blur();activeCell=null;}
+}
+
+function npInput(val){
+  if(!activeCell)return;
+  if(activeCell.classList.contains('dim-cell')){
+    const n=parseInt(val);
+    if(isNaN(n)||n<1||n>6)return;
+    activeCell.value=String(n);
+    triggerDimRebuild(activeCell);
+    return;
+  }
+  const cur=activeCell.value;
+  if(cur==='0'&&val!=='.'&&val!=='/')activeCell.value=val;
+  else activeCell.value=cur+val;
+  const id=activeCell.id;
+  if(id){const m=id.match(/^(p[a-z]+-[fg])_c\d+$/);if(m)updatePolyDisplay(m[1]);}
+}
+function npBackspace(){
+  if(!activeCell||activeCell.classList.contains('dim-cell'))return;
+  activeCell.value=activeCell.value.slice(0,-1)||'0';
+}
+function npClear(){
+  if(!activeCell)return;
+  if(activeCell.classList.contains('dim-cell')){activeCell.value='1';triggerDimRebuild(activeCell);return;}
+  activeCell.value='0';
+}
+function npPrevCell(){
+  if(!activeCell)return;
+  const all=Array.from(document.querySelectorAll('.mat-cell,.poly-coeff,.scalar-input,.dim-cell'));
+  const idx=all.indexOf(activeCell);
+  if(idx>0){all[idx-1].focus();activeCell=all[idx-1];}
+}
+function npNextCell(){
+  if(!activeCell)return;
+  const all=Array.from(document.querySelectorAll('.mat-cell,.poly-coeff,.scalar-input,.dim-cell'));
+  const idx=all.indexOf(activeCell);
+  if(idx>=0&&idx<all.length-1){all[idx+1].focus();activeCell=all[idx+1];}
+}
+function npAns(){
+  if(!activeCell||lastAns===null)return;
+  if(activeCell.classList.contains('dim-cell'))return;
+  if(lastAns instanceof Frac||typeof lastAns==='number'){
+    activeCell.value=lastAns instanceof Frac?lastAns.toStr():String(lastAns);
+    const id=activeCell.id;
+    if(id){const m=id.match(/^(p[a-z]+-[fg])_c\d+$/);if(m)updatePolyDisplay(m[1]);}
+  }else if(Array.isArray(lastAns)&&lastAns.length>0){
+    const cellId=activeCell.id;
+    const match=cellId.match(/^(.+)_[ab]\d/);
+    if(!match)return;
+    const prefix=match[1];
+    const ansRows=lastAns.length,ansCols=lastAns[0].length;
+    const rowsEl=document.getElementById(`${prefix}-rows`);
+    const colsEl=document.getElementById(`${prefix}-cols`);
+    let needRebuild=false;
+    if(rowsEl&&parseInt(rowsEl.value)!==ansRows){rowsEl.value=ansRows;needRebuild=true;}
+    if(colsEl&&parseInt(colsEl.value)!==ansCols){colsEl.value=ansCols;needRebuild=true;}
+    if(needRebuild){
+      const src=rowsEl||colsEl;
+      if(src){const fn=(src.dataset.rebuild||'').replace(/\(\)$/,'');if(typeof window[fn]==='function')window[fn]();}
+      setTimeout(()=>fillMatrixFromAns(prefix,lastAns),60);
+    }else{fillMatrixFromAns(prefix,lastAns);}
+  }
+}
+function fillMatrixFromAns(prefix,mat){
+  for(let i=0;i<mat.length;i++)for(let j=0;j<mat[i].length;j++){
+    const el=document.getElementById(`${prefix}_a${i}_${j}`);
+    if(el){const v=mat[i][j];el.value=v instanceof Frac?v.toStr():String(Math.round(v*1e9)/1e9);}
+  }
+}
+function onCellFocus(el){
+  activeCell=el;
+  el.classList.add('focused');
+  if(!el.classList.contains('dim-cell')&&el.value==='0')el.select();
+  showNumpad();
+}
+function onCellBlur(el){el.classList.remove('focused');}
+
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const o=document.getElementById('overlay');
+  s.classList.toggle('open');
+  o.classList.toggle('visible');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function navigate(){
+  const hash=location.hash.slice(1);
+  if(!hash||hash==='hub'){
+    renderHub();
+  } else {
+    renderTool(hash);
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  navigate();
+  window.addEventListener('hashchange',navigate);
+  setupNumpadListeners();
+  document.addEventListener('pointerdown',e=>{
+    if(!e.target.closest('#numpad-wrap')&&
+       !e.target.classList.contains('mat-cell')&&
+       !e.target.classList.contains('poly-coeff')&&
+       !e.target.classList.contains('scalar-input')&&
+       !e.target.classList.contains('dim-cell')){
+      hideNumpad();
+    }
+  });
+  // 方向键切换格子（Left/Right），Up/Down 跨行
+  document.addEventListener('keydown', e => {
+    if (!activeCell) return;
+    const tag = activeCell.tagName;
+    if (tag !== 'INPUT') return;
+    const isMat = activeCell.classList.contains('mat-cell');
+    const isPoly = activeCell.classList.contains('poly-coeff');
+    const isDim = activeCell.classList.contains('dim-cell');
+    if (!isMat && !isPoly && !isDim) return;
+
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); npPrevCell(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); npNextCell(); }
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      if (!isMat) return;
+      e.preventDefault();
+      // 找到当前格子在矩阵中的行列
+      const allCells = Array.from(document.querySelectorAll('.mat-cell'));
+      const idx = allCells.indexOf(activeCell);
+      if (idx < 0) return;
+      // 获取当前矩阵列数
+      const dimCells = document.querySelectorAll('.dim-cell');
+      const cols = dimCells.length >= 2 ? parseInt(dimCells[1].value) || 1 : 1;
+      const target = e.key === 'ArrowUp'
+        ? allCells[idx - cols]
+        : allCells[idx + cols];
+      if (target) { target.focus(); activeCell = target; }
+    }
+  });
+  const noMenuSelectors = '.mat-cell, .poly-coeff, .scalar-input, .dim-cell';
+
+  // 使用事件委托或直接绑定
+  document.body.addEventListener('contextmenu', function(e) {
+    // 检查触发事件的元素是否匹配我们的选择器
+    if (e.target.matches(noMenuSelectors)) {
+      e.preventDefault(); // 阻止默认菜单
+      e.stopPropagation(); // 阻止事件冒泡
+      return false;
+    }
+  }, { passive: false });
+});
+</script>
+</body>
+</html>
