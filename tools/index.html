@@ -529,21 +529,46 @@
   margin:24px 0;
 }
 .tool-card{
-  display:block;
-  padding:20px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:84px;
+  padding:18px 24px;
   border:1px solid #e2d9c8;
   border-radius:12px;
   text-decoration:none;
+  text-align:center;
   color:#2E2B26;
-  background:#FBF8F0;
+  background:linear-gradient(180deg,#FCFAF4 0%,#F5EFDF 100%);
   font-weight:600;
   font-size:1.05rem;
-  transition:.2s;
+  letter-spacing:2px;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, color .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+.tool-card::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  width:0;
+  height:2px;
+  background:#7a6a53;
+  transform:translateX(-50%);
+  transition:width .3s ease;
+}
+.tool-card-title{
+  line-height:1.4;
 }
 .tool-card:hover{
   transform:translateY(-3px);
-  box-shadow:0 6px 20px rgba(0,0,0,.08);
+  box-shadow:0 8px 24px rgba(122,106,83,.18);
   border-color:#7a6a53;
+  color:#7a6a53;
+}
+.tool-card:hover::before{
+  width:42%;
 }
 .tool-empty{
   color:#6b6358;
