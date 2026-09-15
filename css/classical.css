@@ -608,3 +608,18 @@ body :not(.navbar-container) > a:hover,
     font-size: 0.82em;
   }
 }
+/* ---- 16. 窄屏下分数线加粗，避免亚像素渲染把线"吃掉" ----
+   KaTeX 的分数线是 border-bottom-width:0.04em（内联样式），正常字号下约 0.64px，
+   在移动端缩放成 0.82em 后只剩约 0.52px。低于 1 物理像素的边框会被抗锯齿按位置
+   分摊：恰好压在像素网格上的线看起来正常，跨在像素边界的线则被摊成极浅的灰，肉眼
+   近乎消失（表现为"某些分式的分数线不见了"，且只出现在部分分式上）。
+   这里在窄屏把分数线（含上划线、下划线）提到 1px，任何位置都能完整落在像素上。 */
+@media (max-width: 768px) {
+  .katex .mfrac .frac-line,
+  .katex .overline .overline-line,
+  .katex .underline .underline-line,
+  .katex .rule {
+    border-bottom-width: 1px !important;
+    min-height: 1px !important;
+  }
+}
