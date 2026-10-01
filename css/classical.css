@@ -47,6 +47,10 @@ body.dark-mode {
 }
 
 /* ---- 2. 统一字体：英文 Georgia，中文回退到系统衬线（宋体系） ---- */
+/* 注意：span 从上面这组里拆出来单独写——KaTeX 公式内部全是 <span>，
+   如果用裸 span + !important 会把 KaTeX_Main/KaTeX_Math（Computer Modern）
+   整体覆盖成 Georgia，公式渲染完全失去 LaTeX 观感。
+   这里用 :not() 放行 .katex 子树，公式字体交给 katex.min.css 自己管。 */
 body,
 .site-main,
 .page-container,
@@ -57,7 +61,12 @@ body,
 .cl-hero__title, .cl-hero__type,
 .cl-footer-line, .cl-footer-motto,
 h1, h2, h3, h4, h5, h6,
-p, a, li, span, blockquote, figcaption {
+p, a, li, blockquote, figcaption {
+  font-family: Georgia, "Noto Serif SC", "Source Han Serif SC",
+    "Songti SC", "STSong", "SimSun", serif !important;
+}
+
+span:not(.katex, .katex *) {
   font-family: Georgia, "Noto Serif SC", "Source Han Serif SC",
     "Songti SC", "STSong", "SimSun", serif !important;
 }
@@ -622,4 +631,21 @@ body :not(.navbar-container) > a:hover,
     border-bottom-width: 1px !important;
     min-height: 1px !important;
   }
+}
+
+/* ---- 17. 公式排版：回归标准 LaTeX 观感 ----
+   1. 复位继承字距：body 的 letter-spacing: 0.01em 会渗进公式，
+      把 Computer Modern 的字符间距撑开，数学排版立刻走样。
+   2. display 公式上下留 LaTeX 文献级的空白（\abovedisplayskip 观感），
+      比正文行距更舒展，公式成为独立的"展示行"而不是夹在段落里。 */
+.katex {
+  letter-spacing: normal;
+  text-rendering: auto;
+}
+.katex-display {
+  margin: 1.5em 0 !important;
+}
+/* blockquote 内的公式（如题目块）略微收紧，避免撑散引文 */
+.markdown-body blockquote .katex-display {
+  margin: 0.9em 0 !important;
 }
